@@ -107,7 +107,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             }
         };
 
-        $http.get('http://localhost:8080/api/speakers')
+        $http.get('http://85.214.56.43:8080/api/speakers')
             .success(function (data) {
                 $scope.speakers = data;
             })
@@ -120,7 +120,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         };
 
         var get_speaker_stats = function (name, callback) {
-            $http.get('http://localhost:8080/api/speakers/' + name)
+            $http.get('http://85.214.56.43:8080/api/speakers/' + name)
                 .success(function (data) {
                     callback(data);
                 })

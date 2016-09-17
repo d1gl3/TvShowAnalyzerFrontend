@@ -7,7 +7,7 @@ seriesAnalyzer.controller('speakerTableController', function ($scope, $http) {
         return a - b;
     };
 
-    $http.get('http://localhost:8080/api/tv_show')
+    $http.get('http://85.214.56.43:8080/api/tv_show')
         .success(function (data) {
             $scope.speakers = data.speakers;
         })

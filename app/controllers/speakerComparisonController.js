@@ -162,7 +162,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             }
         };
 
-        $http.get('http://localhost:8080/api/speakers')
+        $http.get('http://85.214.56.43:8080/api/speakers')
             .success(function (data) {
                 $scope.speakers = data;
             })
