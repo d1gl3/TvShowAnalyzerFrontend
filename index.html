@@ -1,0 +1,145 @@
+<html ng-app="seriesAnalyzer">
+<head>
+    <meta charset="utf8"/>
+    <title>Series Analyzer</title>
+
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="assets/libs/nv.d3.css">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.7/angular-nvd3.min.js"></script>
+    <!--<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.js"></script>
+    <script src="bower_components/jqcloud2/dist/jqcloud.js"></script>
+    <script src="bower_components/angular-jqcloud/angular-jqcloud.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="bower_components/jqcloud2/dist/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/appstyle.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/login.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/search.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/x-search.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/orders.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/admin.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/edit.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand navbar-project-name">
+                <div>T<span>he</span> B<span>ig</span> B<span>ang</span> T<span>heory </span>A<span>nalyzed</span></div>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" ng-controller="navbarCtrl" id="navbar">
+
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Overview <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#overview">Action</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Configuration Tables <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/full-config-tables">Overall</a></li>
+                        <li><a href="#/season-config-tables">Seasons</a></li>
+                        <li><a href="#/episode-config-tables">Episoden</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Speakers <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/speaker-overview-table">Overview Table</a></li>
+                        <li><a href="#/speaker-single-view">Single Speakers</a></li>
+                        <li><a href="#/speaker-comparison">Comparison</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">TV-Show <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/tv-show-grafics">Graphs</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div ng-view>
+
+    Test
+
+</div>
+
+
+<!--Angular-->
+<script src="assets/libs/angular-route.min.js"></script>
+<script src="assets/libs/angular-cookies.min.js"></script>
+<script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
+
+<script src="assets/libs/nv.d3.js"></script>
+
+<!--Libs-->
+<script src="assets/libs/ui-bootstrap-tpls-1.1.2.min.js"></script>
+<script src="assets/libs/angular-file-saver.bundle.js"></script>
+<script src="https://npmcdn.com/simple-statistics@2.1.0/dist/simple-statistics.js"></script>
+<script src="bower_components/regression-js/build/regression.min.js"></script>
+
+<!--App-->
+<script src="app/app.js"></script>
+
+<!--Controllers-->
+<script src="app/controllers/controllers.js"></script>
+<script src="app/controllers/configTableController.js"></script>
+<script src="app/controllers/navbarCtrl.js"></script>
+<script src="app/controllers/speakerSingleViewController.js"></script>
+<script src="app/controllers/speakerTableController.js"></script>
+<script src="app/controllers/sunburstChartController.js"></script>
+<script src="app/controllers/pieChartController.js"></script>
+<script src="app/controllers/tvShowGraficsController.js"></script>
+<script src="app/controllers/speakerComparisonController.js"></script>
+
+<!--Directives-->
+<script src="app/directives/directives.js"></script>
+<script src="app/directives/routes.js"></script>
+
+<!--Services-->
+<script src="app/services/services.js"></script>
+<script src="app/services/d3Service.js"></script>
+<script src="app/services/episodeService.js"></script>
+<script src="app/services/seasonService.js"></script>
+<script src="app/services/speakerService.js"></script>
+<script src="app/services/tabService.js"></script>
+<script src="app/services/tvShowService.js"></script>
+<script src="app/services/currentSelectedSpeakerService.js"></script>
+
+</body>
+</html>

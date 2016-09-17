@@ -1,0 +1,73 @@
+<div class="container-fluid full-height">
+    <div id="tabs_container" class="col-xs-12">
+        <div ng-app="seriesAnalyzer" ng-controller="tvShowGraficsController">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Overall Series Stats</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3><span class="label label-info">Replika Distribution</span></h3>
+                            <nvd3 options="options[0]" data="replicaNumberDistribution"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <h3><span class="label label-info">Word Distribution</span></h3>
+                            <nvd3 options="options[0]" data="replicaWordDistribution"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <h3><span class="label label-info">Number of Speakers</span></h3>
+                            <nvd3 options="options[0]" data="numberOfSpeakersDistribution"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Single Season Stats</div>
+                <div class="panel-body">
+
+                    <div class="row speaker-info-grafics" ng-if="tv_show">
+                        <div class="col-md-12">
+                            <h3><span class="label label-info">Replica Length Distribution</span></h3>
+                        </div>
+                        <div class="col-md-6 bar-chart" id="bar-chart-season-replic-length">
+                            <nvd3 options="barOptions" data="tvShowReplicaLengths"></nvd3>
+                        </div>
+
+                        <div class="col-md-6 pie-chart-small">
+                            <nvd3 options="options[1]" data="tvShowReplicaLengthsDistribution"></nvd3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">TV Show Coappearances</div>
+                <div class="panel-body">
+
+                    <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
+                        <div class="col-md-12">
+                            <h3><span class="label label-info">TV Show Coappearances</span></h3>
+                            Minimum Coappearances:
+                            <div>
+                                <rzslider
+                                        rz-slider-model="slider.min"
+                                        rz-slider-high="slider.max"
+                                        rz-slider-options="slider.options"></rzslider>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <nvd3 options="forceDirectedOptions" data="forceDirectedData"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.x-search-area {
+    background-color: rgba(0, 0, 0, 0.1)
+}
+
+.x-search-button {
+    float: right;
+    margin-bottom: 1%;
+    -webkit-transition: border-color .7s,background-color .8s, color .7s;
+}
+
+.x-search-button:hover{
+    border-color: green;
+    background-color: lightgreen;
+    color: darkgreen;
+}
+#close_x_search{
+    float: right;
+    margin-right: -77px;
+    font-size: 21px;
+    text-decoration: none;
+    color: black;
+}

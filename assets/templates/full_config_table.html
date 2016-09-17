@@ -1,0 +1,20 @@
+<div class="container-fluid full-height">
+    <div id="tabs_container" class="col-xs-12">
+
+
+        <div ng-app="seriesAnalyzer" ng-controller="configTableController">
+
+            <table st-table="rowCollection" class="table table-striped">
+                <thead></thead>
+                <tbody>
+                <tr ng-repeat="season in tv_show_data.configuration_matrix">
+                    <td ng-repeat="values in season track by $index" ng-style="set_color(values)" >{{values}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <br>
+    </div>
+</div>

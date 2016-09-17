@@ -1,0 +1,109 @@
+<div class="container-fluid full-height" ng-controller="extendedSearchCtrl">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 result-content">
+            <a id="close_x_search" href="#/suchen" class="glyphicon glyphicon-remove"></a>
+
+            <br>
+            <div class="col-xs-12">
+                <div class="row" ng-show="isAdmin">
+                    <ul class="nav nav-tabs col-xs-12 col-md-10 col-md-offset-1" role="tablist">
+                        <li class="active" role="presentation">
+                            <a role="tab" data-toggle="tab" href="" ng-click="setPersonal()">Personalabteilung</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="tab" data-toggle="tab" href="" ng-click="setExam()">Prüfungsamt</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="tab" data-toggle="tab" href="" ng-click="setStudent()">Studentenkanzlei</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="row x-search-area">
+                    <br>
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div ng-hide="showResult" ng-include="search_template"></div>
+                                <input ng-click="showResult ? resetSearch() : search()" class="x-search-button btn btn-default btn-lg" type="button"
+                                       value="{{showResult ? 'Erneut suchen' : 'Suchen'}}">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-10 col-md-offset-1" ng-show="showResult">
+                                <div class="row text-center orders-count">
+                                    <p>Es wurden {{searchData.length}} Ergebnisse gefunden</p>
+                                </div>
+                                <div class="row orders-row orders-divider">
+                                    <p class="col-xs-4 text-justify orders-head">Nachname</p>
+                                    <p class="col-xs-4 text-justify orders-head">Vorname</p>
+                                    <p class="col-xs-3 text-justify orders-head">Geburtsdatum</p>
+                                </div>
+                                <div class="row result-opener" ng-class-odd="'orders-row-odd'" ng-class-even="'orders-row'" ng-repeat-start="item in searchData | orderBy:['last_name','first_name']"
+                                     ng-init="openSingleResult(searchData.length)" ng-click="toggleItem($index)">
+                                    <p class="col-xs-4 text-justify orders-item">{{item.last_name}}</p>
+                                    <p class="col-xs-4 text-justify orders-item">{{item.first_name}}</p>
+                                    <p class="col-xs-3 text-justify orders-item">{{item.date_of_birth}}</p>
+                                    <p class="col-xs-1 text-justify orders-item">
+                                        <span class="glyphicon glyphicon-menu-right" ng-hide="openItem==$index"></span>
+                                        <span class="glyphicon glyphicon-menu-down" ng-show="openItem==$index"></span>
+                                    </p>
+                                </div>
+                                <div class="row result-border" ng-repeat-end
+                                     uib-collapse="openItem!=$index" style="background: rgba(255, 255, 255, 0.4);">
+                                    <div class="col-xs-10 col-xs-offset-1 result-content">
+                                        <br>
+                                        <div class="row">
+                                            <button type="button" class="btn btn-default pull-right result-button" ng-click="click(item)">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="margin-right: 10px;"></span>{{buttonLabel}}
+                                            </button>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div ng-include="result_template"></div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <br>
+                    <p class="text-center">{{order_message}}</p>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div id="order_modal_spinner" class="col-xs-4 col-xs-offset-4 text-center">
+                            <div class="spinner" style="margin: 10px auto;">
+                                <div class="rect1"></div>
+                                <div class="rect2"></div>
+                                <div class="rect3"></div>
+                                <div class="rect4"></div>
+                                <div class="rect5"></div>
+                            </div>
+                        </div>
+                        <button id="order_modal_button" type="button" class="btn btn-default col-xs-4 col-xs-offset-4 text-center"
+                                data-dismiss="modal">OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

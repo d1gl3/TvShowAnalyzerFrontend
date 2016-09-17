@@ -1,0 +1,75 @@
+#edit_save_button{
+  margin-right: 15px;
+  -webkit-transition: border-color .7s,background-color .8s, color .7s;
+  -moz-transition: border-color .7s,background-color .8s, color .7s;
+  -o-transition: border-color .7s,background-color .8s, color .7s;
+  transition: border-color .7s,background-color .8s, color .7s;
+}
+#edit_save_button:hover{
+  border-color: green;
+  /*background-color: lightgreen;*/
+  color: darkgreen;
+}
+#edit_cancel_button{
+  margin-right: 15px;
+  -webkit-transition: border-color .7s,background-color .8s, color .7s;
+  -moz-transition: border-color .7s,background-color .8s, color .7s;
+  -o-transition: border-color .7s,background-color .8s, color .7s;
+  transition: border-color .7s,background-color .8s, color .7s;
+}
+#edit_cancel_button:hover{
+  border-color: orange;
+  /*background-color: #f2be4d;*/
+  color: orange;
+}
+#edit_delete_button{
+  -webkit-transition: border-color .7s,background-color .8s, color .7s;
+  -moz-transition: border-color .7s,background-color .8s, color .7s;
+  -o-transition: border-color .7s,background-color .8s, color .7s;
+  transition: border-color .7s,background-color .8s, color .7s; 
+}
+#edit_delete_button:hover{
+  border-color: red;
+  /*background-color: #F76666;*/
+  color: red;
+}
+#delete_modal_ok{
+  -webkit-transition: border-color .7s,background-color .8s, color .7s;
+  -moz-transition: border-color .7s,background-color .8s, color .7s;
+  -o-transition: border-color .7s,background-color .8s, color .7s;
+  transition: border-color .7s,background-color .8s, color .7s; 
+}
+#delete_modal_ok:hover{
+  border-color: red;
+  color: red;
+}
+#delete_modal_cancel{
+  -webkit-transition: border-color .7s,background-color .8s, color .7s;
+  -moz-transition: border-color .7s,background-color .8s, color .7s;
+  -o-transition: border-color .7s,background-color .8s, color .7s;
+  transition: border-color .7s,background-color .8s, color .7s; 
+}
+#delete_modal_cancel:hover{
+  border-color: green;
+  color: darkgreen;
+}
+#edit_personal_form{
+  float: left;
+  height: 0px;
+  visibility: hidden;
+}
+#edit_exams_form{
+  float: left;
+  height: 0px;
+  visibility: hidden;
+}
+#edit_students_form{
+  float: left;
+  height: 0px;
+  visibility: hidden;
+}
+#edit_buttons{
+  margin-top: 10px;
+  height: 70px;
+  position: relative;
+}

@@ -1,0 +1,117 @@
+.search-bar {
+  height: 8%;
+}
+
+.search-bar input {
+  height: 80%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search-bar button {
+  height: 80%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: darkgray;
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 1.4em;
+  border-radius: 0;
+}
+
+.search-bar a {
+  height: 100%;
+  display: block;
+  float: right;
+  color: gray;
+}
+
+.search-bar a p {
+  position: relative;
+  float: right;
+  margin-right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+}
+
+.search-bar a span {
+  position: relative;
+  float: right;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8em;
+}
+
+.search-bar a:hover {
+  color: black;
+}
+
+.search-box {
+  position: relative;
+  top: 24%;
+  transform: translateY(-50%);
+  height: 12%;
+}
+
+.search-box h3 {
+  position: relative;
+  color: dimgrey;
+  text-align: center;
+}
+
+.search-input {
+  height: 50px;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 10px black;
+}
+
+.result-opener p {
+  -webkit-transition: color 0.3s, font-size 0.3s;
+  -moz-transition: color 0.3s, font-size 0.3s;
+  -o-transition: color 0.3s, font-size 0.3s;
+  transition: color 0.3s, font-size 0.3s;
+}
+
+.result-opener:hover p {
+  cursor: pointer;
+  font-size: 16px;
+  color: darkgray;
+}
+
+.result-hover {
+  text-align: center;
+}
+
+.result-border {
+  border-bottom: 1px solid;
+  border-color: rgba(0, 0, 0, 0.8);
+}
+
+.result-content {
+  margin-top: 1%;
+}
+
+.result-line {
+  height: 6%;
+}
+
+.result-line label {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.result-line p {
+  font-weight: lighter;
+  font-size: 0.96em;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.result-button {
+  font-weight: lighter;
+  font-size: 0.86em;
+}

@@ -1,0 +1,38 @@
+<div class="container-fluid full-height">
+    <div id="tabs_container" class="col-xs-12">
+
+
+        <div ng-app="seriesAnalyzer" ng-controller="speakerTableController">
+
+            <table st-table="rowCollection" class="table table-striped">
+                <thead>
+                <td>Name</td>
+                <td>Number Of Replicas</td>
+                <td>Longest Replic</td>
+                <td>Shortest Replic</td>
+                <td>Average Replic Length</td>
+                <td>Replic Length Median</td>
+                <td>Total Length Of Replics</td>
+                <td>Tv Show Replic Percentage</td>
+                <td>Tv Show Word Percentage</td>
+                </thead>
+                <tbody>
+                <tr ng-repeat="speaker in speakers | orderBy:'-number_of_replicas'">
+                    <td>{{speaker.name}}</td>
+                    <td>{{speaker.number_of_replicas}}</td>
+                    <td>{{speaker.replicas_length_max}}</td>
+                    <td>{{speaker.replicas_length_min}}</td>
+                    <td>{{speaker.replicas_length_avg.toFixed(2)}}</td>
+                    <td>{{speaker.replicas_length_med}}</td>
+                    <td>{{speaker.replicas_length_total}}</td>
+                    <td>{{((speaker.tv_show_replik_percentage)*100).toFixed(2)}} %</td>
+                    <td>{{((speaker.tv_show_word_percentage)*100).toFixed(2)}} %</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <br>
+    </div>
+</div>

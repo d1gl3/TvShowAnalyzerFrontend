@@ -1,0 +1,432 @@
+<div class="container-fluid full-height full-width">
+    <div id="tabs_container" class="col-xs-12">
+
+
+        <div ng-app="seriesAnalyzer" ng-controller="speakerComparisonController">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Speaker Selection</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6 speaker-selection">
+
+                            <div class="speaker-card">
+                                <div class="speaker-label">Sheldon</div>
+                                <img class="speaker-image" src="assets/img/sheldon.jpg"
+                                     ng-click="set_selected_speaker('Sheldon', 0)">
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Penny</div>
+                                <img class="speaker-image" src="assets/img/penny.jpg"
+                                     ng-click="set_selected_speaker('Penny', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Leonard</div>
+                                <img class="speaker-image" src="assets/img/leonard.jpg"
+                                     ng-click="set_selected_speaker('Leonard', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Howard</div>
+                                <img class="speaker-image" src="assets/img/howard.jpg"
+                                     ng-click="set_selected_speaker('Howard', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Raj</div>
+                                <img class="speaker-image" src="assets/img/raj.jpg"
+                                     ng-click="set_selected_speaker('Raj', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Amy</div>
+                                <img class="speaker-image" src="assets/img/amy.jpg"
+                                     ng-click="set_selected_speaker('Amy', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Bernadette</div>
+                                <img class="speaker-image" src="assets/img/bernadette.jpg"
+                                     ng-click="set_selected_speaker('Bernadette', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Stuart</div>
+                                <img class="speaker-image" src="assets/img/stuart.jpg"
+                                     ng-click="set_selected_speaker('Stuart', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Priya</div>
+                                <img class="speaker-image" src="assets/img/priya.jpg"
+                                     ng-click="set_selected_speaker('Priya', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Mrs Cooper</div>
+                                <img class="speaker-image" src="assets/img/mrs_cooper.jpg"
+                                     ng-click="set_selected_speaker('Mrs Cooper', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Mrs Wolowitz</div>
+                                <img class="speaker-image" src="assets/img/mrs_wolowitz.jpg"
+                                     ng-click="set_selected_speaker('Mrs Wolowitz', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Emily</div>
+                                <img class="speaker-image" src="assets/img/emily.jpg"
+                                     ng-click="set_selected_speaker('Emily', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Beverley</div>
+                                <img class="speaker-image" src="assets/img/beverley.jpg"
+                                     ng-click="set_selected_speaker('Beverley', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Wil</div>
+                                <img class="speaker-image" src="assets/img/wil.jpg"
+                                     ng-click="set_selected_speaker('Wil', 0)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Arthur</div>
+                                <img class="speaker-image" src="assets/img/arthur.jpg"
+                                     ng-click="set_selected_speaker('Arthur', 0)">
+                                </label>
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Leslie</div>
+                                <img class="speaker-image" src="assets/img/leslie.jpg"
+                                     ng-click="set_selected_speaker('Leslie', 0)">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 speaker-selection">
+
+                            <div class="speaker-card">
+                                <div class="speaker-label">Sheldon</div>
+                                <img class="speaker-image" src="assets/img/sheldon.jpg"
+                                     ng-click="set_selected_speaker('Sheldon', 1)">
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Penny</div>
+                                <img class="speaker-image" src="assets/img/penny.jpg"
+                                     ng-click="set_selected_speaker('Penny', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Leonard</div>
+                                <img class="speaker-image" src="assets/img/leonard.jpg"
+                                     ng-click="set_selected_speaker('Leonard', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Howard</div>
+                                <img class="speaker-image" src="assets/img/howard.jpg"
+                                     ng-click="set_selected_speaker('Howard', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Raj</div>
+                                <img class="speaker-image" src="assets/img/raj.jpg"
+                                     ng-click="set_selected_speaker('Raj', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Amy</div>
+                                <img class="speaker-image" src="assets/img/amy.jpg"
+                                     ng-click="set_selected_speaker('Amy', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Bernadette</div>
+                                <img class="speaker-image" src="assets/img/bernadette.jpg"
+                                     ng-click="set_selected_speaker('Bernadette', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Stuart</div>
+                                <img class="speaker-image" src="assets/img/stuart.jpg"
+                                     ng-click="set_selected_speaker('Stuart', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Priya</div>
+                                <img class="speaker-image" src="assets/img/priya.jpg"
+                                     ng-click="set_selected_speaker('Priya', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Mrs Cooper</div>
+                                <img class="speaker-image" src="assets/img/mrs_cooper.jpg"
+                                     ng-click="set_selected_speaker('Mrs Cooper', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Mrs Wolowitz</div>
+                                <img class="speaker-image" src="assets/img/mrs_wolowitz.jpg"
+                                     ng-click="set_selected_speaker('Mrs Wolowitz', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Emily</div>
+                                <img class="speaker-image" src="assets/img/emily.jpg"
+                                     ng-click="set_selected_speaker('Emily', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Beverley</div>
+                                <img class="speaker-image" src="assets/img/beverley.jpg"
+                                     ng-click="set_selected_speaker('Beverley', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Wil</div>
+                                <img class="speaker-image" src="assets/img/wil.jpg"
+                                     ng-click="set_selected_speaker('Wil', 1)">
+
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Arthur</div>
+                                <img class="speaker-image" src="assets/img/arthur.jpg"
+                                     ng-click="set_selected_speaker('Arthur', 1)">
+                                </label>
+                            </div>
+                            <div class="speaker-card">
+                                <div class="speaker-label">Leslie</div>
+                                <img class="speaker-image" src="assets/img/leslie.jpg"
+                                     ng-click="set_selected_speaker('Leslie', 1)">
+
+                            </div>
+                        </div>
+                        <!--
+                        <label>
+                            All Figures:
+                            <select ng-options="speaker as speaker.name for speaker in speakers | orderBy:'-number_of_replicas'" ng-model="selectedSpeaker">
+                                <option value="">Please select a speaker...</option>
+                            </select>
+                        </label>
+                        <div class="speaker-card" ng-repeat="speaker in speakers | orderBy:'-number_of_replicas'" ng-if="$index > 16">
+                            <div class="speaker-label">{{speaker.name}}</div>
+                            <img class="speaker-image" src="img/anonym.jpg" ng-click="set_selected_speaker(speaker.name)">
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Speaker Stats</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="selected-speaker-container" ng-if="selectedSpeaker[0].name != undefined">
+                                <div class="speaker-info-image-container">
+                                    <img class="comparison-image"
+                                         ng-src="assets/img/{{selectedSpeaker[0].name.toString().replace(' ', '_').toLowerCase()}}.jpg"
+                                         onError="this.src='assets/img/anonym.jpg';">
+                                </div>
+                                <div class="speaker-info-table-container">
+                                    <table st-table="rowCollection" class="table table-striped">
+                                        <td class="no-padding">
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td>{{selectedSpeaker[0].name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number Of Replicas:</td>
+                                                    <td>{{selectedSpeaker[0].number_of_replicas}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Longest Replic:</td>
+                                                    <td>{{selectedSpeaker[0].replicas_length_max}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shortest Replic:</td>
+                                                    <td>{{selectedSpeaker[0].replicas_length_min}}</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                        <td class="no-padding">
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+
+                                                <tr>
+                                                    <td>Percentage Of Replics In Show:</td>
+                                                    <td>{{((selectedSpeaker[0].replik_percentage)*100).toFixed(2)}} %
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Percentage Of Words In Show:</td>
+                                                    <td>{{((selectedSpeaker[0].word_percentage)*100).toFixed(2)}} %</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Replic Length:</td>
+                                                    <td>{{selectedSpeaker[0].replicas_length_avg.toFixed(2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Median Replic Length:</td>
+                                                    <td>{{selectedSpeaker[0].replicas_length_med}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="selected-speaker-container" ng-if="selectedSpeaker[1].name != undefined">
+                                <div class="speaker-info-table-container">
+                                    <table st-table="rowCollection" class="table table-striped">
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td>{{selectedSpeaker[1].name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number Of Replicas:</td>
+                                                    <td>{{selectedSpeaker[1].number_of_replicas}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Longest Replic:</td>
+                                                    <td>{{selectedSpeaker[1].replicas_length_max}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shortest Replic:</td>
+                                                    <td>{{selectedSpeaker[1].replicas_length_min}}</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+
+                                                <tr>
+                                                    <td>Percentage Of Replics In Show:</td>
+                                                    <td>{{((selectedSpeaker[1].replik_percentage)*100).toFixed(2)}} %
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Percentage Of Words In Show:</td>
+                                                    <td>{{((selectedSpeaker[1].word_percentage)*100).toFixed(2)}} %</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Replic Length:</td>
+                                                    <td>{{selectedSpeaker[1].replicas_length_avg.toFixed(2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Median Replic Length:</td>
+                                                    <td>{{selectedSpeaker[1].replicas_length_med}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </table>
+                                </div>
+                                <div class="speaker-info-image-container">
+                                    <img class="comparison-image"
+                                         ng-src="assets/img/{{selectedSpeaker[1].name.toString().replace(' ', '_').toLowerCase()}}.jpg"
+                                         onError="this.src='assets/img/anonym.jpg';">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" ng-if="selectedSpeaker[0].replicaLengths || selectedSpeaker[1].replicaLengths">
+                <div class="panel-heading">Replica Length Distribution</div>
+                <div class="panel-body">
+
+                    <div class="row speaker-info-grafics">
+                        <div class="col-md-6 bar-chart">
+                            <nvd3 options="options" data="selectedSpeaker[0].replicaLengths"></nvd3>
+                        </div>
+                        <div class="col-md-6 bar-chart">
+                            <nvd3 options="options" data="selectedSpeaker[1].replicaLengths"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" ng-if="speakerWords">
+                <div class="panel-heading">Most Used Words</div>
+                <div class="panel-body">
+
+                    <div class="row" id="speaker-word-cloud">
+                        <div class="col-md-4 bar-chart">
+                            <jqcloud words="speakerWords" width="500" height="350" steps="7"></jqcloud>
+                        </div>
+                        <div class="col-md-4 bar-chart">
+                            <jqcloud words="speakerWordsPos" width="500" height="350" steps="7"></jqcloud>
+                            <span class="label label-success">Ratio: {{(selectedSpeaker.words_pos_ratio*100).toFixed(1)}} %</span>
+                        </div>
+                        <div class="col-md-4 bar-chart">
+                            <jqcloud words="speakerWordsNeg" width="500" height="350" steps="7"></jqcloud>
+                            <span class="label label-danger">Ratio: {{(selectedSpeaker.words_neg_ratio*100).toFixed(1)}} %</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default linechart-panel" ng-if="speakerSeasonStats">
+                <div class="panel-heading">Speaker Season Replic Stats</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaAvg" data="replicaAverageSeasons"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaNumber" data="replicaNumberSeasons"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaSum" data="replicaSumSeasons"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default linechart-panel" ng-if="speakerEpisodeStats">
+                <div class="panel-heading">Speaker Episode Replic Stats</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaAvgEpi" data="replicaAverageEpisodes"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaNumberEpi" data="replicaNumberEpisodes"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-4">
+                            <nvd3 options="linechartOptionsReplicaSumEpi" data="replicaSumEpisodes"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+    </div>
+</div>

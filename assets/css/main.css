@@ -1,0 +1,117 @@
+.speaker-label {
+    position: relative;
+    text-align: center;
+    height: 40px;
+}
+
+.speaker-image {
+    margin: 0 auto;
+    position: relative;
+    display: block;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+#bar-chart-season-replic-length {
+    padding: 40px;
+}
+
+.speaker-image:hover {
+    -moz-transform: scale(1.3);
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.speaker-info-table {
+    display: inline;
+    border-top: 0;
+}
+
+.table {
+    opacity: 0.80;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: 0;
+}
+
+.pie-chart-small {
+    height: 400px;
+}
+
+.speaker-card {
+    position: relative;
+    height: 150px;
+    width: 120px;
+    margin: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.speaker-card:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.speaker-selection {
+    font-family: calibri;
+    box-sizing: border-box;
+    overflow: auto;
+    height: 190px;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    /*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);*/
+}
+
+#force-directed-graph-speakers {
+    height: 500px;
+}
+
+.speaker-info-grafics {
+    /*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);*/
+    height: auto;
+}
+
+.bar-chart {
+    height: 400px;
+}
+
+#speaker-info-box {
+    /*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);*/
+    /*padding: 10px;*/
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.speaker-info-image-container {
+    width: 33%;
+}
+
+.speaker-info-table-container {
+    width: 67%;
+}
+
+.linechart-pannel {
+    height:auto;
+}
+
+.linechart-pannel > .pannel-body{
+    height:auto;
+}
+
+#speaker-info-box > div > img {
+    height: 300px;
+    width: 300px;
+}
+
+.comparison-image {
+    width: 100%;
+    position: relative;
+}
+
+.selected-speaker-container {
+    display: flex;
+}

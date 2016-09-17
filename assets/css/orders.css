@@ -1,0 +1,58 @@
+.orders-count {
+  padding: 10px 0 5px 0;
+  font-size: 16px;
+  background: rgba(235, 235, 235, 0.9);
+}
+
+.orders-row {
+  padding: 10px 0 5px 0;
+  background: rgba(235, 235, 235, 0.9);
+  border-color: black;
+  border-bottom: 1px solid;
+}
+
+.orders-row-odd {
+  padding: 10px 0 5px 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: black;
+  border-bottom: 1px solid;
+}
+
+.orders-divider {
+  border-color: black;
+  border-bottom: 2px solid;
+}
+
+.orders-head {
+  font-size: 18px;
+  text-align: center;
+}
+
+.orders-item {
+  font-size: 14px;
+  text-align: center;
+}
+
+.order-status-dropdown {
+  margin-top: 2px !important;
+}
+
+.order-status {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px 2px;
+  text-align: center;
+  border-top: solid 1px darkgrey;
+  -webkit-transition: background-color .8s;
+  transition:  background-color .8s;
+}
+
+.order-status:first-child {
+  border-top: none;
+}
+
+.order-status-btn {
+  width: 100%;
+  text-align: center;
+}
+

@@ -1,0 +1,37 @@
+<div class="container-fluid full-height">
+    <div id="tabs_container" class="col-xs-12">
+
+
+        <div ng-app="seriesAnalyzer" ng-controller="configTableController">
+
+
+            <div class="row">
+                <label>
+                    Episode:
+                    <select ng-options="episode as 'Season ' + episode.season_number + ' ' + 'Episode ' + episode.episode_number for episode in all_episodes | orderBy:['season_number','episode_number']"
+                            ng-model="selectedEpisode">
+                        <option value="">Please select an episode...</option>
+                    </select>
+                </label>
+
+                <table st-table="rowCollection" class="table table-striped">
+                    <thead></thead>
+                    <tbody>
+                    <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
+                        <td ng-repeat="values in scene track by $index" ng-style="set_color(values)">{{values}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row" id="force-directed-graph-speakers" ng-if="selectedEpisode">
+                <div class="col-md-6">
+                    <nvd3 options="options" data="selectedEpisode.force_directed_data"></nvd3>
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+    </div>
+</div>
