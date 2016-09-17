@@ -11,7 +11,7 @@ seriesAnalyzer.factory('SpeakerService',
                 deferObject;
 
             service.GetSpeakers = function () {
-                var speaker_endpoint = 'http://localhost:8080/api/speakers',
+                var speaker_endpoint = 'http://85.214.56.43:8080/api/speakers',
 
                     speakers = $http.get(speaker_endpoint),
 
@@ -30,7 +30,7 @@ seriesAnalyzer.factory('SpeakerService',
             };
 
             service.GetSpeakerByName = function (name) {
-                var speaker_endpoint = 'http://localhost:8080/api/speakers/' + name.toString(),
+                var speaker_endpoint = 'http://85.214.56.43:8080/api/speakers/' + name.toString(),
 
                     speakers = $http.get(speaker_endpoint),
 

@@ -11,7 +11,7 @@ seriesAnalyzer.factory('EpisodeService',
                 deferObject;
 
             service.GetEpisodes = function () {
-                var episode_endpoint = 'http://localhost:8080/api/episodes',
+                var episode_endpoint = 'http://85.214.56.43:8080/api/episodes',
 
                     episodes = $http.get(episode_endpoint),
 
