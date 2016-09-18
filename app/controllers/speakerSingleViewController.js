@@ -110,6 +110,11 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         $http.get('http://85.214.56.43:8080/api/speakers')
             .success(function (data) {
                 $scope.speakers = data;
+                var dropdownSpeakerNames = [];
+                for(var i = 0; i< $scope.speakers.length; i++){
+                    dropdownSpeakerNames.push(String.valueOf($scope.speakers[i].name));
+                }
+                $scope.dropdownSpeakerNames = dropdownSpeakerNames;
             })
             .error(function (data) {
                 console.log('Error: ' + data);
@@ -161,6 +166,10 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             set_speaker_season_data(name);
             set_speaker_episode_data(name);
         };
+
+        $scope.$watch('dropdownSelectedSpeaker', function (speaker) {
+           $scope.set_selected_speaker(speaker);
+        });
 
         $scope.$watch('speakerSeasonStats', function (new_value) {
             set_speaker_season_replik_line_chart_data(new_value);
