@@ -111,7 +111,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             .success(function (data) {
                 $scope.speakers = data;
                 var dropdownSpeakerNames = [];
-                for(var i = 0; i< $scope.speakers.length; i++){
+                for (var i = 0; i < $scope.speakers.length; i++) {
                     dropdownSpeakerNames.push(String.valueOf($scope.speakers[i].name));
                 }
                 $scope.dropdownSpeakerNames = dropdownSpeakerNames;
@@ -137,30 +137,31 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         $scope.set_selected_speaker = function (name) {
             console.log(name);
             get_speaker_stats(name, function (speaker) {
-                $scope.selectedSpeaker = speaker;
-                var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
-                var length_list = [];
+                if (!speaker.isNaN() && !speaker == undefined) {
+                    $scope.selectedSpeaker = speaker;
+                    var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
+                    var length_list = [];
 
-                for (var len in replica_lengths) {
-                    if (replica_lengths.hasOwnProperty(len)) {
-                        length_list.push([len.substring(1), replica_lengths[len]])
+                    for (var len in replica_lengths) {
+                        if (replica_lengths.hasOwnProperty(len)) {
+                            length_list.push([len.substring(1), replica_lengths[len]])
+                        }
                     }
+
+                    length_list.sort(function (a, b) {
+                        return a[0] - b[0]
+                    });
+
+                    $scope.speakerWords = $scope.selectedSpeaker.word_cloud_data;
+                    $scope.speakerWordsNeg = $scope.selectedSpeaker.negative_words_cloud;
+                    $scope.speakerWordsPos = $scope.selectedSpeaker.positive_words_cloud;
+
+                    $scope.replicaLengths = [{
+                        key: "Quantity",
+                        bar: true,
+                        values: length_list
+                    }];
                 }
-
-                length_list.sort(function (a, b) {
-                    return a[0] - b[0]
-                });
-
-                $scope.speakerWords = $scope.selectedSpeaker.word_cloud_data;
-                $scope.speakerWordsNeg = $scope.selectedSpeaker.negative_words_cloud;
-                $scope.speakerWordsPos = $scope.selectedSpeaker.positive_words_cloud;
-
-                $scope.replicaLengths = [{
-                    key: "Quantity",
-                    bar: true,
-                    values: length_list
-                }];
-
             });
 
             set_speaker_season_data(name);
@@ -168,7 +169,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         };
 
         $scope.$watch('dropdownSelectedSpeaker', function (speaker) {
-           $scope.set_selected_speaker(speaker);
+            $scope.set_selected_speaker(speaker);
         });
 
         $scope.$watch('speakerSeasonStats', function (new_value) {
@@ -225,15 +226,15 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 key: $scope.selectedSpeaker.name,
                 values: avg_length_list
             },
-            {
-                key: "Regression",
-                values: getLinearRegressionLine(avg_length_list)
-            }];
+                {
+                    key: "Regression",
+                    values: getLinearRegressionLine(avg_length_list)
+                }];
 
             $scope.replicaNumberEpisodes = [{
                 key: $scope.selectedSpeaker.name,
                 values: number_of_replicas_list
-            },{
+            }, {
                 key: "Regression",
                 values: getLinearRegressionLine(number_of_replicas_list)
             }];
@@ -291,7 +292,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 key: $scope.selectedSpeaker.name,
                 bar: true,
                 values: avg_length_list
-            },{
+            }, {
                 key: "Regression",
                 values: getLinearRegressionLine(avg_length_list)
             }];
@@ -300,7 +301,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 key: $scope.selectedSpeaker.name,
                 bar: true,
                 values: number_of_replicas_list
-            },{
+            }, {
                 key: "Regression",
                 values: getLinearRegressionLine(number_of_replicas_list)
             }];
@@ -309,7 +310,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 key: $scope.selectedSpeaker.name,
                 bar: true,
                 values: sum_length_list
-            },{
+            }, {
                 key: "Regression",
                 values: getLinearRegressionLine(sum_length_list)
             }];
