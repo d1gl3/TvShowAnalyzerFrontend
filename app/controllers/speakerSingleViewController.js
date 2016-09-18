@@ -166,7 +166,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 }
             });
 
-            if (typeof $scope.selectedSpeaker != "undefined" || typeof speaker == "string") {
+            if (typeof $scope.selectedSpeaker != "undefined" || typeof $scope.selectedSpeaker == "string") {
                 console.log($scope.selectedSpeaker);
                 set_speaker_season_data(name);
                 set_speaker_episode_data(name);
