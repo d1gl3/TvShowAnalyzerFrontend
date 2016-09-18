@@ -128,7 +128,7 @@ app.get('/api/speakers/:name', function (req, res) {
     find_speaker_by_name(name, function (err, result) {
         if (err) {
             console.log("Sent err");
-            res.status(404).send.(err);
+            res.status(404).send(err);
         }
         else {
             console.log("Sent result");
