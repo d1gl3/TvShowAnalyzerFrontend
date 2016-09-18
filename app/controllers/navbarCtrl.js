@@ -6,6 +6,8 @@ seriesAnalyzer.controller('navbarCtrl', function ($scope, $rootScope, $location,
         TabService.SetSelectedTab(tab);
     };
 
+    //test
+
     $scope.isSelected = function(tab) {
         return TabService.IsTabSelected(tab);
     };
