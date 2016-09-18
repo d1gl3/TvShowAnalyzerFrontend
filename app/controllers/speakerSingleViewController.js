@@ -175,7 +175,9 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         };
 
         $scope.$watch('dropdownSelectedSpeaker', function (speaker) {
-            $scope.set_selected_speaker(speaker);
+            if(String(speaker).length > 0) {
+                $scope.set_selected_speaker(speaker);
+            }
         });
 
         $scope.$watch('speakerSeasonStats', function (new_value) {
