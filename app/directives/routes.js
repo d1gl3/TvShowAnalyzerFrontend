@@ -1,7 +1,6 @@
 seriesAnalyzer.config(function($routeProvider) {
     $routeProvider
-        .when('/', { templateUrl: 'assets/templates/overview.html' })
-        .when('/overview', { templateUrl: 'assets/templates/overview.html' })
+        .when('/', { templateUrl: 'assets/templates/tv_show_grafics.html' })
         .when('/full-config-tables', { templateUrl: 'assets/templates/full_config_table.html'})
         .when('/episode-config-tables', { templateUrl: 'assets/templates/episode_config_tables.html' })
         .when('/season-config-tables', { templateUrl: 'assets/templates/season_config_tables.html' })
