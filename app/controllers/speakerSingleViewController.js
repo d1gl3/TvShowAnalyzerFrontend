@@ -139,7 +139,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         $scope.set_selected_speaker = function (name) {
             console.log(name);
             get_speaker_stats(name, function (speaker) {
-                if (typeof speaker != "undefined" || typeof speaker === "string" || speaker instanceof String) {
+                if (!isNaN($scope.selectedSpeaker)) {
                     console.log(typeof speaker);
                     $scope.selectedSpeaker = speaker;
                     var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
@@ -167,7 +167,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 }
             });
 
-            if (typeof $scope.selectedSpeaker != "undefined" || typeof $scope.selectedSpeaker === "string" || $scope.selectedSpeaker instanceof String) {
+            if (!isNaN($scope.selectedSpeaker)) {
                 console.log($scope.selectedSpeaker);
                 set_speaker_season_data(name);
                 set_speaker_episode_data(name);
