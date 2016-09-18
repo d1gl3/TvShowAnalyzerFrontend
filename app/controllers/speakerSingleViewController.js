@@ -128,6 +128,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         var get_speaker_stats = function (name, callback) {
             $http.get('http://85.214.56.43:8080/api/speakers/' + name)
                 .success(function (data) {
+                    console.log(data);
                     callback(data);
                 })
                 .error(function (data) {
