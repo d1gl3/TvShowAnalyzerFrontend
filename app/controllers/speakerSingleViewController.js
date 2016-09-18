@@ -112,6 +112,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 $scope.speakers = data;
                 var dropdownSpeakerNames = [];
                 for (var i = 0; i < $scope.speakers.length; i++) {
+                    console.log($scope.speakers);
                     dropdownSpeakerNames.push(String.valueOf($scope.speakers[i].name));
                 }
                 $scope.dropdownSpeakerNames = dropdownSpeakerNames;
