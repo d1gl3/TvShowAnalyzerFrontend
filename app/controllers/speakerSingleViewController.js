@@ -138,7 +138,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             console.log(name);
             get_speaker_stats(name, function (speaker) {
                 if (typeof speaker != "undefined") {
-                    console.log(speaker);
+                    console.log(typeof speaker);
                     $scope.selectedSpeaker = speaker;
                     var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
                     var length_list = [];
