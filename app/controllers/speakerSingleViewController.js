@@ -140,7 +140,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             console.log(name);
             get_speaker_stats(name, function (speaker) {
                 if (!isNaN(speaker)) {
-                    console.log(speaker);
+                    console.log("Speaker" + speaker);
                     $scope.selectedSpeaker = speaker;
                     var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
                     var length_list = [];
