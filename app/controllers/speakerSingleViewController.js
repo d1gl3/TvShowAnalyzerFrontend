@@ -165,8 +165,10 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 }
             });
 
-            set_speaker_season_data(name);
-            set_speaker_episode_data(name);
+            if (typeof $scope.selectedSpeaker != "undefined") {
+                set_speaker_season_data(name);
+                set_speaker_episode_data(name);
+            }
         };
 
         $scope.$watch('dropdownSelectedSpeaker', function (speaker) {
