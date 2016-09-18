@@ -81,9 +81,9 @@ var find_all_seasons = function (callback) {
 var find_speaker_by_name = function (name, callback) {
     db.get().collection('speaker_collection').findOne({"name": name}, function (err, doc) {
         if (doc) {
-            callback(doc);
+            callback(doc, null);
         } else {
-            callback(err, "An Error Occured");
+            callback(null, err);
         }
     });
 };
@@ -125,10 +125,10 @@ app.get('/api/speakers/:name', function (req, res) {
     var name = req.params.name;
 
 
-    find_speaker_by_name(name, function (err, result) {
+    find_speaker_by_name(name, function (result, err) {
         if (err) {
             console.log("Sent err");
-            res.status(404).send(err);
+            res.status(404).send();
         }
         else {
             console.log("Sent result");
