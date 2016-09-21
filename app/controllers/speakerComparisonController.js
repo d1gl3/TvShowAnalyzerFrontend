@@ -6,7 +6,7 @@
 seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'CurrentSelectedSpeakerService', 'SeasonService', 'EpisodeService', 'SettingService',
     function ($scope, $http, CurrentSelectedSpeakerService, SeasonService, EpisodeService, SettingService) {
 
-        $scope.selectedSpeaker = [{},{}];
+        $scope.selectedSpeaker = [{}, {}];
         $scope.seasonHammingDistance = [];
         $scope.episodeHammingDistance = [];
 
@@ -40,15 +40,15 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                     bar: true,
                     values: length_list
                 },
-                {
-                    key: "Regression",
-                    bar: false,
-                    values: getPolynomialRegressionLine(length_list).points
-                }];
+                    {
+                        key: "Regression",
+                        bar: false,
+                        values: getPolynomialRegressionLine(length_list).points
+                    }];
             });
 
-            //set_speaker_season_data(name, pos);
-            //set_speaker_episode_data(name, pos);
+            set_speaker_season_data(name, pos);
+            set_speaker_episode_data(name, pos);
         };
 
         function compareNumbers(a, b) {
@@ -191,12 +191,12 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             var str1 = str1.toLowerCase();
             var str2 = str2.toLowerCase();
 
-            for(var i = 0; i < str1.length; i++) {
+            for (var i = 0; i < str1.length; i++) {
 
-                if(str2[i] && str2[i] !== str1[i]) {
+                if (str2[i] && str2[i] !== str1[i]) {
                     dist += 1;
                 }
-                else if(!str2[i]) {
+                else if (!str2[i]) {
                     //  If there's no letter in the comparing string
                     dist += dist;
                 }
@@ -205,18 +205,22 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             return dist;
         };
 
-        $scope.$watch('speakerSeasonStats', function (new_value) {
-            set_speaker_season_replik_line_chart_data(new_value);
+        $scope.$watch('selectedSpeaker[0].speakerSeasonStats', function () {
+            set_speaker_season_replik_line_chart_data();
+        });
+
+        $scope.$watch('selectedSpeaker[1].speakerSeasonStats', function () {
+            set_speaker_season_replik_line_chart_data();
         });
 
         $scope.$watch('selectedSpeaker[0]', function (new_value) {
-           if ($scope.selectedSpeaker[1].name != undefined){
-              $scope.set_season_hamm_dist();
-           }
+            if ($scope.selectedSpeaker[1].name != undefined) {
+                $scope.set_season_hamm_dist();
+            }
         });
 
         $scope.$watch('selectedSpeaker[1]', function (new_value) {
-            if ($scope.selectedSpeaker[0].name != undefined){
+            if ($scope.selectedSpeaker[0].name != undefined) {
                 $scope.set_season_hamm_dist();
             }
         });
@@ -226,8 +230,8 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             var hamm_1 = $scope.selectedSpeaker[0].hamming_distances["season_" + season_number];
             var hamm_2 = $scope.selectedSpeaker[1].hamming_distances["season_" + season_number];
 
-            for(var i = 1; i<=Object.keys(hamm_1).length -1; i++){
-                var dist = calc_hamm(hamm_1["episode_"+ i].episode_hamming_dist, hamm_2["episode_"+ i].episode_hamming_dist);
+            for (var i = 1; i <= Object.keys(hamm_1).length - 1; i++) {
+                var dist = calc_hamm(hamm_1["episode_" + i].episode_hamming_dist, hamm_2["episode_" + i].episode_hamming_dist);
                 episode_dist.push({
                     x: i,
                     y: dist
@@ -245,13 +249,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             $scope.$apply();
         };
 
-        $scope.set_season_hamm_dist = function(){
+        $scope.set_season_hamm_dist = function () {
             var season_dist = [];
             var hamm_1 = $scope.selectedSpeaker[0].hamming_distances;
             var hamm_2 = $scope.selectedSpeaker[1].hamming_distances;
 
-            for(var i = 1; i<=8; i++){
-                var dist = calc_hamm(hamm_1["season_"+ i].season_hamming_dist, hamm_2["season_"+ i].season_hamming_dist);
+            for (var i = 1; i <= 8; i++) {
+                var dist = calc_hamm(hamm_1["season_" + i].season_hamming_dist, hamm_2["season_" + i].season_hamming_dist);
                 season_dist.push({
                     x: i,
                     y: dist
@@ -265,19 +269,19 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 values: season_dist
             }];
         };
-        //
-        // $scope.$watch('selectedSpeaker[0].speakerEpisodeStats', function () {
-        //     // set_speaker_episode_replik_line_chart_data(new_value);
-        //     set_episode_hamming_distances();
-        // });
-        //
-        // $scope.$watch('selectedSpeaker[1].speakerEpisodeStats', function () {
-        //     // set_speaker_episode_replik_line_chart_data(new_value);
-        //     set_episode_hamming_distances();
-        // });
+
+        $scope.$watch('selectedSpeaker[0].speakerEpisodeStats', function () {
+            set_speaker_episode_replik_line_chart_data();
+            //set_episode_hamming_distances();
+        });
+
+        $scope.$watch('selectedSpeaker[1].speakerEpisodeStats', function () {
+            set_speaker_episode_replik_line_chart_data();
+            //set_episode_hamming_distances();
+        });
 
 
-        var set_episode_hamming_distance= function(list1, list2, callback){
+        var set_episode_hamming_distance = function (list1, list2, callback) {
             console.log(list1);
             console.log(list2);
             callback("Test");
@@ -351,151 +355,233 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             }];
         };
 
-        var set_speaker_season_replik_line_chart_data = function (speaker_stats) {
-            var avg_length_list = [],
-                number_of_replicas_list = [],
-                sum_length_list = [];
+        var set_speaker_season_replik_line_chart_data = function () {
 
-            for (var season in speaker_stats) {
-                if (speaker_stats.hasOwnProperty(season)) {
-                    var season_data = speaker_stats[season];
-                    if (season_data.season_data != null) {
-                        avg_length_list.push({
-                            x: season_data.season_number,
-                            y: season_data.season_data.replicas_length_avg
-                        });
-                        number_of_replicas_list.push({
-                            x: season_data.season_number,
-                            y: season_data.season_data.number_of_replicas
-                        });
-                        sum_length_list.push({
-                            x: season_data.season_number,
-                            y: season_data.season_data.replicas_length_total
-                        });
-                    }
-                    else {
-                        avg_length_list.push({
-                            x: season_data.season_number,
-                            y: 0
-                        });
-                        number_of_replicas_list.push({
-                            x: season_data.season_number,
-                            y: 0
-                        });
-                        sum_length_list.push({
-                            x: season_data.season_number,
-                            y: 0
-                        });
+            var replicaAverageSeasons = [],
+                replicaNumberSeasons = [],
+                replicaSumSeasons = [],
+                avg_length_list = [],
+                number_of_replicas_list = [],
+                sum_length_list = [],
+                name = null,
+                speaker_stats = 0;
+
+            console.log($scope.selectedSpeaker[0]);
+            if ($scope.selectedSpeaker[0].speakerSeasonStats) {
+
+                avg_length_list = [];
+                number_of_replicas_list = [];
+                sum_length_list = [];
+                speaker_stats = $scope.selectedSpeaker[0].speakerSeasonStats;
+                name = $scope.selectedSpeaker[0].name;
+
+                for (var season in speaker_stats) {
+                    if (speaker_stats.hasOwnProperty(season)) {
+                        var season_data = speaker_stats[season];
+                        if (season_data.season_data != null) {
+                            avg_length_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.replicas_length_avg
+                            });
+                            number_of_replicas_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.number_of_replicas
+                            });
+                            sum_length_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.replicas_length_total
+                            });
+                        }
+                        else {
+                            avg_length_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                            number_of_replicas_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                            sum_length_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                        }
                     }
                 }
+
+                replicaAverageSeasons.push({
+                        key: name,
+                        bar: true,
+                        values: avg_length_list
+                    },
+                    {
+                        key: "Regression " + name,
+                        values: getLinearRegressionLine(avg_length_list)
+                    });
+
+                replicaNumberSeasons.push({
+                    key: name,
+                    bar: true,
+                    values: number_of_replicas_list
+                }, {
+                    key: "Regression " + name,
+                    values: getLinearRegressionLine(number_of_replicas_list)
+                });
+
+                replicaSumSeasons.push({
+                    key: name,
+                    bar: true,
+                    values: sum_length_list
+                }, {
+                    key: "Regression" + name,
+                    values: getLinearRegressionLine(sum_length_list)
+                });
             }
 
-            $scope.replicaAverageSeasons = [{
-                key: $scope.selectedSpeaker.name,
-                bar: true,
-                values: avg_length_list
-            }, {
-                key: "Regression",
-                values: getLinearRegressionLine(avg_length_list)
-            }];
+            if ($scope.selectedSpeaker[1].speakerSeasonStats) {
 
-            $scope.replicaNumberSeasons = [{
-                key: $scope.selectedSpeaker.name,
-                bar: true,
-                values: number_of_replicas_list
-            }, {
-                key: "Regression",
-                values: getLinearRegressionLine(number_of_replicas_list)
-            }];
+                avg_length_list = [];
+                number_of_replicas_list = [];
+                sum_length_list = [];
+                speaker_stats = $scope.selectedSpeaker[1].speakerSeasonStats;
+                name = $scope.selectedSpeaker[1].name;
 
-            $scope.replicaSumSeasons = [{
-                key: $scope.selectedSpeaker.name,
-                bar: true,
-                values: sum_length_list
-            }, {
-                key: "Regression",
-                values: getLinearRegressionLine(sum_length_list)
-            }];
+                for (var season in speaker_stats) {
+                    if (speaker_stats.hasOwnProperty(season)) {
+                        var season_data = speaker_stats[season];
+                        if (season_data.season_data != null) {
+                            avg_length_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.replicas_length_avg
+                            });
+                            number_of_replicas_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.number_of_replicas
+                            });
+                            sum_length_list.push({
+                                x: season_data.season_number,
+                                y: season_data.season_data.replicas_length_total
+                            });
+                        }
+                        else {
+                            avg_length_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                            number_of_replicas_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                            sum_length_list.push({
+                                x: season_data.season_number,
+                                y: 0
+                            });
+                        }
+                    }
+                }
+
+                replicaAverageSeasons.push({
+                        key: name,
+                        bar: true,
+                        values: avg_length_list
+                    },
+                    {
+                        key: "Regression " + name,
+                        values: getLinearRegressionLine(avg_length_list)
+                    });
+
+                replicaNumberSeasons.push({
+                    key: name,
+                    bar: true,
+                    values: number_of_replicas_list
+                }, {
+                    key: "Regression " + name,
+                    values: getLinearRegressionLine(number_of_replicas_list)
+                });
+
+                replicaSumSeasons.push({
+                    key: name,
+                    bar: true,
+                    values: sum_length_list
+                }, {
+                    key: "Regression" + name,
+                    values: getLinearRegressionLine(sum_length_list)
+                });
+            }
+
+            $scope.replicaAverageSeasons = replicaAverageSeasons;
+            $scope.replicaNumberSeasons = replicaNumberSeasons;
+            $scope.replicaSumSeasons = replicaSumSeasons;
+
         };
-        //
-        // var set_speaker_season_data = function (name, pos) {
-        //     SeasonService.GetSeasons().then(
-        //         function (result) {
-        //             var speaker_season_stats = [];
-        //             for (var season in result.data) {
-        //                 if (result.data.hasOwnProperty(season)) {
-        //                     var _season_speakers = result.data[season].speakers;
-        //                     var season_speaker_stats = _.findWhere(_season_speakers, {name: name});
-        //                     speaker_season_stats.push({
-        //                         season_number: result.data[season].season_number,
-        //                         season_data: season_speaker_stats
-        //                     });
-        //                 } else {
-        //                     speaker_season_stats.push({
-        //                         season_number: result.data[season].season_number,
-        //                         season_data: null
-        //                     });
-        //                 }
-        //             }
-        //
-        //             speaker_season_stats.sort(function (a, b) {
-        //                 return a.season_number - b.season_number;
-        //             });
-        //
-        //             $scope.selectedSpeaker[pos].speakerSeasonStats = speaker_season_stats
-        //         }
-        //     );
-        // };
-        //
-        // var set_speaker_episode_data = function (name, pos) {
-        //     EpisodeService.GetEpisodes().then(
-        //         function (result) {
-        //             var speaker_episode_stats = [];
-        //             for (var episode in result.data) {
-        //                 if (result.data.hasOwnProperty(episode)) {
-        //                     var _episode_speakers = result.data[episode].speakers;
-        //                     var episode_speaker_stats = _.findWhere(_episode_speakers, {name: name});
-        //
-        //                     if(episode_speaker_stats == undefined){
-        //                         continue;
-        //                     }
-        //
-        //                     var appeared_in_scenes = episode_speaker_stats.appeared_in_scenes;
-        //                     appeared_in_scenes.sort(compareNumbers);
-        //
-        //                     var binary_conf_list = [];
-        //                     for(var i = 1; i <= result.data[episode].number_of_scenes; i++){
-        //                         if(_.contains(appeared_in_scenes, i)){
-        //                             binary_conf_list.push(1);
-        //                         }else {
-        //                             binary_conf_list.push(0);
-        //                         }
-        //                     }
-        //
-        //                     speaker_episode_stats.push({
-        //                         season_number: result.data[episode].season_number,
-        //                         episode_number: result.data[episode].episode_number,
-        //                         episode_data: episode_speaker_stats,
-        //                         binary_conf_list: binary_conf_list
-        //                     });
-        //                 } else {
-        //                     speaker_episode_stats.push({
-        //                         season_number: result.data[episode].season_number,
-        //                         episode_number: result.data[episode].episode_number,
-        //                         episode_data: null,
-        //                         binary_conf_list: null
-        //                     });
-        //                 }
-        //             }
-        //
-        //             speaker_episode_stats.sort(fieldSorter(['season_number', 'episode_number']));
-        //
-        //             $scope.selectedSpeaker[pos].speakerEpisodeStats = speaker_episode_stats;
-        //
-        //             console.log($scope.selectedSpeaker);
-        //         }
-        //     );
-        // };
+
+        var set_speaker_season_data = function (name, pos) {
+            SeasonService.GetSeasons().then(
+                function (result) {
+                    var speaker_season_stats = [];
+                    for (var season in result.data) {
+                        if (result.data.hasOwnProperty(season)) {
+                            var _season_speakers = result.data[season].speakers;
+                            var season_speaker_stats = _.findWhere(_season_speakers, {name: name});
+                            speaker_season_stats.push({
+                                season_number: result.data[season].season_number,
+                                season_data: season_speaker_stats
+                            });
+                        } else {
+                            speaker_season_stats.push({
+                                season_number: result.data[season].season_number,
+                                season_data: null
+                            });
+                        }
+                    }
+
+                    speaker_season_stats.sort(function (a, b) {
+                        return a.season_number - b.season_number;
+                    });
+
+                    $scope.selectedSpeaker[pos].speakerSeasonStats = speaker_season_stats
+                }
+            );
+        };
+
+        var set_speaker_episode_data = function (name, pos) {
+            EpisodeService.GetEpisodes().then(
+                function (result) {
+                    var speaker_episode_stats = [];
+                    for (var episode in result.data) {
+                        if (result.data.hasOwnProperty(episode)) {
+                            var _episode_speakers = result.data[episode].speakers;
+                            var episode_speaker_stats = _.findWhere(_episode_speakers, {name: name});
+
+                            if (episode_speaker_stats == undefined) {
+                                continue;
+                            }
+
+                            var appeared_in_scenes = episode_speaker_stats.appeared_in_scenes;
+                            appeared_in_scenes.sort(compareNumbers);
+
+                            speaker_episode_stats.push({
+                                season_number: result.data[episode].season_number,
+                                episode_number: result.data[episode].episode_number,
+                                episode_data: episode_speaker_stats
+                            });
+                        } else {
+                            speaker_episode_stats.push({
+                                season_number: result.data[episode].season_number,
+                                episode_number: result.data[episode].episode_number,
+                                episode_data: null
+                            });
+                        }
+                    }
+
+                    speaker_episode_stats.sort(fieldSorter(['season_number', 'episode_number']));
+
+                    $scope.selectedSpeaker[pos].speakerEpisodeStats = speaker_episode_stats;
+
+                    console.log($scope.selectedSpeaker);
+                }
+            );
+        };
 
         $scope.linechartOptionsReplicaNumber = {
             chart: {
@@ -893,7 +979,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 },
                 interactiveLayer: {
                     dispatch: {
-                        elementClick: function(e){
+                        elementClick: function (e) {
                             $scope.set_episodes_hamm_dist(Math.round(e.pointXValue));
                         }
                     }
