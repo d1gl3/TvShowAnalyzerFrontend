@@ -5,13 +5,13 @@
 'use strict';
 
 seriesAnalyzer.factory('TvShowService',
-    ['$http', '$q',
-        function ($http, $q) {
+    ['$http', '$q', 'SettingService',
+        function ($http, $q, SettingService) {
             var service = {},
                 deferObject;
 
             service.GetTvShow = function () {
-                var tv_show_endpoint = 'http://85.214.56.43:8080/api/tv_show',
+                var tv_show_endpoint = SettingService.getBackendUrl() + '/api/tv_show',
 
                     tv_show = $http.get(tv_show_endpoint),
 

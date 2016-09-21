@@ -5,13 +5,13 @@
 'use strict';
 
 seriesAnalyzer.factory('SeasonService',
-    ['$http', '$q',
-        function ($http, $q) {
+    ['$http', '$q', 'SettingService',
+        function ($http, $q, SettingService) {
             var service = {},
                 deferObject;
 
             service.GetSeasons = function () {
-                var season_endpoint = 'http://85.214.56.43:8080/api/seasons',
+                var season_endpoint = SettingService.getBackendUrl() + '/api/seasons',
 
                     seasons = $http.get(season_endpoint),
 

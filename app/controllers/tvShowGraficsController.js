@@ -26,7 +26,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
             links = links.filter(filter_by_weight);
 
-            $scope.slider.options.ceil = $scope.max_weight
+            $scope.slider.options.ceil = $scope.max_weight;
 
             $scope.forceDirectedData = {
                 links: links,

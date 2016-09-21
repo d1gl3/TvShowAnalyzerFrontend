@@ -3,8 +3,8 @@
  */
 
 
-seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'CurrentSelectedSpeakerService', 'SeasonService', 'EpisodeService',
-    function ($scope, $http, CurrentSelectedSpeakerService, SeasonService, EpisodeService) {
+seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'CurrentSelectedSpeakerService', 'SeasonService', 'EpisodeService', 'SettingService',
+    function ($scope, $http, CurrentSelectedSpeakerService, SeasonService, EpisodeService, SettingService) {
 
         function compareNumbers(a, b) {
             return a - b;
@@ -54,65 +54,11 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             return regression_list;
         }
 
-        $scope.options = {
-            chart: {
-                type: 'discreteBarChart',
-                height: 300,
-                margin: {
-                    top: 20,
-                    right: 20,
-                    bottom: 65,
-                    left: 50
-                },
-                x: function (d) {
-                    return d[0];
-                },
-                y: function (d) {
-                    return d[1] / 100000;
-                },
-                showValues: false,
-                valueFormat: function (d) {
-                    return d3.format(',.0f')(d);
-                },
-                duration: 800,
-                xAxis: {
-                    axisLabel: 'Length',
-                    tickFormat: function (d) {
-                        return d3.format(',.0f')(d)
-                    },
-                    rotateLabels: 30,
-                    showMaxMin: false
-                },
-                yAxis: {
-                    axisLabel: 'Occurences',
-                    axisLabelDistance: -10,
-                    tickFormat: function (d) {
-                        return d3.format(",.0f")(d * 100000);
-                    }
-                },
-                tooltip: {
-                    keyFormatter: function (d) {
-                        return d3.format(',.0f')(d);
-                    }
-                },
-                zoom: {
-                    enabled: true,
-                    scaleExtent: [1, 10],
-                    useFixedDomain: false,
-                    useNiceScale: false,
-                    horizontalOff: false,
-                    verticalOff: true,
-                    unzoomEventType: 'dblclick.zoom'
-                }
-            }
-        };
-
-        $http.get('http://85.214.56.43:8080/api/speakers')
+        $http.get(SettingService.getBackendUrl() + '/api/speakers')
             .success(function (data) {
                 $scope.speakers = data;
                 var dropdownSpeakerNames = [];
                 for (var i = 0; i < $scope.speakers.length; i++) {
-                    console.log($scope.speakers[i].name);
                     dropdownSpeakerNames.push(String.valueOf($scope.speakers[i].name));
                 }
                 $scope.dropdownSpeakerNames = dropdownSpeakerNames;
@@ -126,9 +72,8 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         };
 
         var get_speaker_stats = function (name, callback) {
-            $http.get('http://85.214.56.43:8080/api/speakers/' + name)
+            $http.get(SettingService.getBackendUrl() + '/api/speakers/' + name)
                 .success(function (data) {
-                    console.log(data);
                     callback(data);
                 })
                 .error(function (data) {
@@ -137,10 +82,8 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
         };
 
         $scope.set_selected_speaker = function (name) {
-            console.log(name);
             get_speaker_stats(name, function (speaker) {
                 if (speaker != null) {
-                    console.log("Speaker" + speaker);
                     $scope.selectedSpeaker = speaker;
                     var replica_lengths = $scope.selectedSpeaker.replicas_length_list;
                     var length_list = [];
@@ -164,28 +107,28 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         bar: true,
                         values: length_list
                     }];
+                    set_speaker_season_data(name);
+                    set_speaker_episode_data(name);
                 }
             });
-
-            if (!isNaN($scope.selectedSpeaker)) {
-                console.log($scope.selectedSpeaker);
-                set_speaker_season_data(name);
-                set_speaker_episode_data(name);
-            }
         };
 
         $scope.$watch('dropdownSelectedSpeaker', function (speaker) {
-            if(String(speaker).length > 0) {
+            if (String(speaker).length > 0) {
                 $scope.set_selected_speaker(speaker);
             }
         });
 
         $scope.$watch('speakerSeasonStats', function (new_value) {
-            set_speaker_season_replik_line_chart_data(new_value);
+            if (new_value != undefined) {
+                set_speaker_season_replik_line_chart_data(new_value);
+            }
         });
 
         $scope.$watch('speakerEpisodeStats', function (new_value) {
-            set_speaker_episode_replik_line_chart_data(new_value);
+            if (new_value != undefined) {
+                set_speaker_episode_replik_line_chart_data(new_value);
+            }
         });
 
         var set_speaker_episode_replik_line_chart_data = function (episode_stats) {
@@ -261,7 +204,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 number_of_replicas_list = [],
                 sum_length_list = [];
 
-            console.log(speaker_stats);
             for (var season in speaker_stats) {
                 if (speaker_stats.hasOwnProperty(season)) {
                     var season_data = speaker_stats[season];
@@ -348,7 +290,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return a.season_number - b.season_number;
                     });
 
-                    $scope.speakerSeasonStats = speaker_season_stats
+                    $scope.speakerSeasonStats = speaker_season_stats;
                 }
             );
         };
@@ -377,11 +319,64 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
 
                     speaker_episode_stats.sort(fieldSorter(['season_number', 'episode_number']));
 
-                    $scope.speakerEpisodeStats = speaker_episode_stats
-                    console.log(speaker_episode_stats);
+                    $scope.speakerEpisodeStats = speaker_episode_stats;
                 }
             );
         };
+
+        $scope.options = {
+            chart: {
+                type: 'discreteBarChart',
+                height: 300,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 65,
+                    left: 50
+                },
+                x: function (d) {
+                    return d[0];
+                },
+                y: function (d) {
+                    return d[1] / 100000;
+                },
+                showValues: false,
+                valueFormat: function (d) {
+                    return d3.format(',.0f')(d);
+                },
+                duration: 800,
+                xAxis: {
+                    axisLabel: 'Length',
+                    tickFormat: function (d) {
+                        return d3.format(',.0f')(d)
+                    },
+                    rotateLabels: 30,
+                    showMaxMin: false
+                },
+                yAxis: {
+                    axisLabel: 'Occurences',
+                    axisLabelDistance: -10,
+                    tickFormat: function (d) {
+                        return d3.format(",.0f")(d * 100000);
+                    }
+                },
+                tooltip: {
+                    keyFormatter: function (d) {
+                        return d3.format(',.0f')(d);
+                    }
+                },
+                zoom: {
+                    enabled: true,
+                    scaleExtent: [1, 10],
+                    useFixedDomain: false,
+                    useNiceScale: false,
+                    horizontalOff: false,
+                    verticalOff: true,
+                    unzoomEventType: 'dblclick.zoom'
+                }
+            }
+        };
+
 
         $scope.linechartOptionsReplicaNumber = {
             chart: {
@@ -423,9 +418,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {
@@ -481,9 +473,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {
@@ -539,9 +528,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {
@@ -599,9 +585,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {
@@ -657,9 +640,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {
@@ -715,9 +695,6 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             },
             title: {

@@ -4,7 +4,7 @@
 
         <div ng-app="seriesAnalyzer" ng-controller="speakerComparisonController">
 
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">Speaker Selection</div>
                 <div class="panel-body">
 
@@ -221,12 +221,12 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
+            <div class="panel panel-primary" ng-if="selectedSpeaker[0].name != undefined">
                 <div class="panel-heading">Speaker Stats</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="selected-speaker-container" ng-if="selectedSpeaker[0].name != undefined">
+                            <div class="selected-speaker-container">
                                 <div class="speaker-info-image-container">
                                     <img class="comparison-image"
                                          ng-src="assets/img/{{selectedSpeaker[0].name.toString().replace(' ', '_').toLowerCase()}}.jpg"
@@ -349,7 +349,9 @@
                 </div>
             </div>
 
-            <div class="panel panel-default" ng-if="selectedSpeaker[0].replicaLengths || selectedSpeaker[1].replicaLengths">
+
+            <div class="panel panel-primary"
+                 ng-if="selectedSpeaker[0].replicaLengths || selectedSpeaker[1].replicaLengths">
                 <div class="panel-heading">Replica Length Distribution</div>
                 <div class="panel-body">
 
@@ -364,21 +366,75 @@
                 </div>
             </div>
 
-            <div class="panel panel-default" ng-if="speakerWords">
+            <div class="panel panel-primary" ng-if="selectedSpeaker[0].hamming_distances || selectedSpeaker[1].hamming_distances">
+                <div class="panel-heading">Hamming Distances</div>
+                <div class="row">
+                    <div class="col-md-6" ng-if="seasonHammingDistance">
+                        <nvd3 options="linechartOptionsSeasonHamming" data="seasonHammingDistance"></nvd3>
+                    </div>
+                    <div class="col-md-6" ng-if="episodeHammingDistance">
+                        <nvd3 options="linechartOptionsEpisodeHamming" data="episodeHammingDistance"></nvd3>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel panel-primary"
+                 ng-if="selectedSpeaker[0].speakerWords || selectedSpeaker[1].speakerWords">
                 <div class="panel-heading">Most Used Words</div>
                 <div class="panel-body">
 
-                    <div class="row" id="speaker-word-cloud">
-                        <div class="col-md-4 bar-chart">
-                            <jqcloud words="speakerWords" width="500" height="350" steps="7"></jqcloud>
+                    <div class="panel-heading">Overall</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[0].speakerWords" width="350" height="250" steps="7"
+                                         shape="rectangular"></jqcloud>
+                            </div>
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[1].speakerWords" width="350" height="250" steps="7"
+                                         shape="rectangular"></jqcloud>
+                            </div>
                         </div>
-                        <div class="col-md-4 bar-chart">
-                            <jqcloud words="speakerWordsPos" width="500" height="350" steps="7"></jqcloud>
-                            <span class="label label-success">Ratio: {{(selectedSpeaker.words_pos_ratio*100).toFixed(1)}} %</span>
+                    </div>
+
+                    <div class="panel-heading">Positive</div>
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[0].speakerWordsPos" width="350" height="250"
+                                         steps="7"
+                                         shape="rectangular"></jqcloud>
+                                <span class="label label-success">Ratio: {{(selectedSpeaker[0].words_pos_ratio*100).toFixed(1)}} %</span>
+                            </div>
+
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[1].speakerWordsPos" width="350" height="250"
+                                         steps="7"
+                                         shape="rectangular"></jqcloud>
+                                <span class="label label-success">Ratio: {{(selectedSpeaker[1].words_pos_ratio*100).toFixed(1)}} %</span>
+                            </div>
                         </div>
-                        <div class="col-md-4 bar-chart">
-                            <jqcloud words="speakerWordsNeg" width="500" height="350" steps="7"></jqcloud>
-                            <span class="label label-danger">Ratio: {{(selectedSpeaker.words_neg_ratio*100).toFixed(1)}} %</span>
+                    </div>
+
+                    <div class="panel-heading">Negative</div>
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[0].speakerWordsNeg" width="350" height="250"
+                                         steps="7"
+                                         shape="rectangular"></jqcloud>
+                                <span class="label label-danger">Ratio: {{(selectedSpeaker[0].words_neg_ratio*100).toFixed(1)}} %</span>
+                            </div>
+
+                            <div class="col-md-6" id="speaker-word-cloud">
+                                <jqcloud words="selectedSpeaker[1].speakerWordsNeg" width="350" height="250"
+                                         steps="7"
+                                         shape="rectangular"></jqcloud>
+                                <span class="label label-danger">Ratio: {{(selectedSpeaker[1].words_neg_ratio*100).toFixed(1)}} %</span>
+                            </div>
                         </div>
                     </div>
                 </div>

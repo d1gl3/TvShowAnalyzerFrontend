@@ -5,13 +5,13 @@
 'use strict';
 
 seriesAnalyzer.factory('SpeakerService',
-    ['$http', '$q', 'SeasonService',
-        function ($http, $q, SeasonService) {
+    ['$http', '$q', 'SeasonService', 'SettingService',
+        function ($http, $q, SeasonService, SettingService) {
             var service = {},
                 deferObject;
 
             service.GetSpeakers = function () {
-                var speaker_endpoint = 'http://85.214.56.43:8080/api/speakers',
+                var speaker_endpoint = SettingService.getBackendUrl() + '/api/speakers',
 
                     speakers = $http.get(speaker_endpoint),
 
@@ -30,7 +30,7 @@ seriesAnalyzer.factory('SpeakerService',
             };
 
             service.GetSpeakerByName = function (name) {
-                var speaker_endpoint = 'http://85.214.56.43:8080/api/speakers/' + name.toString(),
+                var speaker_endpoint = SettingService.getBackendUrl() + '/api/speakers/' + name.toString(),
 
                     speakers = $http.get(speaker_endpoint),
 
