@@ -221,19 +221,24 @@
                 </div>
             </div>
 
-            <div class="well" ng-if="selectedSpeaker[0].name == undefined && selectedSpeaker[1].name == undefined">Please choose at least one of the speakers to show data!</div>
+            <div class="well" ng-if="selectedSpeaker[0].name == undefined && selectedSpeaker[1].name == undefined">
+                Please choose at least one of the speakers to show data!
+            </div>
 
-            <div class="panel panel-primary" ng-if="selectedSpeaker[0].name != undefined || selectedSpeaker[1].name != undefined">
+            <div class="panel panel-primary"
+                 ng-if="selectedSpeaker[0].name != undefined || selectedSpeaker[1].name != undefined">
                 <div class="panel-heading">Speaker Stats</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="selected-speaker-container">
+
                                 <div class="speaker-info-image-container">
                                     <img class="comparison-image"
                                          ng-src="assets/img/{{selectedSpeaker[0].name.toString().replace(' ', '_').toLowerCase()}}.jpg"
                                          onError="this.src='assets/img/anonym.jpg';">
                                 </div>
+
                                 <div class="speaker-info-table-container">
                                     <table st-table="rowCollection" class="table table-striped">
                                         <td class="no-padding">
@@ -368,7 +373,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary" ng-if="selectedSpeaker[0].hamming_distances || selectedSpeaker[1].hamming_distances">
+            <div class="panel panel-primary"
+                 ng-if="selectedSpeaker[0].hamming_distances || selectedSpeaker[1].hamming_distances">
                 <div class="panel-heading">Hamming Distances</div>
                 <div class="row">
                     <div class="col-md-6" ng-if="seasonHammingDistance">
@@ -389,11 +395,11 @@
                     <div class="panel-heading">Overall</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[0].speakerWords" width="350" height="250" steps="7"
                                          shape="rectangular"></jqcloud>
                             </div>
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[1].speakerWords" width="350" height="250" steps="7"
                                          shape="rectangular"></jqcloud>
                             </div>
@@ -404,14 +410,14 @@
                     <div class="panel-body">
                         <div class="row">
 
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[0].speakerWordsPos" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
                                 <span class="label label-success">Ratio: {{(selectedSpeaker[0].words_pos_ratio*100).toFixed(1)}} %</span>
                             </div>
 
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[1].speakerWordsPos" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
@@ -424,14 +430,14 @@
                     <div class="panel-body">
                         <div class="row">
 
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[0].speakerWordsNeg" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
                                 <span class="label label-danger">Ratio: {{(selectedSpeaker[0].words_neg_ratio*100).toFixed(1)}} %</span>
                             </div>
 
-                            <div class="col-md-6" id="speaker-word-cloud">
+                            <div class="col-md-6">
                                 <jqcloud words="selectedSpeaker[1].speakerWordsNeg" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
@@ -442,7 +448,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel" ng-if="selectedSpeaker[0].speakerSeasonStats || selectedSpeaker[1].speakerSeasonStats">
+            <div class="panel panel-primary linechart-panel"
+                 ng-if="selectedSpeaker[0].speakerSeasonStats || selectedSpeaker[1].speakerSeasonStats">
                 <div class="panel-heading">Speaker Season Replic Stats</div>
                 <div class="panel-body">
 
@@ -463,7 +470,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel" ng-if="speakerEpisodeStats">
+            <div class="panel panel-primary linechart-panel"
+                 ng-if="selectedSpeaker[0].speakerEpisodeStats || selectedSpeaker[1].speakerEpisodeStats">
                 <div class="panel-heading">Speaker Episode Replic Stats</div>
                 <div class="panel-body">
 
