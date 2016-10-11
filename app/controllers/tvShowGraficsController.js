@@ -118,14 +118,14 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 linkStrength:   function(d) { return (1/(1+d.weight)) },
                 friction: 0.6,
                 linkDist: function(d){
-                    return (($scope.max_weight + 50) - d.weight)/2;
+                    return (($scope.max_weight + 100) - d.weight)/2;
                 },
                 charge: -1000,
                 gravity: 0.4,
                 width: (function () {
                     return nv.utils.windowSize().width
                 })(),
-                radius: function(d) { return d.weight + 50; },
+                radius: function(d) { return d.weight*d.weight; },
                 margin: {
                     top: 20, right: 20, bottom: 20, left: 20
                 }
