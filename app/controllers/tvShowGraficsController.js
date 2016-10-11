@@ -15,7 +15,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             return 0;
         };
 
-        var filter_by_weight = function(link) {
+        var filter_by_weight = function (link) {
             return (link.weight >= $scope.slider.min) && (link.weight <= $scope.slider.max);
         };
 
@@ -39,7 +39,9 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
         TvShowService.GetTvShow().then(function (result) {
             $scope.tv_show = result.data;
 
-            $scope.max_weight = Math.max.apply(Math,result.data.force_directed_data.links.map(function(o){return o.weight;}));
+            $scope.max_weight = Math.max.apply(Math, result.data.force_directed_data.links.map(function (o) {
+                return o.weight;
+            }));
 
             set_force_directed_data(result.data);
 
@@ -93,11 +95,11 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             $scope.numberOfSpeakersDistribution = number_of_speakers.sort(compare_strings);
         });
 
-        $scope.$watch("slider.min", function(){
-           set_force_directed_data($scope.tv_show);
+        $scope.$watch("slider.min", function () {
+            set_force_directed_data($scope.tv_show);
         }, true);
 
-        $scope.$watch("slider.max", function(){
+        $scope.$watch("slider.max", function () {
             set_force_directed_data($scope.tv_show);
         }, true);
 
@@ -115,17 +117,21 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             chart: {
                 type: 'forceDirectedGraph',
                 height: 1000,
-                linkStrength:   function(d) { return (1/(1+d.weight)) },
+                linkStrength: function (d) {
+                    return (1 / (1 + d.weight))
+                },
                 friction: 0.6,
-                linkDist: function(d){
-                    return (($scope.max_weight + 100) - d.weight)/2;
+                linkDist: function (d) {
+                    return (($scope.max_weight + 200) - d.weight) / 2;
                 },
                 charge: -1000,
                 gravity: 0.4,
                 width: (function () {
                     return nv.utils.windowSize().width
                 })(),
-                radius: function(d) { return d.weight*d.weight; },
+                radius: function (d) {
+                    return d.weight * 2;
+                },
                 margin: {
                     top: 20, right: 20, bottom: 20, left: 20
                 }
