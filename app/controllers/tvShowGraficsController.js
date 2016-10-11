@@ -125,7 +125,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 width: (function () {
                     return nv.utils.windowSize().width
                 })(),
-                radius: function(d) { return d.weight; },
+                radius: function(d) { return d.weight + 50; },
                 margin: {
                     top: 20, right: 20, bottom: 20, left: 20
                 }
