@@ -146,7 +146,11 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                         .attr("dx", 8)
                         .attr("dy", ".35em")
                         .text(function (d) {
-                            return d.name
+                            if ((d.weight * 2) < 50) {
+                                return ""
+                            } else {
+                                return d.name
+                            }
                         })
                         .style('font-size', '10px');
                 }
