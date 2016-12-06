@@ -4,14 +4,16 @@
 
         <div ng-app="seriesAnalyzer" ng-controller="configTableController">
 
-            <table st-table="rowCollection" class="table table-striped">
-                <thead></thead>
-                <tbody>
-                <tr ng-repeat="season in tv_show_data.configuration_matrix">
-                    <td ng-repeat="values in season track by $index" ng-style="set_color(values)" >{{values}}</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table st-table="rowCollection" class="table table-striped">
+                    <thead></thead>
+                    <tbody>
+                    <tr ng-repeat="season in tv_show_data.configuration_matrix">
+                        <td ng-repeat="values in season track by $index" ng-class="set_color(values)">{{values}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

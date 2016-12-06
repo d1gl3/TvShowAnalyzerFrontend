@@ -1,73 +1,179 @@
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
-
         <div ng-app="seriesAnalyzer" ng-controller="tvShowGraficsController">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Overall Series Stats</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="speaker-info-box" ng-if="tv_show">
+                            <div class="col-md-12">
+                                <table st-table="rowCollection" class="table table-striped">
+                                    <td>
+                                        <table st-table="rowCollection"
+                                               class="table table-striped speaker-info-table">
+                                            <tr>
+                                                <td>Configuration Density:</td>
+                                                <td>{{(tv_show.configuration_density).toFixed(2)}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number Of Speaches:</td>
+                                                <td>{{tv_show.number_of_replicas}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Longest Speach:</td>
+                                                <td>{{tv_show.replicas_length_max}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table st-table="rowCollection"
+                                               class="table table-striped speaker-info-table">
 
-            <div class="panel panel-default">
-                <div class="panel-heading">Overall Series Stats</div>
-                <div class="panel-body">
-                    <div class="row">
+                                            <tr>
+                                                <td>Shortest Speach:</td>
+                                                <td>{{tv_show.replicas_length_min}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Speach Length Median:</td>
+                                                <td>{{tv_show.replicas_length_med}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Speach Length Total:</td>
+                                                <td>{{tv_show.replicas_length_total}}</td>
+                                            </tr>
+
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table st-table="rowCollection"
+                                               class="table table-striped speaker-info-table">
+                                            <tr>
+                                                <td>Average Speach Length:</td>
+                                                <td>{{(tv_show.replicas_length_avg).toFixed(2)}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Median Speach Length:</td>
+                                                <td>{{tv_show.replicas_length_med}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number of Speakers:</td>
+                                                <td>{{tv_show.speakers.length}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </table>
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <h3><span class="label label-info">Replika Distribution</span></h3>
-                            <nvd3 options="options[0]" data="replicaNumberDistribution"
-                                  class="with-3d-shadow with-transitions"></nvd3>
+                            <nvd3 options="barOptions2" data="replicaNumberDistribution"
+                            ></nvd3>
                         </div>
                         <div class="col-md-4">
                             <h3><span class="label label-info">Word Distribution</span></h3>
-                            <nvd3 options="options[0]" data="replicaWordDistribution"
+                            <nvd3 options="barOptions2" data="replicaWordDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-4">
                             <h3><span class="label label-info">Number of Speakers</span></h3>
-                            <nvd3 options="options[0]" data="numberOfSpeakersDistribution"
+                            <nvd3 options="barOptions2" data="numberOfSpeakersDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">Single Season Stats</div>
-                <div class="panel-body">
-
-                    <div class="row speaker-info-grafics" ng-if="tv_show">
-                        <div class="col-md-12">
-                            <h3><span class="label label-info">Replica Length Distribution</span></h3>
-                        </div>
-                        <div class="col-md-6 bar-chart" id="bar-chart-season-replic-length">
-                            <nvd3 options="barOptions" data="tvShowReplicaLengths"></nvd3>
-                        </div>
-
-                        <div class="col-md-6 pie-chart-small">
-                            <nvd3 options="options[1]" data="tvShowReplicaLengthsDistribution"></nvd3>
-                        </div>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Speach Length Distribution</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
+                    <div class="panel-body">
 
+                        <div class="row speaker-info-grafics" ng-if="tv_show">
+                            <div class="col-md-12">
+                                <h3><span class="label label-info">Replica Length Distribution</span></h3>
+                            </div>
+                            <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
+                                <nvd3 options="barOptions" data="tvShowReplicaLengths"></nvd3>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
-
-            <div class="panel panel-default">
-                <div class="panel-heading">TV Show Coappearances</div>
-                <div class="panel-body">
-
-                    <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
-                        <div class="col-md-12">
-                            <h3><span class="label label-info">TV Show Coappearances</span></h3>
-                            Minimum Coappearances:
-                            <div>
-                                <rzslider
-                                        rz-slider-model="slider.min"
-                                        rz-slider-high="slider.max"
-                                        rz-slider-options="slider.options"></rzslider>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Matrix</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <table st-table="rowCollection" class="table table-fixed">
+                            <tbody>
+                            <tr ng-repeat="scene in tv_show.configuration_matrix">
+                                <td ng-repeat="values in scene track by $index"
+                                    ng-class="set_color(values)">
+                                    {{values}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Densities</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row speaker-info-grafics">
+                            <div class="col-md-12 bar-chart">
+                                <nvd3 options="barOptionsConfigurationDensities"
+                                      data="configuration_densities"></nvd3>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <nvd3 options="forceDirectedOptions" data="forceDirectedData"></nvd3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Character Network</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
+                            <div class="col-md-12">
+                                <h3><span class="label label-info">TV Show Coappearances</span></h3>
+                                Minimum Coappearances:
+                                <div>
+                                    <rzslider
+                                            rz-slider-model="slider.min"
+                                            rz-slider-high="slider.max"
+                                            rz-slider-options="slider.options"></rzslider>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <nvd3 options="forceDirectedOptions" data="forceDirectedData"></nvd3>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

@@ -57,14 +57,11 @@
                 <li>
                     <a href="#tv-show-grafics">Overview</a>
                 </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Configuration Tables <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/full-config-tables">Overall</a></li>
-                        <li><a href="#/season-config-tables">Seasons</a></li>
-                        <li><a href="#/episode-config-tables">Episoden</a></li>
-                    </ul>
+                <li>
+                    <a href="#/season-config-tables">Seasons</a>
+                </li>
+                <li>
+                    <a href="#/episode-config-tables">Episodes</a>
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -93,6 +90,7 @@
 <script src="assets/libs/angular-cookies.min.js"></script>
 <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
 <script src="bower_components/underscore/underscore-min.js"></script>
+<script src="bower_components/regression-js/src/regression.js"></script>
 
 <script src="assets/libs/nv.d3.js"></script>
 
@@ -130,6 +128,21 @@
 <script src="app/services/tabService.js"></script>
 <script src="app/services/tvShowService.js"></script>
 <script src="app/services/currentSelectedSpeakerService.js"></script>
+
+<script>
+    $(document).on('click', '.panel-heading span.clickable', function(e){
+        var $this = $(this);
+        if(!$this.hasClass('panel-collapsed')) {
+            $this.parents('.panel').find('.panel-body').slideUp();
+            $this.addClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        } else {
+            $this.parents('.panel').find('.panel-body').slideDown();
+            $this.removeClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        }
+    });
+</script>
 
 </body>
 </html>

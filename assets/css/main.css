@@ -4,6 +4,24 @@
     height: 40px;
 }
 
+.row{
+    margin-top:40px;
+    padding: 0 10px;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+.panel-body {
+    overflow: auto;
+}
+
+.panel-heading span {
+    margin-top: -20px;
+    font-size: 15px;
+}
+
 .speaker-image {
     margin: 0 auto;
     position: relative;
@@ -95,11 +113,11 @@
 }
 
 .linechart-pannel {
-    height:auto;
+    height: auto;
 }
 
-.linechart-pannel > .pannel-body{
-    height:auto;
+.linechart-pannel > .pannel-body {
+    height: auto;
 }
 
 #speaker-info-box > div > img {

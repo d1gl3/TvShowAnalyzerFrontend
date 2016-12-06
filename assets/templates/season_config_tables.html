@@ -1,36 +1,178 @@
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
+        <div class="col-md-12">
+            <div ng-app="seriesAnalyzer" ng-controller="configTableController">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Season Selection</div>
+                    <div class="panel-body">
+                        <div class="col-md-3">
+                            <label>
+                                Season:
+                                <select ng-options="season as 'Season ' + season.season_number for season in all_seasons | orderBy:['season_number']"
+                                        ng-model="selectedSeason" ng-change="select_clicked()">
+                                    <option value="">Please select an season...</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="well well-lg" ng-if="!selectedSeason">Please select a Season to see Statistics!</div>
 
-        <div ng-app="seriesAnalyzer" ng-controller="configTableController">
+                <div class="panel panel-primary" ng-if="selectedSeason">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Season Statistics</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div id="speaker-info-box" class="row">
+                                <div class="col-md-9">
+                                    <table st-table="rowCollection" class="table table-striped">
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
 
-            <div class="row">
-                <label>
-                    Season:
-                    <select ng-options="season as 'Season ' + season.season_number for season in all_seasons | orderBy:['season_number']"
-                            ng-model="selectedSeason">
-                        <option value="">Please select an season...</option>
-                    </select>
-                </label>
+                                                <tr>
+                                                    <td>Season:</td>
+                                                    <td>{{selectedSeason.season_number}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Configuration Density:</td>
+                                                    <td>{{(selectedSeason.configuration_density).toFixed(2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number of Scenes:</td>
+                                                    <td>{{selectedSeason.number_of_episodes}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+                                                <tr>
+                                                    <td>Number Of Speachs:</td>
+                                                    <td>{{selectedSeason.number_of_replicas}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Longest Speach:</td>
+                                                    <td>{{selectedSeason.replicas_length_max}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shortest Speach:</td>
+                                                    <td>{{selectedSeason.replicas_length_min}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Speach Length Median:</td>
+                                                    <td>{{selectedSeason.replicas_length_med}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Speach Length Total:</td>
+                                                    <td>{{selectedSeason.replicas_length_total}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Speach Length:</td>
+                                                    <td>{{(selectedSeason.replicas_length_avg).toFixed(2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Median Speach Length:</td>
+                                                    <td>{{selectedSeason.replicas_length_med}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+                                                <tr>
+                                                    <td>Number of Speakers:</td>
+                                                    <td>{{selectedSeason.speakers.length}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <table st-table="rowCollection" class="table table-striped">
-                    <thead></thead>
-                    <tbody>
-                    <tr ng-repeat="episode in selectedSeason.configuration_matrix">
-                        <td ng-repeat="values in episode track by $index" ng-style="set_color(values)">{{values}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                <div class="panel panel-primary" ng-if="selectedSeason">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Density Evolution</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row speaker-info-grafics">
+                            <div class="col-md-12 bar-chart">
+                                <nvd3 options="barOptionsConfigurationDensities"
+                                      data="configuration_densities"></nvd3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
-                <div class="col-md-6">
-                    <nvd3 options="forceDirectedOptionsSeasons" data="selectedSeason.force_directed_data"></nvd3>
+                <div class="panel panel-primary" ng-if="selectedSeason">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Speach Length Distribution</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row speaker-info-grafics">
+                            <div class="col-md-12 bar-chart">
+                                <nvd3 options="barOptions" data="replica_length_list"></nvd3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary" ng-if="selectedSeason">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Matrix</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table st-table="rowCollection" class="table table-striped">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr ng-repeat="scene in selectedSeason.configuration_matrix">
+                                        <td ng-repeat="values in scene track by $index"
+                                            ng-class="set_color(values)">
+                                            {{values}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary" ng-if="selectedSeason">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Character Network</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
+                            <div class="col-md-6">
+                                <nvd3 options="forceDirectedOptionsSeasons"
+                                      data="selectedSeason.force_directed_data"></nvd3>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-
-        <br>
     </div>
+</div>
+
+<br>
+</div>
 </div>
