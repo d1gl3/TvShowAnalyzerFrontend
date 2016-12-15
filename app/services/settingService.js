@@ -8,7 +8,7 @@ seriesAnalyzer.factory('SettingService',
 
             var configuration;
 
-            var isLocal = true;
+            var isLocal = false;
 
             if (isLocal) {
                 configuration = {
