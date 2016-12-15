@@ -9,7 +9,7 @@
                     <thead></thead>
                     <tbody>
                     <tr ng-repeat="season in tv_show_data.configuration_matrix">
-                        <td ng-repeat="values in season track by $index" ng-class="set_color(values)">{{values}}</td>
+                        <td ng-repeat="values in season track by $index" ng-class="setColor(values)">{{values}}</td>
                     </tr>
                     </tbody>
                 </table>

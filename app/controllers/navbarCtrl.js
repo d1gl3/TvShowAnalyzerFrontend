@@ -1,4 +1,4 @@
-seriesAnalyzer.controller('navbarCtrl', function ($scope, $rootScope, $location, TabService) {
+angular.module('my-controllers').controller('navbarCtrl', function ($scope, $rootScope, $location, TabService) {
 
     TabService.Init();
 

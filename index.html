@@ -6,6 +6,7 @@
     <script src="bower_components/angular/angular.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js" charset="utf-8"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
 
     <link rel="stylesheet" type="text/css" href="assets/libs/nv.d3.css">
 
@@ -19,6 +20,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.js"></script>
     <script src="bower_components/jqcloud2/dist/jqcloud.js"></script>
     <script src="bower_components/angular-jqcloud/angular-jqcloud.js"></script>
@@ -27,12 +29,6 @@
 
     <link rel="stylesheet" type="text/css" href="bower_components/jqcloud2/dist/jqcloud.css">
     <link rel="stylesheet" type="text/css" href="assets/css/appstyle.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/login.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/search.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/x-search.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/orders.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/admin.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/edit.css">
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
@@ -95,7 +91,6 @@
 <script src="assets/libs/nv.d3.js"></script>
 
 <!--Libs-->
-<script src="assets/libs/ui-bootstrap-tpls-1.1.2.min.js"></script>
 <script src="assets/libs/angular-file-saver.bundle.js"></script>
 <script src="https://npmcdn.com/simple-statistics@2.1.0/dist/simple-statistics.js"></script>
 <script src="bower_components/regression-js/build/regression.min.js"></script>
@@ -108,8 +103,6 @@
 <script src="app/controllers/navbarCtrl.js"></script>
 <script src="app/controllers/speakerSingleViewController.js"></script>
 <script src="app/controllers/speakerTableController.js"></script>
-<script src="app/controllers/sunburstChartController.js"></script>
-<script src="app/controllers/pieChartController.js"></script>
 <script src="app/controllers/tvShowGraficsController.js"></script>
 <script src="app/controllers/speakerComparisonController.js"></script>
 <script src="app/controllers/configTableController.js"></script>
@@ -122,6 +115,7 @@
 <script src="app/services/services.js"></script>
 <script src="app/services/d3Service.js"></script>
 <script src="app/services/settingService.js"></script>
+<script src="app/services/utilityService.js"></script>
 <script src="app/services/episodeService.js"></script>
 <script src="app/services/seasonService.js"></script>
 <script src="app/services/speakerService.js"></script>
@@ -140,6 +134,10 @@
             $this.parents('.panel').find('.panel-body').slideDown();
             $this.removeClass('panel-collapsed');
             $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        }
+
+        for (var i = 0; i < nv.graphs.length; i++) {
+            nv.graphs[i].update();
         }
     });
 </script>

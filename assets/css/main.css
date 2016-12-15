@@ -14,7 +14,11 @@
 }
 
 .panel-body {
-    overflow: auto;
+    overflow-y: auto;
+}
+
+#replica-length-chart-body {
+    height: 450px;
 }
 
 .panel-heading span {
@@ -29,10 +33,6 @@
     border-radius: 50%;
     height: 100px;
     width: 100px;
-}
-
-#bar-chart-season-replic-length {
-    padding: 40px;
 }
 
 .speaker-image:hover {

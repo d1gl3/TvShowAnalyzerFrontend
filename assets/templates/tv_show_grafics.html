@@ -1,6 +1,46 @@
+
+
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
         <div ng-app="seriesAnalyzer" ng-controller="tvShowGraficsController">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jumbotron" ng-controller="navbarCtrl">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1>The Big Bang Theory</h1>
+                                <h2>Quantitative Analysis</h2>
+                                <p>
+                                    This website visualizes quantitative data extracted and computed from the
+                                    transcripts of
+                                    the TV Series "The Big Bang Theory".
+                                    The data which is provided is computed from the speaches of the all the characters
+                                    in
+                                    the show.
+                                </p>
+                                <p>
+                                    On the start page you can find an overview of the whole series. Detailed insight in
+                                    statistics for single Seasons, Episodes and Speakers can be accesed via the
+                                    according
+                                    navigation points.
+                                </p>
+                                <p>
+                                    <a class="btn btn-primary btn-lg" href="#/season-config-tables" role="button">Season
+                                        Data</a>
+                                    <a class="btn btn-primary btn-lg" href="#/episode-config-tables" role="button">Episodes
+                                        Data</a>
+                                    <a class="btn btn-primary btn-lg" href="#/speaker-overview-table" role="button">Speaker
+                                        Overview
+                                        Data</a>
+                                </p>
+                            </div>
+                            <div>
+                                <img src="../assets/img/bbt_overview.jpg"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -20,11 +60,11 @@
                                                 <td>{{(tv_show.configuration_density).toFixed(2)}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Number Of Speaches:</td>
+                                                <td>Number Of Speeches:</td>
                                                 <td>{{tv_show.number_of_replicas}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Longest Speach:</td>
+                                                <td>Longest Speech:</td>
                                                 <td>{{tv_show.replicas_length_max}}</td>
                                             </tr>
                                         </table>
@@ -34,15 +74,15 @@
                                                class="table table-striped speaker-info-table">
 
                                             <tr>
-                                                <td>Shortest Speach:</td>
+                                                <td>Shortest Speech:</td>
                                                 <td>{{tv_show.replicas_length_min}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Speach Length Median:</td>
+                                                <td>Speech Length Median:</td>
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Speach Length Total:</td>
+                                                <td>Speech Length Total:</td>
                                                 <td>{{tv_show.replicas_length_total}}</td>
                                             </tr>
 
@@ -52,11 +92,11 @@
                                         <table st-table="rowCollection"
                                                class="table table-striped speaker-info-table">
                                             <tr>
-                                                <td>Average Speach Length:</td>
+                                                <td>Average Speech Length:</td>
                                                 <td>{{(tv_show.replicas_length_avg).toFixed(2)}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Median Speach Length:</td>
+                                                <td>Median Speech Length:</td>
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
@@ -89,23 +129,19 @@
             </div>
 
             <div class="col-md-12">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" ng-if="tv_show">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Speach Length Distribution</h3>
+                        <h3 class="panel-title">Speech Length Distribution</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
-                    <div class="panel-body">
-
-                        <div class="row speaker-info-grafics" ng-if="tv_show">
+                    <div class="panel-body" id="replica-length-chart-body">
                             <div class="col-md-12">
-                                <h3><span class="label label-info">Replica Length Distribution</span></h3>
+                                <h3><span class="label label-info">Speech Length Distribution</span></h3>
                             </div>
                             <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
-                                <nvd3 options="barOptions" data="tvShowReplicaLengths"></nvd3>
+                                <nvd3 options="barOptions2" data="tvShowReplicaLengths"></nvd3>
                             </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -122,7 +158,7 @@
                             <tbody>
                             <tr ng-repeat="scene in tv_show.configuration_matrix">
                                 <td ng-repeat="values in scene track by $index"
-                                    ng-class="set_color(values)">
+                                    ng-class="setColor(values)">
                                     {{values}}
                                 </td>
                             </tr>
@@ -131,10 +167,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Configuration Densities</h3>
+                        <h3 class="panel-title">Configuration Densities In Tv Show Seasons</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
@@ -142,7 +179,7 @@
                         <div class="row speaker-info-grafics">
                             <div class="col-md-12 bar-chart">
                                 <nvd3 options="barOptionsConfigurationDensities"
-                                      data="configuration_densities"></nvd3>
+                                      data="configuration_densities" class="graph"></nvd3>
                             </div>
                         </div>
                     </div>

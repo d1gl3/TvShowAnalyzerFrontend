@@ -1,14 +1,14 @@
 'use strict';
 
 seriesAnalyzer.factory('SettingService',
-    ['$cookieStore', '$rootScope',
-        function ($cookieStore, $rootScope) {
+    [
+        function () {
 
             var service = {};
 
             var configuration;
 
-            var isLocal = false;
+            var isLocal = true;
 
             if (isLocal) {
                 configuration = {
@@ -25,4 +25,6 @@ seriesAnalyzer.factory('SettingService',
             };
 
             return service;
-        }]);
+        }
+    ]
+);

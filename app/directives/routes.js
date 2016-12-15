@@ -8,8 +8,5 @@ seriesAnalyzer.config(function($routeProvider) {
         .when('/speaker-overview-table', { templateUrl: 'assets/templates/speaker_overview_table.html' })
         .when('/speaker-single-view', { templateUrl: 'assets/templates/single_speaker_statistics.html' })
         .when('/speaker-comparison', { templateUrl: 'assets/templates/speaker-comparison.html' })
-        .when('/anfragen', { templateUrl: 'assets/templates/episode_config_tables.html' })
-        .when('/admin', { templateUrl: 'assets/templates/admin.html' })
-        .when('/edit', { templateUrl: 'assets/templates/edit.html' })
         .otherwise({ redirectTo: '/' });
 });
