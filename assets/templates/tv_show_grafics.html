@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" type="text/css" href="../assets/css/tv_show_overview.css">
 
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
@@ -51,10 +51,10 @@
                     <div class="panel-body">
                         <div id="speaker-info-box" ng-if="tv_show">
                             <div class="col-md-12">
-                                <table st-table="rowCollection" class="table table-striped">
+                                <table st-table="rowCollection">
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-striped speaker-info-table">
+                                               class="table table-bordered speaker-info-table">
                                             <tr>
                                                 <td>Configuration Density:</td>
                                                 <td>{{(tv_show.configuration_density).toFixed(2)}}</td>
@@ -71,7 +71,7 @@
                                     </td>
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-striped speaker-info-table">
+                                               class="table table-bordered speaker-info-table">
 
                                             <tr>
                                                 <td>Shortest Speech:</td>
@@ -90,7 +90,7 @@
                                     </td>
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-striped speaker-info-table">
+                                               class="table table-bordered speaker-info-table">
                                             <tr>
                                                 <td>Average Speech Length:</td>
                                                 <td>{{(tv_show.replicas_length_avg).toFixed(2)}}</td>
@@ -136,28 +136,34 @@
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body" id="replica-length-chart-body">
-                            <div class="col-md-12">
-                                <h3><span class="label label-info">Speech Length Distribution</span></h3>
-                            </div>
-                            <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
-                                <nvd3 options="barOptions2" data="tvShowReplicaLengths"></nvd3>
-                            </div>
+                        <div class="col-md-12">
+                            <h3><span class="label label-info">Speech Length Distribution</span></h3>
+                        </div>
+                        <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
+                            <nvd3 options="barOptions2" data="tvShowReplicaLengths"></nvd3>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-12">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" ng-if="tv_show_config_matrix">
                     <div class="panel-heading">
                         <h3 class="panel-title">Configuration Matrix</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body">
-                        <table st-table="rowCollection" class="table table-fixed">
+                        <table datatable="ng" dt-options="dtOptions" id="config-matrix" class="row-border hover">
+                            <thead>
+
+                            <th>Speaker/Season</th>
+                            <th ng-repeat="n in [] | range:all_seasons.length+1">{{n}}</th>
+
+                            </thead>
                             <tbody>
-                            <tr ng-repeat="scene in tv_show.configuration_matrix">
-                                <td ng-repeat="values in scene track by $index"
+                            <tr ng-repeat="season in tv_show_config_matrix">
+                                <td ng-repeat="values in season track by $index"
                                     ng-class="setColor(values)">
                                     {{values}}
                                 </td>

@@ -26,6 +26,14 @@
     font-size: 15px;
 }
 
+.config-cell {
+    background-color: white;
+}
+
+.config-cell:hover {
+    background-color: #dceffa;
+}
+
 .speaker-image {
     margin: 0 auto;
     position: relative;

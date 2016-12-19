@@ -4,8 +4,20 @@
 
 'use strict';
 
-angular.module('my-controllers').controller('tvShowGraficsController', ['$scope', '$q', 'SeasonService', 'TvShowService', 'UtilityService',
-    function ($scope, $q, SeasonService, TvShowService, UtilityService) {
+angular.module('my-controllers').filter('range', function () {
+    return function (input, total) {
+        total = parseInt(total);
+
+        for (var i = 1; i < total; i++) {
+            input.push(i);
+        }
+
+        return input;
+    };
+});
+
+angular.module('my-controllers').controller('tvShowGraficsController', ['$scope', '$q', 'SeasonService', 'TvShowService', 'UtilityService', 'DTOptionsBuilder',
+    function ($scope, $q, SeasonService, TvShowService, UtilityService, DTOptionsBuilder) {
 
         var util = UtilityService;
 
@@ -28,37 +40,40 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             };
         };
 
-        TvShowService.GetTvShow().then(function (result) {
-            $scope.tv_show = result.data;
+        function get_tv_show_data() {
+            TvShowService.GetTvShow().then(function (result) {
+                $scope.tv_show = result.data;
+                $scope.tv_show_config_matrix = $scope.tv_show.configuration_matrix
 
-            $scope.max_weight = Math.max.apply(Math, result.data.force_directed_data.links.map(function (o) {
-                return o.weight;
-            }));
+                $scope.max_weight = Math.max.apply(Math, result.data.force_directed_data.links.map(function (o) {
+                    return o.weight;
+                }));
 
-            set_force_directed_data(result.data);
+                set_force_directed_data(result.data);
 
-            var replica_lengths = $scope.tv_show.replicas_length_list;
-            var length_list = [];
+                var replica_lengths = $scope.tv_show.replicas_length_list;
+                var length_list = [];
 
-            for (var len in replica_lengths) {
-                if (replica_lengths.hasOwnProperty(len)) {
-                    length_list.push([+len.substring(1), replica_lengths[len], "Test"])
+                for (var len in replica_lengths) {
+                    if (replica_lengths.hasOwnProperty(len)) {
+                        length_list.push([+len.substring(1), replica_lengths[len], "Test"])
+                    }
                 }
-            }
 
-            length_list.sort(util.sort_by_key(0));
+                length_list.sort(util.sort_by_key(0));
 
-            $scope.tvShowReplicaLengths = [{
-                key: "Quantity",
-                bar: true,
-                values: length_list.slice(1, 51)
-            }];
+                $scope.tvShowReplicaLengths = [{
+                    key: "Quantity",
+                    bar: true,
+                    values: length_list.slice(1, 51)
+                }];
 
-            var reversed_length_list = jQuery.extend(true, [], length_list);
-            reversed_length_list.sort(util.sort_by_key(1));
+                var reversed_length_list = jQuery.extend(true, [], length_list);
+                reversed_length_list.sort(util.sort_by_key(1));
 
-            $scope.tvShowReplicaLengthsDistribution = reversed_length_list;
-        });
+                $scope.tvShowReplicaLengthsDistribution = reversed_length_list;
+            });
+        }
 
         SeasonService.GetSeasons().then(function (result) {
             $scope.all_seasons = result.data;
@@ -83,6 +98,8 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             $scope.numberOfSpeakersDistribution = [util.barChartObject("Quantity", number_of_speakers.sort(util.sort_by_key(0)))];
 
             $scope.configuration_densities = util.calculate_configuration_densities(result.data);
+
+            get_tv_show_data();
         });
 
         $scope.barOptionsConfigurationDensities = {
@@ -184,6 +201,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 }
                 ,
                 nodeExtras: function (node) {
+                    console.log(node);
                     node && node
                         .append("text")
                         .attr("dx", 8)
@@ -192,6 +210,12 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                             return d.name
                         })
                         .style('font-size', '10px');
+                },
+                linkExtras: function (link) {
+                    link && link
+                        .style('stroke', function (l) {
+                            return l.color
+                        });
                 }
             }
         };
@@ -287,6 +311,19 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 $(window).resize();
                 console.log("Test");
             }, 1000);
-        }
+        };
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            .withDOM('frtip')
+            .withButtons([
+                {
+                    extend: 'csv',
+                    text: 'Download as CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Download as XLS'
+                }
+        ]);
     }]
 );

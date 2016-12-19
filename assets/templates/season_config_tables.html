@@ -141,9 +141,10 @@
                                     <table st-table="rowCollection" class="table table-striped">
                                         <thead></thead>
                                         <tbody>
-                                        <tr ng-repeat="scene in selectedSeason.configuration_matrix">
-                                            <td ng-repeat="values in scene track by $index"
-                                                ng-class="setColor(values)">
+                                        <tr ng-repeat="episode in selectedSeason.configuration_matrix">
+                                            <td ng-repeat="values in episode track by $index"
+                                                ng-class="setColor(values)" class="config-cell"
+                                                title="{{episode_titles[$index]}}">
                                                 {{values}}
                                             </td>
                                         </tr>

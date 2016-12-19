@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="../assets/css/force_directed_graph.css">
+
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
         <div class="row">
@@ -137,7 +139,7 @@
                                     <thead></thead>
                                     <tbody>
                                     <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
-                                        <td ng-repeat="values in scene track by $index" ng-class="setColor(values)">
+                                        <td ng-repeat="values in scene track by $index" ng-class="setColor(values)" title="{{selectedEpisode.title}}">
                                             {{values}}
                                         </td>
                                     </tr>
@@ -147,16 +149,28 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-primary" ng-if="selectedEpisode">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">Character Network</h3>
                             <span class="pull-right clickable"><i
                                     class="glyphicon glyphicon-chevron-up"></i></span>
                         </div>
                         <div class="panel-body">
-                            <div class="row" id="force-directed-graph-speakers" ng-if="selectedEpisode">
-                                <div class="col-md-6">
-                                    <nvd3 options="options" data="selectedEpisode.force_directed_data"></nvd3>
+                            <div class="row">
+                                <label>Concomidant:
+                                    <input type="checkbox" ng-model="checkboxModel.concomidant">
+                                </label><br/>
+                                <label>Dominating:
+                                    <input type="checkbox" ng-model="checkboxModel.dominating">
+                                </label><br/>
+                                <label>Independent:
+                                    <input type="checkbox" ng-model="checkboxModel.independent">
+                                </label>
+                                <h3> Link threshold 0 <input type="range" id="thersholdSlider" name="points" value = 0 min="0" max="10" onchange="threshold(this.value)"> 10 </h3><br/>
+                            </div>
+                            <div class="row" id="force-directed-graph-speakers">
+                                <div class="col-md-12" id="force-graph">
+
                                 </div>
                             </div>
                         </div>

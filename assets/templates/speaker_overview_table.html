@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" type="text/css" href="../assets/css/speaker_overview.css">
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
@@ -11,22 +10,23 @@
                             class="glyphicon glyphicon-chevron-up"></i></span>
                 </div>
                 <div class="panel-body">
-                    <div ng-app="seriesAnalyzer" ng-controller="speakerTableController">
-
-                        <table st-table="rowCollection" class="table table-striped">
+                    <div ng-app="seriesAnalyzer" ng-controller="speakerOverviewController as SpeakerCtrl">
+                        <table datatable="ng" dt-options="SpeakerCtrl.dtOptions" class="row-border hover">
                             <thead>
-                            <td>Name</td>
-                            <td>Number Of Replicas</td>
-                            <td>Longest Replic</td>
-                            <td>Shortest Replic</td>
-                            <td>Average Replic Length</td>
-                            <td>Replic Length Median</td>
-                            <td>Total Length Of Replics</td>
-                            <td>Tv Show Replic Percentage</td>
-                            <td>Tv Show Word Percentage</td>
+                            <tr>
+                                <th>Name</th>
+                                <th>Number Of Replicas</th>
+                                <th>Longest Replic</th>
+                                <th>Shortest Replic</th>
+                                <th>Average Replic Length</th>
+                                <th>Replic Length Median</th>
+                                <th>Total Length Of Replics</th>
+                                <th>Tv Show Replic Percentage</th>
+                                <th>Tv Show Word Percentage</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="speaker in speakers | orderBy:'-number_of_replicas'">
+                            <tr ng-repeat="speaker in SpeakerCtrl.speakers">
                                 <td>{{speaker.name}}</td>
                                 <td>{{speaker.number_of_replicas}}</td>
                                 <td>{{speaker.replicas_length_max}}</td>
@@ -34,8 +34,8 @@
                                 <td>{{speaker.replicas_length_avg.toFixed(2)}}</td>
                                 <td>{{speaker.replicas_length_med}}</td>
                                 <td>{{speaker.replicas_length_total}}</td>
-                                <td>{{((speaker.tv_show_replik_percentage)*100).toFixed(2)}} %</td>
-                                <td>{{((speaker.tv_show_word_percentage)*100).toFixed(2)}} %</td>
+                                <td>{{((speaker.replik_percentage)*100).toFixed(2)}} %</td>
+                                <td>{{((speaker.word_percentage)*100).toFixed(2)}} %</td>
                             </tr>
                             </tbody>
                         </table>

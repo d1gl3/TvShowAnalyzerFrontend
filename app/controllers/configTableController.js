@@ -4,6 +4,12 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         var util = UtilityService;
         // Get All Data For Config Tables
 
+        $scope.checkboxModel = {
+            dominating: true,
+            concomidant: true,
+            independent: true
+        };
+
         $q.all([
             EpisodeService.GetEpisodes(),
             SeasonService.GetSeasons(),
@@ -36,6 +42,18 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         // Sets the configuration table cell classes to set the color
         $scope.setColor = util.setColor;
 
+        function get_titles_from_episodes(episodes) {
+            var titles = [];
+
+            for (var el in episodes) {
+                if (episodes.hasOwnProperty(el)) {
+                    titles.push(episodes[el].title);
+                }
+            }
+
+            return titles;
+        }
+
         // Prepares all data for Season Config Table View
         $scope.$watch("selectedSeason", function (new_season) {
             if (typeof new_season == "undefined") return;
@@ -57,6 +75,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 return el.season_number == $scope.selectedSeason.season_number;
             });
             $scope.configuration_densities = util.calculate_configuration_densities(episodes);
+            $scope.episode_titles = get_titles_from_episodes(episodes)
         });
 
         // Prepares the data when viewing an Episode
@@ -89,8 +108,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 },
                 color: function (d) {
                     return color(d.group);
-                }
-                ,
+                },
                 nodeExtras: function (node) {
                     node && node
                         .append("text")
@@ -100,6 +118,12 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                             return d.name;
                         })
                         .style("font-size", "10px");
+                },
+                linkExtras: function (link) {
+                    link && link
+                        .style('stroke', function (l) {
+                            return l.color
+                        });
                 }
             }
         };
@@ -248,8 +272,156 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                             return d.name;
                         })
                         .style("font-size", "10px");
+                },
+                linkExtras: function (link) {
+                    link && link
+                        .style('stroke', function (l) {
+                            return l.color
+                        });
                 }
             }
         };
 
+        $scope.$watch('selectedEpisode', function (force_data) {
+
+            if (typeof force_data == "undefined") return;
+
+            var links = force_data.force_directed_data.links;
+
+            var nodes = {};
+
+            // Compute the distinct nodes from the links.
+            links.forEach(function (link) {
+                link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+                link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+            });
+
+            console.log(nodes);
+
+            var width = 700,
+                height = 700;
+
+            var force = d3.layout.force()
+                .nodes(d3.values(nodes))
+                .links(links)
+                .size([width, height])
+                .linkDistance(300)
+                .charge(-120)
+                .friction(0.9)
+                .on("tick", tick)
+                .start();
+
+            var svg = d3.select("#force-graph").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            // Per-type markers, as they don't inherit styles.
+            svg.append("defs").selectAll("marker")
+                .data(["dominating"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 20)
+                .attr("refY", 0)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+            svg.append("defs").selectAll("marker")
+                .data(["sdfsdf"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 20)
+                .attr("refY", 0)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto-start-reverse")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+            var path = svg.append("g").selectAll("path")
+                .data(force.links())
+                .enter().append("path")
+                .attr("class", function (d) {
+                    return "link " + d.type;
+                })
+                .attr("marker-end", function (d) {
+                    return "url(#" + d.type + ")";
+                })
+                .attr("marker-start", function (d) {
+                    if (d.type == "concomidant") {
+                        return "url(#" + d.type + ")";
+                    }
+                });
+
+
+            var circle = svg.append("g").selectAll("circle")
+                .data(force.nodes())
+                .enter().append("circle")
+                .attr("r", function (d) {
+                    return d.weight * 2;
+                })
+                .call(force.drag);
+
+            var text = svg.append("g").selectAll("text")
+                .data(force.nodes())
+                .enter().append("text")
+                .attr("x", 8)
+                .attr("y", ".31em")
+                .text(function (d) {
+                    return d.name;
+                });
+
+            // Use elliptical arc path segments to doubly-encode directionality.
+            function tick() {
+                path.attr("d", linkArc);
+                circle.attr("transform", transform);
+                text.attr("transform", transform);
+            }
+
+            function linkArc(d) {
+                var dx = d.target.x - d.source.x,
+                    dy = d.target.y - d.source.y,
+                    dr = Math.sqrt(dx * dx + dy * dy);
+
+                var offsetX = (dx * d.target.weight) / dr,
+                    offsetY = (dy * d.target.weight) / dr;
+
+                return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x) + "," + (d.target.y);
+            }
+
+            function transform(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            }
+        });
+
+
+        $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
+            hide_show_elements_by_class("concomidant", checkboxSettings)
+        });
+
+        $scope.$watch('checkboxModel.independent', function (checkboxSettings) {
+            hide_show_elements_by_class("independent", checkboxSettings)
+        });
+
+        $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
+            hide_show_elements_by_class("dominating", checkboxSettings)
+        });
+
+        function hide_show_elements_by_class(classname, setVisible) {
+            [].forEach.call(document.querySelectorAll('.' + classname), function (el) {
+                if (!setVisible) {
+                    el.style.visibility = 'hidden';
+                } else {
+                    el.style.visibility = 'visible';
+                }
+            });
+        }
     }]);

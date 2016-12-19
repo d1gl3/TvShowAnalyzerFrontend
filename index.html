@@ -3,15 +3,28 @@
     <meta charset="utf8"/>
     <title>Series Analyzer</title>
 
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-datatables/dist/angular-datatables.js"></script>
+
+    <script src="//cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
+    <script src="bower_components/angular-datatables/dist/plugins/buttons/angular-datatables.buttons.js"></script>
+    <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
+    <script src="bower_components/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js" charset="utf-8"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
 
     <link rel="stylesheet" type="text/css" href="assets/libs/nv.d3.css">
-
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
-            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.7/angular-nvd3.min.js"></script>
     <!--<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>-->
@@ -27,8 +40,12 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="bower_components/jqcloud2/dist/jqcloud.css">
     <link rel="stylesheet" type="text/css" href="assets/css/appstyle.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.3/css/buttons.dataTables.min.css"
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
@@ -98,19 +115,6 @@
 <!--App-->
 <script src="app/app.js"></script>
 
-<!--Controllers-->
-<script src="app/controllers/controllers.js"></script>
-<script src="app/controllers/navbarCtrl.js"></script>
-<script src="app/controllers/speakerSingleViewController.js"></script>
-<script src="app/controllers/speakerTableController.js"></script>
-<script src="app/controllers/tvShowGraficsController.js"></script>
-<script src="app/controllers/speakerComparisonController.js"></script>
-<script src="app/controllers/configTableController.js"></script>
-
-<!--Directives-->
-<script src="app/directives/directives.js"></script>
-<script src="app/directives/routes.js"></script>
-
 <!--Services-->
 <script src="app/services/services.js"></script>
 <script src="app/services/d3Service.js"></script>
@@ -122,6 +126,21 @@
 <script src="app/services/tabService.js"></script>
 <script src="app/services/tvShowService.js"></script>
 <script src="app/services/currentSelectedSpeakerService.js"></script>
+
+<!--Controllers-->
+<script src="app/controllers/controllers.js"></script>
+<script src="app/controllers/navbarCtrl.js"></script>
+<script src="app/controllers/speakerSingleViewController.js"></script>
+<script src="app/controllers/speakerTableController.js"></script>
+<script src="app/controllers/tvShowGraficsController.js"></script>
+<script src="app/controllers/speakerComparisonController.js"></script>
+<script src="app/controllers/configTableController.js"></script>
+<script src="app/controllers/speakerOverviewController.js"></script>
+
+<!--Directives-->
+<script src="app/directives/directives.js"></script>
+<script src="app/directives/routes.js"></script>
+
 
 <script>
     $(document).on('click', '.panel-heading span.clickable', function(e){
