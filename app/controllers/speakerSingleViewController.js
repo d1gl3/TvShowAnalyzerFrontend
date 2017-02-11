@@ -22,6 +22,28 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
             });
         };
 
+        $scope.downloadReplicaCSV = function () {
+            console.log("CLICK");
+            var replica_lengths = $scope.replicaLengths[0].values;
+            var csvContent = "SpeachLength, Value\n";
+            var max_length = $scope.replicaLengths[0].values[$scope.replicaLengths[0].values.length - 1];
+            console.log(max_length);
+            replica_lengths.forEach(function (lengthArray, index) {
+
+                var dataString = lengthArray.join(",");
+                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
+
+            });
+
+            var speaker_name = $scope.selectedSpeaker.name;
+            var hiddenElement = document.createElement('a');
+
+            hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'SpeachLengths_'.concat(speaker_name).concat('.csv');
+            hiddenElement.click();
+        };
+
         $scope.set_selected_speaker = function (name) {
             get_speaker_stats(name, function (speaker) {
                 if (speaker != null) {

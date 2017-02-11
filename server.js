@@ -20,7 +20,7 @@ var db = require('./db');
 //var Episode = require('app/models/episode.js');
 
 // Connection URL
-var url = 'mongodb://localhost:27017/bbt';
+var url = 'mongodb://localhost:27017/bbt_new';
 
 // configuration =================
 

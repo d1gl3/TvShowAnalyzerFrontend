@@ -24,8 +24,24 @@
     fill: red;
 }
 
+#subordinating {
+    fill: red;
+}
+
 .link.dominating {
     stroke: red;
+}
+
+.link.subordinating{
+    stroke: red;
+}
+
+#alternative {
+    fill: purple;
+}
+
+.link.alternative {
+    stroke-dasharray: 5, 5;
 }
 
 circle {

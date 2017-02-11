@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+
 <div class="container-fluid full-height">
     <div class="row">
         <div id="tabs_container" class="col-xs-12">
@@ -65,15 +67,15 @@
 
                             </div>
                             <div class="speaker-card">
-                                <div class="speaker-label">Mrs Cooper</div>
-                                <img class="speaker-image" src="assets/img/mrs_cooper.jpg"
-                                     ng-click="set_selected_speaker('Mrs Cooper')">
+                                <div class="speaker-label">Sheldon's Mother</div>
+                                <img class="speaker-image" src="assets/img/Sheldon’s_Mother.jpg"
+                                     ng-click="set_selected_speaker('Sheldon’s Mother')">
 
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Wolowitz</div>
-                                <img class="speaker-image" src="assets/img/mrs_wolowitz.jpg"
-                                     ng-click="set_selected_speaker('Mrs Wolowitz')">
+                                <img class="speaker-image" src="assets/img/Howard’s_Mother.jpg"
+                                     ng-click="set_selected_speaker('Howard’s Mother')">
 
                             </div>
                             <div class="speaker-card">
@@ -84,8 +86,8 @@
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Beverley</div>
-                                <img class="speaker-image" src="assets/img/beverley.jpg"
-                                     ng-click="set_selected_speaker('Beverley')">
+                                <img class="speaker-image" src="assets/img/Leonard’s_Mother.jpg"
+                                     ng-click="set_selected_speaker('Leonard’s Mother')">
 
                             </div>
                             <div class="speaker-card">
@@ -218,6 +220,7 @@
                                 <nvd3 options="options" data="replicaLengths"></nvd3>
                             </div>
                         </div>
+                        <md-button class="md-raised" ng-click="downloadReplicaCSV()">Download as CSV</md-button>
                     </div>
                 </div>
 

@@ -339,10 +339,11 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
         }
 
         // Set data for season hamming distance graph
-        function set_season_hamm_dist() {
+        function set_season_hamm_dist(speakers) {
+            console.log(speakers);
             var season_dist = [];
-            var hamm_1 = $scope.selectedSpeaker[0].hamming_distances;
-            var hamm_2 = $scope.selectedSpeaker[1].hamming_distances;
+            var hamm_1 = speakers[0].hamming_distances;
+            var hamm_2 = speakers[1].hamming_distances;
 
             for (var i = 1; i <= 8; i++) {
                 var dist = util.calc_hamm(hamm_1["season_" + i].season_hamming_dist, hamm_2["season_" + i].season_hamming_dist);
@@ -358,6 +359,51 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 area: true,
                 values: season_dist
             }];
+        }
+
+        function set_probability_curve(speakers) {
+            console.log("SET CURVES");
+            var absolut_enc = [],
+                relative_enc = [],
+                speaker1 = speakers[0].name,
+                speaker2 = speakers[1].name,
+                count = 1;
+
+            var episodes = $scope.all_episodes;
+
+            episodes.sort(util.fieldSorter(['season_number', 'episode_number']));
+
+            for (var epi in episodes) {
+                if (episodes.hasOwnProperty(epi)) {
+                    var _abs_enc = episodes[epi].speaker_probabilities.couple[speaker1][speaker2],
+                        prob1 = episodes[epi].speaker_probabilities.single[speaker1],
+                        prob2 = episodes[epi].speaker_probabilities.single[speaker2];
+
+                    if (isNaN(_abs_enc)) _abs_enc = 0;
+
+                    var delta = _abs_enc - (episodes[epi].number_of_scenes * prob1 * prob2);
+
+                    relative_enc.push({
+                        count: count,
+                        delta: delta,
+                        episode_number: episodes[epi].episode_number,
+                        season_number: episodes[epi].season_number
+                    });
+                    count += 1;
+
+                    console.log(episodes[epi].season_number, episodes[epi].episode_number, delta)
+                }
+            }
+
+            $scope.probabilities = [
+                {
+                    key: "Probability Delta",
+                    bar: false,
+                    area: false,
+                    values: relative_enc
+                }];
+
+            console.log(relative_enc);
         }
 
         function calculate_correlations(replica_list_dict) {
@@ -402,9 +448,11 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             set_speaker_season_replik_line_chart_data();
         });
 
-        $scope.$watchGroup(['selectedSpeaker[0]', 'selectedSpeaker[1]'], function () {
-            if ($scope.selectedSpeaker[0].name != undefined && $scope.selectedSpeaker[1].name != undefined) {
-                set_season_hamm_dist();
+        $scope.$watchGroup(['selectedSpeaker[0]', 'selectedSpeaker[1]'], function (speakers) {
+            console.log(speakers);
+            if (speakers[0].name != undefined && speakers[1].name != undefined) {
+                set_season_hamm_dist(speakers);
+                set_probability_curve(speakers);
             }
         });
 
@@ -601,6 +649,49 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             title: {
                 enable: true,
                 text: 'Episodes Hamming Distance'
+            }
+        };
+
+
+        $scope.linechartOptionsProbs = {
+            chart: {
+                type: 'lineChart',
+                height: 450,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
+                    left: 55
+                },
+                noData: "No data available. Chart is computed as soon as you chose two characters.",
+                x: function (d) {
+                    return d.count;
+                },
+                y: function (d) {
+                    return d.delta;
+                },
+                xAxis: {
+                    axisLabel: 'Episodes'
+                },
+                yAxis: {
+                    axisLabel: 'Probability Delta',
+                    tickFormat: function (d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -10
+                },
+                tooltip: {
+                    contentGenerator: function (d) {
+                        console.log(d.series[0].values[d.pointIndex].episode_number);
+                        return '<h3>Delta: ' + d.series[0].values[d.pointIndex].delta + '</h3>' +
+                            '<h4>Season: ' + d.series[0].values[d.pointIndex].season_number + '</h4>' +
+                            '<h4>Episode: ' + d.series[0].values[d.pointIndex].episode_number + '</h4>';
+                    }
+                }
+            },
+            title: {
+                enable: true,
+                text: 'Speaker Configuration Probability'
             }
         };
 

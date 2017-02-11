@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+
 <div class="container-fluid full-height full-width">
     <div id="tabs_container" class="col-xs-12">
 
@@ -486,6 +488,19 @@
                         </div>
                         <div class="col-md-4">
                             <nvd3 options="linechartOptionsReplicaSumEpi" data="replicaSumEpisodes"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-primary linechart-panel" ng-if="probabilities">
+                <div class="panel-heading">Speaker Configuration Probabilities</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nvd3 options="linechartOptionsProbs" data="probabilities"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                     </div>

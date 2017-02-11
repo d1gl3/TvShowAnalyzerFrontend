@@ -7,27 +7,27 @@ seriesAnalyzer.factory('UtilityService',
             var service = {};
 
             // Filters Force Directed Graph Links by weight >= 2
-            service.filter_by_weight = function(link) {
+            service.filter_by_weight = function (link) {
                 return link.weight >= 2;
             };
 
             // Returns a 4th degree polynomial regression
-            service.getPolynomialRegressionCurve = function(value_array) {
+            service.getPolynomialRegressionCurve = function (value_array) {
                 return regression("polynomial", value_array, 4).points;
             };
 
             // Sorts a list of objects by key
-            service.sort_by_key = function(key) {
-                return function(a,b){
+            service.sort_by_key = function (key) {
+                return function (a, b) {
                     return a[key] - b[key];
                 }
             };
 
-            service.compareNumbers = function(a, b) {
+            service.compareNumbers = function (a, b) {
                 return a - b;
             };
 
-            service.fieldSorter = function(fields) {
+            service.fieldSorter = function (fields) {
                 return function (a, b) {
                     return fields
                         .map(function (o) {
@@ -47,7 +47,7 @@ seriesAnalyzer.factory('UtilityService',
             };
 
             // Sets the configuration table cell classes to set the color
-            service.setColor = function(value) {
+            service.setColor = function (value) {
                 if (value == 1) {
                     return "info";
                 }
@@ -57,19 +57,34 @@ seriesAnalyzer.factory('UtilityService',
                 return "active";
             };
 
+            // Sets the configuration table cell classes to set the color
+            service.setProbabilityColor = function (value) {
+                if (typeof value === 'number') {
+                    if (value > 1) {
+                        return "prob-plus";
+                    }
+                    if (value < 1) {
+                        return "prob-minus";
+                    }
+                } else {
+                    console.log("HIER: " + String.valueOf(value));
+                }
+                return "prob-equal";
+            };
+
             service.barChartObject = function (name, values) {
-              return {
-                  key: name,
-                  bar: true,
-                  values: values
-              }
+                return {
+                    key: name,
+                    bar: true,
+                    values: values
+                }
             };
 
             service.lineChartObject = function (name, values) {
-              return {
-                  key: name,
-                  values: values
-              }
+                return {
+                    key: name,
+                    values: values
+                }
             };
 
             service.calculate_configuration_densities = function (elements) {
@@ -97,7 +112,7 @@ seriesAnalyzer.factory('UtilityService',
                 ];
             };
 
-            service.format_replica_length_list = function(replica_lengths) {
+            service.format_replica_length_list = function (replica_lengths) {
                 var length_list = [];
 
                 for (var len in replica_lengths) {

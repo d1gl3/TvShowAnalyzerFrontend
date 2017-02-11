@@ -21,6 +21,14 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
         var util = UtilityService;
 
+        $scope.loading = true;
+
+        $scope.checkboxModel = {
+            dominating: true,
+            concomidant: true,
+            independent: true
+        };
+
         var filter_by_weight = function (link) {
             return (link.weight >= $scope.slider.min) && (link.weight <= $scope.slider.max);
         };
@@ -43,7 +51,18 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
         function get_tv_show_data() {
             TvShowService.GetTvShow().then(function (result) {
                 $scope.tv_show = result.data;
-                $scope.tv_show_config_matrix = $scope.tv_show.configuration_matrix
+                $scope.tv_show_config_matrix = _.sortBy($scope.tv_show.configuration_matrix, function (array) {
+                    var sum = 0;
+
+                    for (var el in array) {
+                        if (array.hasOwnProperty(el)) {
+                            if (array[el] == 1) sum++;
+                        }
+                    }
+
+                    return sum;
+                }).reverse();
+
 
                 $scope.max_weight = Math.max.apply(Math, result.data.force_directed_data.links.map(function (o) {
                     return o.weight;
@@ -65,7 +84,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 $scope.tvShowReplicaLengths = [{
                     key: "Quantity",
                     bar: true,
-                    values: length_list.slice(1, 51)
+                    values: length_list.slice(0, 50)
                 }];
 
                 var reversed_length_list = jQuery.extend(true, [], length_list);
@@ -80,7 +99,8 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
             var replik_percentage = [],
                 word_percentage = [],
-                number_of_speakers = [];
+                number_of_speakers = [],
+                config_densities = [];
 
             for (var season in $scope.all_seasons) {
                 if ($scope.all_seasons.hasOwnProperty(season)) {
@@ -88,6 +108,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     replik_percentage.push([season_obj.season_number, season_obj.number_of_replicas]);
                     word_percentage.push([season_obj.season_number, season_obj.replicas_length_total]);
                     number_of_speakers.push([season_obj.season_number, season_obj.speakers.length]);
+                    config_densities.push([season_obj.season_number, season_obj.configuration_density]);
                 }
             }
 
@@ -97,7 +118,10 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
             $scope.numberOfSpeakersDistribution = [util.barChartObject("Quantity", number_of_speakers.sort(util.sort_by_key(0)))];
 
-            $scope.configuration_densities = util.calculate_configuration_densities(result.data);
+            $scope.configuration_densities = [util.barChartObject("Density", config_densities.sort(util.sort_by_key(0)))];
+
+            console.log($scope.numberOfSpeakersDistribution);
+            console.log($scope.configuration_densities);
 
             get_tv_show_data();
         });
@@ -161,6 +185,28 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
         $scope.setColor = util.setColor;
 
+
+        $scope.downloadReplicaCSV = function () {
+            console.log("CLICK");
+            var replica_lengths = $scope.tvShowReplicaLengths[0].values;
+            var csvContent = "SpeachLength, Value\n";
+            var max_length = $scope.tvShowReplicaLengths[0].values[$scope.tvShowReplicaLengths[0].values.length - 1];
+            console.log(max_length);
+            replica_lengths.forEach(function (lengthArray, index) {
+
+                var dataString = lengthArray.join(",");
+                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
+
+            });
+
+            var hiddenElement = document.createElement('a');
+
+            hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'SpeachLengths_Total.csv';
+            hiddenElement.click();
+        };
+
         $scope.$watchGroup(["slider.min", "slider.max"], function () {
             set_force_directed_data($scope.tv_show);
         }, true);
@@ -219,6 +265,211 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 }
             }
         };
+
+        function drawForceGraph(force_data) {
+
+            if (typeof force_data == "undefined") return;
+
+            d3.select("#force-graph").select("svg").remove();
+
+            var links = force_data.force_directed_data.links;
+
+            var nodes = {};
+
+            // Compute the distinct nodes from the links.
+            links.forEach(function (link) {
+                link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+                link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+            });
+
+            console.log(nodes);
+
+            var width = 1400,
+                height = 700;
+
+            var force = d3.layout.force()
+                .nodes(d3.values(nodes))
+                .links(links)
+                .size([width, height])
+                .linkDistance(400)
+                .gravity(0.5)
+                .charge(-100)
+                //.alpha(0.5)
+                //.friction(0.5)
+                .on("tick", tick)
+                .start();
+
+            var drag = force.drag()
+                .on('dragstart', function (d) {
+                    d3.select(this).classed('fixed', d.fixed = true);
+                    force.stop();
+                })
+                .on('dragend', function () {
+                    force.stop();
+                });
+
+            var svg = d3.select("#force-graph").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("id", "svg_character_network");
+
+            // Per-type markers, as they don't inherit styles.
+            svg.append("defs").selectAll("marker")
+                .data(["dominating"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 0)
+                .attr("refY", 0)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+            svg.append("defs").selectAll("marker")
+                .data(["concomidant"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 0)
+                .attr("refY", 0)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto-start-reverse")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+            svg.append("defs").selectAll("marker")
+                .data(["subordinating"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 0)
+                .attr("refY", 0)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto-start-reverse")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+
+            var path = svg.append("g").selectAll("path")
+                .data(force.links())
+                .enter().append("path")
+                .attr("class", function (d) {
+                    return "link " + d.type;
+                })
+                .attr("marker-end", function (d) {
+                    if (d.type != "subordinating") {
+                        return "url(#" + d.type + ")";
+                    }
+                })
+                .attr("marker-start", function (d) {
+                    if (d.type == "concomidant" || d.type == "subordinating") {
+                        return "url(#" + d.type + ")";
+                    }
+                });
+
+
+            var circle = svg.append("g").selectAll("circle")
+                .data(force.nodes())
+                .enter().append("circle")
+                .attr("r", function (d) {
+                    return d.weight;
+                })
+                .call(drag)
+                .on('dblclick', function (d) {
+                    d3.select(this).classed('fixed', d.fixed = false);
+                    force.start();
+                });
+
+            var text = svg.append("g").selectAll("text")
+                .data(force.nodes())
+                .enter().append("text")
+                .attr("x", 8)
+                .attr("y", ".31em")
+                .text(function (d) {
+                    return d.name;
+                });
+
+            // Use elliptical arc path segments to doubly-encode directionality.
+            function tick() {
+                path.attr("d", initial_path);
+                path.attr("d", corrected_path);
+                circle.attr("transform", transform);
+                text.attr("transform", transform);
+            }
+
+            function corrected_path(d) {
+
+                if (d.type == "alternative") return;
+
+                if (d.type == "dominating") {
+                    var pl = this.getTotalLength(),
+                        // radius of circle plus marker head
+                        r = (d.target.weight) + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                        // position close to where path intercepts circle
+                        m = this.getPointAtLength(pl - r);
+
+                    return "M" + d.source.x + "," + d.source.y + "L" + m.x + "," + m.y;
+                } else {
+                    if (d.type == "concomidant") {
+                        var pl = this.getTotalLength(),
+                            // radius of circle plus marker head
+                            r = (d.target.weight) + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                            // position close to where path intercepts circle
+                            l = this.getPointAtLength(pl - r);
+
+                        var x_start = d.source.x + (r / this.getTotalLength()) * (d.target.x - d.source.x),
+                            y_start = d.source.y + (r / this.getTotalLength()) * (d.target.y - d.source.y);
+
+                        return "M" + x_start + "," + y_start + "L" + l.x + "," + l.y;
+                    } else {
+                        return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+                    }
+                }
+            }
+
+            function initial_path(d) {
+                return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+            }
+
+            function transform(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            }
+        }
+
+        $scope.$watch('tv_show', drawForceGraph);
+
+        $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
+            hide_show_elements_by_class("concomidant", checkboxSettings);
+        });
+
+        $scope.$watch('checkboxModel.independent', function (checkboxSettings) {
+            hide_show_elements_by_class("independent", checkboxSettings)
+        });
+
+        $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
+            hide_show_elements_by_class("dominating", checkboxSettings)
+            hide_show_elements_by_class("subordinating", checkboxSettings);
+        });
+
+        function hide_show_elements_by_class(classname, setVisible) {
+            [].forEach.call(document.querySelectorAll('.' + classname), function (el) {
+                if (!setVisible) {
+                    el.style.visibility = 'hidden';
+                } else {
+                    el.style.visibility = 'visible';
+                }
+            });
+        }
 
         $scope.barOptions = {
             chart: {
@@ -297,7 +548,36 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 },
                 showValues: true,
                 valueFormat: function (d) {
-                    return d3.format(',.0f')(d);
+                    return d3.format('.0f')(d);
+                },
+                transitionDuration: 500,
+                xAxis: {
+                    axisLabel: 'Season'
+                }
+            }
+        };
+
+        $scope.barOptionsConfigDensities = {
+            chart: {
+                type: 'discreteBarChart',
+                useInteractiveGuideline: false,
+                interactive: true,
+                height: 400,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 60,
+                    left: 55
+                },
+                x: function (d) {
+                    return d[0];
+                },
+                y: function (d) {
+                    return d[1];
+                },
+                showValues: true,
+                valueFormat: function (d) {
+                    return d3.format('.2f')(d);
                 },
                 transitionDuration: 500,
                 xAxis: {
@@ -315,6 +595,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withDOM('frtip')
+            .withOption('order', [])
             .withButtons([
                 {
                     extend: 'csv',
@@ -324,6 +605,6 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     extend: 'excel',
                     text: 'Download as XLS'
                 }
-        ]);
+            ]);
     }]
 );

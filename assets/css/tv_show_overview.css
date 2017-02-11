@@ -1,3 +1,15 @@
 .panel-title {
-    display: inline;
+    display: block;
+}
+
+.panel-body {
+    overflow-y: hidden;
+}
+
+#replica-length-chart-body {
+    height: 550px;
+}
+
+#force-directed-graph-body {
+    height: 850px;
 }

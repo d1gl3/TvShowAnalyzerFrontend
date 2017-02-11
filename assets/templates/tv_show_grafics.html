@@ -1,4 +1,7 @@
+<link rel="stylesheet" type="text/css" href="../assets/css/main.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/tv_show_overview.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/force_directed_graph.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/optionElements.css">
 
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
@@ -49,40 +52,41 @@
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body">
+                        <div class="loader" ng-if="loading" ng-hide="tv_show"></div>
                         <div id="speaker-info-box" ng-if="tv_show">
                             <div class="col-md-12">
                                 <table st-table="rowCollection">
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-bordered speaker-info-table">
+                                               class="table speaker-info-table">
                                             <tr>
-                                                <td>Configuration Density:</td>
+                                                <td>Configuration density:</td>
                                                 <td>{{(tv_show.configuration_density).toFixed(2)}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Number Of Speeches:</td>
+                                                <td>Number of speeches:</td>
                                                 <td>{{tv_show.number_of_replicas}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Longest Speech:</td>
+                                                <td>Longest speech:</td>
                                                 <td>{{tv_show.replicas_length_max}}</td>
                                             </tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-bordered speaker-info-table">
+                                               class="table speaker-info-table">
 
                                             <tr>
-                                                <td>Shortest Speech:</td>
+                                                <td>Shortest speech:</td>
                                                 <td>{{tv_show.replicas_length_min}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Speech Length Median:</td>
+                                                <td>Speech length median:</td>
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Speech Length Total:</td>
+                                                <td>Speech length total:</td>
                                                 <td>{{tv_show.replicas_length_total}}</td>
                                             </tr>
 
@@ -90,17 +94,17 @@
                                     </td>
                                     <td>
                                         <table st-table="rowCollection"
-                                               class="table table-bordered speaker-info-table">
+                                               class="table speaker-info-table">
                                             <tr>
-                                                <td>Average Speech Length:</td>
+                                                <td>Average speech length:</td>
                                                 <td>{{(tv_show.replicas_length_avg).toFixed(2)}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Median Speech Length:</td>
+                                                <td>Median speech length:</td>
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Number of Speakers:</td>
+                                                <td>Number of speakers:</td>
                                                 <td>{{tv_show.speakers.length}}</td>
                                             </tr>
                                         </table>
@@ -109,19 +113,24 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <h3><span class="label label-info">Replika Distribution</span></h3>
                             <nvd3 options="barOptions2" data="replicaNumberDistribution"
                             ></nvd3>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <h3><span class="label label-info">Word Distribution</span></h3>
                             <nvd3 options="barOptions2" data="replicaWordDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <h3><span class="label label-info">Number of Speakers</span></h3>
                             <nvd3 options="barOptions2" data="numberOfSpeakersDistribution"
+                                  class="with-3d-shadow with-transitions"></nvd3>
+                        </div>
+                        <div class="col-md-3">
+                            <h3><span class="label label-info">Configuration Density</span></h3>
+                            <nvd3 options="barOptionsConfigDensities" data="configuration_densities"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                     </div>
@@ -129,32 +138,38 @@
             </div>
 
             <div class="col-md-12">
-                <div class="panel panel-primary" ng-if="tv_show">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Speech Length Distribution</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body" id="replica-length-chart-body">
+                        <div class="loader" ng-if="loading" ng-hide="tv_show"></div>
                         <div class="col-md-12">
                             <h3><span class="label label-info">Speech Length Distribution</span></h3>
                         </div>
                         <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
                             <nvd3 options="barOptions2" data="tvShowReplicaLengths"></nvd3>
                         </div>
+                        <div class="col-md-12 bar-chart">
+                            <md-button class="md-raised" ng-click="downloadReplicaCSV()">Download as CSV</md-button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-12">
-                <div class="panel panel-primary" ng-if="tv_show_config_matrix">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Configuration Matrix</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body">
-                        <table datatable="ng" dt-options="dtOptions" id="config-matrix" class="row-border hover">
+                        <div class="loader" ng-if="loading" ng-hide="tv_show"></div>
+                        <table datatable="ng" dt-options="dtOptions" id="config-matrix" class="row-border hover"
+                               ng-if="tv_show_config_matrix">
                             <thead>
 
                             <th>Speaker/Season</th>
@@ -177,16 +192,42 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Configuration Densities In Tv Show Seasons</h3>
+                        <h3 class="panel-title">Overall Series Stats</h3>
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
                     <div class="panel-body">
-                        <div class="row speaker-info-grafics">
-                            <div class="col-md-12 bar-chart">
-                                <nvd3 options="barOptionsConfigurationDensities"
-                                      data="configuration_densities" class="graph"></nvd3>
-                            </div>
+                        <div ng-app="seriesAnalyzer" ng-controller="speakerOverviewController as SpeakerCtrl">
+                            <table datatable="ng" dt-options="SpeakerCtrl.dtOptions" class="row-border hover">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Number Of Replicas</th>
+                                    <th>Longest Replic</th>
+                                    <th>Shortest Replic</th>
+                                    <th>Average Replic Length</th>
+                                    <th>Replic Length Median</th>
+                                    <th>Total Length Of Replics</th>
+                                    <th>Tv Show Replic Percentage</th>
+                                    <th>Tv Show Word Percentage</th>
+                                    <th>Appeared in seasons</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="speaker in SpeakerCtrl.speakers">
+                                    <td>{{speaker.name}}</td>
+                                    <td>{{speaker.number_of_replicas}}</td>
+                                    <td>{{speaker.replicas_length_max}}</td>
+                                    <td>{{speaker.replicas_length_min}}</td>
+                                    <td>{{speaker.replicas_length_avg.toFixed(2)}}</td>
+                                    <td>{{speaker.replicas_length_med}}</td>
+                                    <td>{{speaker.replicas_length_total}}</td>
+                                    <td>{{((speaker.replik_percentage)*100).toFixed(2)}} %</td>
+                                    <td>{{((speaker.word_percentage)*100).toFixed(2)}} %</td>
+                                    <td>{{speaker.appeared_in_seasons.sort(sort_numbers).join()}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -199,24 +240,48 @@
                         <span class="pull-right clickable"><i
                                 class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
-                    <div class="panel-body">
-                        <div class="row" id="force-directed-graph-speakers" ng-if="forceDirectedData">
-                            <div class="col-md-12">
-                                <h3><span class="label label-info">TV Show Coappearances</span></h3>
-                                Minimum Coappearances:
-                                <div>
-                                    <rzslider
-                                            rz-slider-model="slider.min"
-                                            rz-slider-high="slider.max"
-                                            rz-slider-options="slider.options"></rzslider>
-                                </div>
+                    <div class="panel-body" id="force-directed-graph-body">
+                        <table class="">
+                            <tr>
+                                <td>Concomidant</td>
+                                <td><label class="switch">
+                                    <input id="concomidant-switch" type="checkbox"
+                                           ng-model="checkboxModel.concomidant">
+                                    <div class="slider round"></div>
+                                </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dominating</td>
+                                <td>
+                                    <label class="switch">
+                                        <input id="dominating-switch" type="checkbox"
+                                               ng-model="checkboxModel.dominating">
+                                        <div class="slider round"></div>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Independent</td>
+                                <td>
+                                    <label class="switch">
+                                        <input id="independent-switch" type="checkbox"
+                                               ng-model="checkboxModel.independent">
+                                        <div class="slider round"></div>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="force-directed-graph-speakers">
+                            <div class="col-md-12" id="force-graph">
                             </div>
-                            <div class="col-md-12">
-                                <nvd3 options="forceDirectedOptions" data="forceDirectedData"></nvd3>
-                            </div>
+                            <button svg-download="#svg_character_network" title="CharacterNetworkFull" type="png">
+                                Download as PNG
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

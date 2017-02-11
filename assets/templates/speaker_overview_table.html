@@ -23,6 +23,7 @@
                                 <th>Total Length Of Replics</th>
                                 <th>Tv Show Replic Percentage</th>
                                 <th>Tv Show Word Percentage</th>
+                                <th>Appeared in seasons</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,6 +37,7 @@
                                 <td>{{speaker.replicas_length_total}}</td>
                                 <td>{{((speaker.replik_percentage)*100).toFixed(2)}} %</td>
                                 <td>{{((speaker.word_percentage)*100).toFixed(2)}} %</td>
+                                <td>{{speaker.appeared_in_seasons.sort(sort_numbers).join()}}</td>
                             </tr>
                             </tbody>
                         </table>

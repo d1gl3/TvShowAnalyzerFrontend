@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="ui boo" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/assets/libs/ui-bootstrap-2.3.1.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/assets/libs/ui-bootstrap-2.3.1.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

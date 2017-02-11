@@ -1,5 +1,18 @@
-angular.module('my-controllers').controller("configTableController", ["$scope", "$http", "$q", "EpisodeService", "SeasonService", "TvShowService", "UtilityService",
-    function ($scope, $http, $q, EpisodeService, SeasonService, TvShowService, UtilityService) {
+
+angular.module('my-controllers').filter('range', function () {
+    return function (input, total) {
+        total = parseInt(total);
+
+        for (var i = 1; i < total; i++) {
+            input.push(i);
+        }
+
+        return input;
+    };
+});
+
+angular.module('my-controllers').controller("configTableController", ["$scope", "$http", "$q", "EpisodeService", "SeasonService", "TvShowService", "UtilityService", "DTOptionsBuilder",
+    function ($scope, $http, $q, EpisodeService, SeasonService, TvShowService, UtilityService, DTOptionsBuilder) {
 
         var util = UtilityService;
         // Get All Data For Config Tables
@@ -7,8 +20,70 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         $scope.checkboxModel = {
             dominating: true,
             concomidant: true,
-            independent: true
+            independent: true,
+            alternative: true
         };
+
+        $scope.loading = false;
+
+        $scope.show_loading = function () {
+            console.log("test");
+            $scope.loading = true;
+        };
+
+        $scope.sort_numbers = UtilityService.compareNumbers;
+
+        var lang = {
+            "decimal":        ".",
+            "emptyTable":     "No data available in table",
+            "info":           "Showing _START_ to _END_ of _TOTAL_ entries",
+            "infoEmpty":      "Showing 0 to 0 of 0 entries",
+            "infoFiltered":   "(filtered from _MAX_ total entries)",
+            "infoPostFix":    "",
+            "thousands":      "",
+            "lengthMenu":     "Show _MENU_ entries",
+            "loadingRecords": "Loading...",
+            "processing":     "Processing...",
+            "search":         "Search:",
+            "zeroRecords":    "No matching records found",
+            "paginate": {
+                "first":      "First",
+                "last":       "Last",
+                "next":       "Next",
+                "previous":   "Previous"
+            },
+            "aria": {
+                "sortAscending":  ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        };
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            .withDOM('frtip')
+            .withOption('language', lang)
+            .withButtons([
+                {
+                    extend: 'csv',
+                    text: 'Download as CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Download as XLS'
+                }
+            ]);
+
+        $scope.dtConfigOptions = DTOptionsBuilder.newOptions().withOption('order', [1, 'desc'])
+            .withDOM('frtip')
+            .withButtons([
+                {
+                    extend: 'csv',
+                    text: 'Download as CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Download as XLS'
+                }
+            ]);
 
         $q.all([
             EpisodeService.GetEpisodes(),
@@ -41,6 +116,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
         // Sets the configuration table cell classes to set the color
         $scope.setColor = util.setColor;
+        $scope.setProbabilityColor = util.setProbabilityColor;
 
         function get_titles_from_episodes(episodes) {
             var titles = [];
@@ -58,9 +134,13 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         $scope.$watch("selectedSeason", function (new_season) {
             if (typeof new_season == "undefined") return;
 
+            $scope.loading = true;
+
             var force_data_all = new_season.force_directed_data,
                 nodes = force_data_all.nodes,
                 links = force_data_all.links;
+
+            console.log(nodes);
             $scope.max_weight = Math.max.apply(Math, links.map(function (o) {
                 return o.weight;
             }));
@@ -75,13 +155,52 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 return el.season_number == $scope.selectedSeason.season_number;
             });
             $scope.configuration_densities = util.calculate_configuration_densities(episodes);
-            $scope.episode_titles = get_titles_from_episodes(episodes)
+            $scope.episode_titles = get_titles_from_episodes(episodes);
+
+            $scope.config_matrix = _.sortBy($scope.selectedSeason.configuration_matrix, function (array) {
+                var sum = 0;
+
+                for (var el in array) {
+                    if (array.hasOwnProperty(el)) {
+                        if (array[el] == 1) sum++;
+                    }
+                }
+
+                return sum;
+            }).reverse();
+
+            $scope.config_probability_header = new_season.probability_matrix[0];
+
+            $scope.config_probability = _.sortBy(new_season.probability_matrix.slice(1, new_season.probability_matrix.length), function (array) {
+                console.log(array);
+                var max = 0;
+
+                for (var el in array) {
+                    if (array.hasOwnProperty(el)) {
+                        if (typeof array[el] === 'number'){
+                            if(array[el] > max){
+                                max = array[el];
+                            }
+                        }
+                    }
+                }
+
+                return max;
+            }).reverse();
+            $scope.loading = false;
         });
 
         // Prepares the data when viewing an Episode
         $scope.$watch("selectedEpisode", function (new_episode) {
             if (typeof new_episode === 'undefined') return;
+            $scope.loading = true;
             $scope.replica_length_list = getFormatedLengthList(new_episode.replicas_length_list);
+
+            $scope.config_probability_header = new_episode.probability_matrix[0];
+            $scope.config_probability = new_episode.probability_matrix.slice(1, new_episode.probability_matrix.length);
+            console.log($scope.config_probability);
+            console.log($scope.config_probability_header);
+            $scope.loading = false;
         });
 
         $scope.forceDirectedOptionsSeasons = {
@@ -185,6 +304,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         $scope.barOptionsConfigurationDensities = {
             chart: {
                 type: "lineChart",
+                interactive: true,
                 height: 300,
                 margin: {
                     top: 20,
@@ -220,8 +340,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 },
                 yDomain: [0, 1],
                 tooltip: {
-                    keyFormatter: function (d) {
-                        return d3.format(",.0f")(d);
+                    contentGenerator: function (key) {
+                        return '<h3>' + $scope.episode_titles[key.pointIndex] + '</h3>';
                     }
                 },
                 zoom: {
@@ -282,9 +402,11 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             }
         };
 
-        $scope.$watch('selectedEpisode', function (force_data) {
+        function drawForceGraph(force_data) {
 
             if (typeof force_data == "undefined") return;
+
+            d3.select("#force-graph").select("svg").remove();
 
             var links = force_data.force_directed_data.links;
 
@@ -298,8 +420,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
             console.log(nodes);
 
-            var width = 700,
-                height = 700;
+            var width = 1400,
+                height = 900;
 
             var force = d3.layout.force()
                 .nodes(d3.values(nodes))
@@ -311,9 +433,19 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 .on("tick", tick)
                 .start();
 
+            var drag = force.drag()
+                .on('dragstart', function(d) {
+                    d3.select(this).classed('fixed', d.fixed = true);
+                    force.stop();
+                })
+                .on('dragend', function() {
+                    force.stop();
+                });
+
             var svg = d3.select("#force-graph").append("svg")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height)
+                .attr("id", "svg_character_network");;
 
             // Per-type markers, as they don't inherit styles.
             svg.append("defs").selectAll("marker")
@@ -323,7 +455,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     return d;
                 })
                 .attr("viewBox", "0 -5 10 10")
-                .attr("refX", 20)
+                .attr("refX", 0)
                 .attr("refY", 0)
                 .attr("markerWidth", 12)
                 .attr("markerHeight", 12)
@@ -332,13 +464,13 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 .attr("d", "M0,-5L10,0L0,5");
 
             svg.append("defs").selectAll("marker")
-                .data(["sdfsdf"])
+                .data(["concomidant"])
                 .enter().append("marker")
                 .attr("id", function (d) {
                     return d;
                 })
                 .attr("viewBox", "0 -5 10 10")
-                .attr("refX", 20)
+                .attr("refX", 0)
                 .attr("refY", 0)
                 .attr("markerWidth", 12)
                 .attr("markerHeight", 12)
@@ -366,9 +498,13 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 .data(force.nodes())
                 .enter().append("circle")
                 .attr("r", function (d) {
-                    return d.weight * 2;
+                    return d.weight * 4;
                 })
-                .call(force.drag);
+                .call(drag)
+                .on('dblclick', function (d) {
+                    d3.select(this).classed('fixed', d.fixed = false);
+                    force.start();
+                });
 
             var text = svg.append("g").selectAll("text")
                 .data(force.nodes())
@@ -381,27 +517,50 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
             // Use elliptical arc path segments to doubly-encode directionality.
             function tick() {
-                path.attr("d", linkArc);
+                path.attr("d", initial_path);
+                path.attr("d", corrected_path);
                 circle.attr("transform", transform);
                 text.attr("transform", transform);
             }
 
-            function linkArc(d) {
-                var dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    dr = Math.sqrt(dx * dx + dy * dy);
+            function corrected_path(d) {
+                if (d.type == "dominating") {
+                    var pl = this.getTotalLength(),
+                        // radius of circle plus marker head
+                        r = (d.target.weight) * 4 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                        // position close to where path intercepts circle
+                        m = this.getPointAtLength(pl - r);
 
-                var offsetX = (dx * d.target.weight) / dr,
-                    offsetY = (dy * d.target.weight) / dr;
+                    return "M" + d.source.x + "," + d.source.y + "L" + m.x + "," + m.y;
+                } else {
+                    if (d.type == "concomidant") {
+                        var pl = this.getTotalLength(),
+                            // radius of circle plus marker head
+                            r = (d.target.weight) * 4 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                            // position close to where path intercepts circle
+                            l = this.getPointAtLength(pl - r);
 
-                return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x) + "," + (d.target.y);
+                        var x_start = d.source.x + (r / this.getTotalLength()) * (d.target.x - d.source.x),
+                            y_start = d.source.y + (r / this.getTotalLength()) * (d.target.y - d.source.y);
+
+                        return "M" + x_start + "," + y_start + "L" + l.x + "," + l.y;
+                    } else {
+                        return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+                    }
+                }
+            }
+
+            function initial_path(d) {
+                return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
             }
 
             function transform(d) {
                 return "translate(" + d.x + "," + d.y + ")";
             }
-        });
+        }
 
+        $scope.$watch('selectedEpisode', drawForceGraph);
+        $scope.$watch('selectedSeason', drawForceGraph);
 
         $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
             hide_show_elements_by_class("concomidant", checkboxSettings)
@@ -413,6 +572,10 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
         $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
             hide_show_elements_by_class("dominating", checkboxSettings)
+        });
+
+        $scope.$watch('checkboxModel.alternative', function (checkboxSettings) {
+            hide_show_elements_by_class("alternative", checkboxSettings)
         });
 
         function hide_show_elements_by_class(classname, setVisible) {

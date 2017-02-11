@@ -1,187 +1,299 @@
 <link rel="stylesheet" type="text/css" href="../assets/css/force_directed_graph.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/optionElements.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/episodes.css">
 
 <div class="container-fluid full-height">
     <div id="tabs_container" class="col-xs-12">
-        <div class="row">
+        <div ng-app="seriesAnalyzer" ng-controller="configTableController">
+            <div class="col-md-12" id="episode-selection">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Episode Selection</div>
+                    <div class="panel-body overflow-x-auto">
+                        <div class="col-md-3">
+                            <label>
+                                Episode:
+                                <select ng-options="episode as 'Season ' + episode.season_number + ' ' + 'Episode ' + episode.episode_number for episode in all_episodes | orderBy:['season_number','episode_number']"
+                                        ng-model="selectedEpisode" ng-change="select_clicked()">
+                                    <option value="">Please select an episode...</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-12">
-                <div ng-app="seriesAnalyzer" ng-controller="configTableController">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Episode Selection</div>
-                        <div class="panel-body">
-                            <div class="col-md-3">
-                                <label>
-                                    Episode:
-                                    <select ng-options="episode as 'Season ' + episode.season_number + ' ' + 'Episode ' + episode.episode_number for episode in all_episodes | orderBy:['season_number','episode_number']"
-                                            ng-model="selectedEpisode">
-                                        <option value="">Please select an Episode...</option>
-                                    </select>
-                                </label>
-                            </div>
-                        </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Episode Statistics</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
                     </div>
-
-                    <div class="well well-lg" ng-if="!selectedEpisode">Please select an Episode to see the Statistics!
-                    </div>
-
-                    <div class="panel panel-primary" ng-if="selectedEpisode">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Episode Statistics</h3>
-                            <span class="pull-right clickable"><i
-                                    class="glyphicon glyphicon-chevron-up"></i></span>
+                    <div class="panel-body">
+                        <div class="well well-sm" ng-hide="selectedEpisode">No episode data available. Please select a
+                            season first!
                         </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div id="speaker-info-box" class="row" ng-if="selectedEpisode">
-                                    <!--<div class="col-md-3">
-                                        <img class=""
-                                             ng-src="assets/img/{{selectedSpeaker.name.toString().replace(' ', '_').toLowerCase()}}.jpg"
-                                             onError="this.src='assets/img/anonym.jpg';">
-                                    </div>-->
+                        <div class="row">
+                            <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                            <div class="row" ng-if="selectedEpisode">
+                                <div class="col-md-12">
+                                    <table st-table="rowCollection" class="table table-striped">
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
 
-                                    <div class="col-md-9">
-                                        <table st-table="rowCollection" class="table table-striped">
-                                            <td>
-                                                <table st-table="rowCollection"
-                                                       class="table table-striped speaker-info-table">
-
-                                                    <tr>
-                                                        <td>Season:</td>
-                                                        <td>{{selectedEpisode.season_number}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Episode:</td>
-                                                        <td>{{selectedEpisode.episode_number}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Configuration Density:</td>
-                                                        <td>{{(selectedEpisode.configuration_density).toFixed(2)}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Number of Scenes:</td>
-                                                        <td>{{selectedEpisode.number_of_scenes}}</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table st-table="rowCollection"
-                                                       class="table table-striped speaker-info-table">
-                                                    <tr>
-                                                        <td>Number Of Speaches:</td>
-                                                        <td>{{selectedEpisode.number_of_replicas}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Longest Speach:</td>
-                                                        <td>{{selectedEpisode.replicas_length_max}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Shortest Speach:</td>
-                                                        <td>{{selectedEpisode.replicas_length_min}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Speach Length Median:</td>
-                                                        <td>{{selectedEpisode.replicas_length_med}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Speach Length Total:</td>
-                                                        <td>{{selectedEpisode.replicas_length_total}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Average Speach Length:</td>
-                                                        <td>{{(selectedEpisode.replicas_length_avg).toFixed(2)}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Median Speach Length:</td>
-                                                        <td>{{selectedEpisode.replicas_length_med}}</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table st-table="rowCollection"
-                                                       class="table table-striped speaker-info-table">
-                                                    <tr>
-                                                        <td>Number of Speakers:</td>
-                                                        <td>{{selectedEpisode.speakers.length}}</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary" ng-if="selectedEpisode">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Speach Length Distribution</h3>
-                            <span class="pull-right clickable"><i
-                                    class="glyphicon glyphicon-chevron-up"></i></span>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row speaker-info-grafics">
-                                <div class="col-md-12 bar-chart">
-                                    <nvd3 options="barOptions" data="replica_length_list"></nvd3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary" ng-if="selectedEpisode">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Configuration Matrix</h3>
-                            <span class="pull-right clickable"><i
-                                    class="glyphicon glyphicon-chevron-up"></i></span>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-
-                                <table st-table="rowCollection" class="table table-striped">
-                                    <thead></thead>
-                                    <tbody>
-                                    <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
-                                        <td ng-repeat="values in scene track by $index" ng-class="setColor(values)" title="{{selectedEpisode.title}}">
-                                            {{values}}
+                                                <tr>
+                                                    <td>Season:</td>
+                                                    <td>{{selectedEpisode.season_number}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Episode:</td>
+                                                    <td>{{selectedEpisode.episode_number}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Configuration density:</td>
+                                                    <td>{{(selectedEpisode.configuration_density).toFixed(2)}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number of scenes:</td>
+                                                    <td>{{selectedEpisode.number_of_scenes}}</td>
+                                                </tr>
+                                            </table>
                                         </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Character Network</h3>
-                            <span class="pull-right clickable"><i
-                                    class="glyphicon glyphicon-chevron-up"></i></span>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <label>Concomidant:
-                                    <input type="checkbox" ng-model="checkboxModel.concomidant">
-                                </label><br/>
-                                <label>Dominating:
-                                    <input type="checkbox" ng-model="checkboxModel.dominating">
-                                </label><br/>
-                                <label>Independent:
-                                    <input type="checkbox" ng-model="checkboxModel.independent">
-                                </label>
-                                <h3> Link threshold 0 <input type="range" id="thersholdSlider" name="points" value = 0 min="0" max="10" onchange="threshold(this.value)"> 10 </h3><br/>
-                            </div>
-                            <div class="row" id="force-directed-graph-speakers">
-                                <div class="col-md-12" id="force-graph">
-
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+                                                <tr>
+                                                    <td>Number of speeches:</td>
+                                                    <td>{{selectedEpisode.number_of_replicas}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Longest speech:</td>
+                                                    <td>{{selectedEpisode.replicas_length_max}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shortest speech:</td>
+                                                    <td>{{selectedEpisode.replicas_length_min}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Speech length median:</td>
+                                                    <td>{{selectedEpisode.replicas_length_med}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table st-table="rowCollection"
+                                                   class="table table-striped speaker-info-table">
+                                                <tr>
+                                                    <td>Speech length total:</td>
+                                                    <td>{{selectedEpisode.replicas_length_total}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average speech length:</td>
+                                                    <td>{{(selectedEpisode.replicas_length_avg).toFixed(2)}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Median speech length:</td>
+                                                    <td>{{selectedEpisode.replicas_length_med}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number of speakers:</td>
+                                                    <td>{{selectedEpisode.speakers.length}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary" ng-if="selectedEpisode">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Speech Length Distribution</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="well well-sm" ng-hide="selectedEpisode">No episode data available. Please select a
+                        season first!
+                    </div>
+                    <div class="row speaker-info-grafics">
+                        <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                        <div class="col-md-12 bar-chart">
+                            <nvd3 options="barOptions" data="replica_length_list"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary" ng-if="selectedEpisode">
+                    <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Overall Episode Stats</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-app="seriesAnalyzer">
+                            <table datatable="ng" dt-options="dtOptions" class="row-border hover">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Number of speeches</th>
+                                    <th>Longest speech</th>
+                                    <th>Shortest speech</th>
+                                    <th>Average speech length</th>
+                                    <th>Speech length median</th>
+                                    <th>Total length of replics</th>
+                                    <th>Tv show speech percentage</th>
+                                    <th>Tv show word percentage</th>
+                                    <th>Appeared in scenes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="speaker in selectedEpisode.speakers">
+                                    <td>{{speaker.name}}</td>
+                                    <td>{{speaker.number_of_replicas}}</td>
+                                    <td>{{speaker.replicas_length_max}}</td>
+                                    <td>{{speaker.replicas_length_min}}</td>
+                                    <td>{{speaker.replicas_length_avg.toFixed(2)}}</td>
+                                    <td>{{speaker.replicas_length_med}}</td>
+                                    <td>{{speaker.replicas_length_total}}</td>
+                                    <td>{{((speaker.replik_percentage)*100).toFixed(2)}} %</td>
+                                    <td>{{((speaker.word_percentage)*100).toFixed(2)}} %</td>
+                                    <td>{{speaker.appeared_in_scenes.sort(sort_numbers).join()}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary" ng-if="selectedEpisode">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Matrix</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body overflow-x-auto">
+                        <div class="well well-sm" ng-hide="selectedEpisode">No episode data available. Please select a
+                            season first!
+                        </div>
+                        <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                        <table datatable="ng" dt-options="dtOptions" id="config-matrix"
+                               class="row-border hover">
+                            <thead>
+
+                            <th>Speaker/Season</th>
+                            <th ng-repeat="n in [] | range:selectedEpisode.number_of_scenes+1">{{n}}</th>
+
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
+                                <td ng-repeat="values in scene track by $index"
+                                    ng-class="setColor(values)">
+                                    {{values}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration Probability</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body overflow-x-auto">
+                        <div class="well well-sm" ng-hide="selectedEpisode">No episode data available. Please select
+                            a
+                            season first!
+                        </div>
+                        <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                        <table datatable="ng" dt-options="dtOptions" class="row-border hover"
+                               ng-if="config_probability">
+                            <thead>
+
+                            <th ng-repeat="n in config_probability_header">{{n}}</th>
+
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in config_probability">
+                                <td ng-repeat="val in row track by $index"
+                                    ng-class="setProbabilityColor(val)">
+                                    {{val}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Character Network</h3>
+                        <span class="pull-right clickable"><i
+                                class="glyphicon glyphicon-chevron-up"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="">
+                            <tr>
+                                <td>Concomidant</td>
+                                <td><label class="switch">
+                                    <input id="concomidant-switch" type="checkbox"
+                                           ng-model="checkboxModel.concomidant">
+                                    <div class="slider round"></div>
+                                </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dominating</td>
+                                <td>
+                                    <label class="switch">
+                                        <input id="dominating-switch" type="checkbox"
+                                               ng-model="checkboxModel.dominating">
+                                        <div class="slider round"></div>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Independent</td>
+                                <td>
+                                    <label class="switch">
+                                        <input id="independent-switch" type="checkbox"
+                                               ng-model="checkboxModel.independent">
+                                        <div class="slider round"></div>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="row" id="force-directed-graph-speakers">
+                            <div class="col-md-12" id="force-graph">
+
+                            </div>
+                            <button svg-download="#svg_character_network" title="{{'CharacterNetwork_Season_' + selectedEpisode.season_number
+                            + '_Episode_' + selectedEpisode.episode_number}}" type="png">
+                                Download as PNG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
-
-<br>
-</div>
 </div>
