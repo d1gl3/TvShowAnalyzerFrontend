@@ -582,6 +582,11 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 transitionDuration: 500,
                 xAxis: {
                     axisLabel: 'Season'
+                },
+                yAxis: {
+                    tickFormat: function (d) {
+                        return d3.format('.2f')(d);
+                    }
                 }
             }
         };
