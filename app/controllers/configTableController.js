@@ -128,9 +128,9 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
             for(var i = 1; i<max_length; i++){
                 if (length_dict[i] != null){
-                    csvContent += i < max_length ? i.toString() + ',' + length_dict[i].toString() + "\n" : i.toString() + ',' + length_dict[i].toString();
+                    csvContent += i < max_length ? String.valueOf(i) + ',' + String.valueOf(length_dict[i]) + "\n" : String.valueOf(i) + ',' + String.valueOf(length_dict[i]);
                 } else {
-                    csvContent += i < max_length ? i.toString() + ',0\n' : i.toString() + ',0';
+                    csvContent += i < max_length ? String.valueOf(i) + ',0\n' : String.valueOf(i) + ',0';
                 }
             }
 
