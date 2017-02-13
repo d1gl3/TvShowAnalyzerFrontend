@@ -118,7 +118,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             console.log("CLICK");
             var replica_lengths = $scope.replica_length_list[0].values;
             var csvContent = "SpeachLength, Value\n";
-            var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
+            var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1][0];
             console.log(max_length);
             var length_dict = {};
             replica_lengths.forEach(function (lengthArray, index) {
