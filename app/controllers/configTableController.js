@@ -128,7 +128,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var value_to_add = null;
 
             for(var i = 1; i<max_length; i++){
-                if (length_dict[i] != null){
+                if (i in length_dict){
                     value_to_add = i < max_length ? String.valueOf(i) + ',' + String.valueOf(length_dict[i]) + "\n" : String.valueOf(i) + ',' + String.valueOf(length_dict[i]);
                     console.log(value_to_add);
                     csvContent += value_to_add;
