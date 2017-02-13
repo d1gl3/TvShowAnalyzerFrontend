@@ -114,6 +114,27 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             return [util.barChartObject("Quantity", length_list)];
         }
 
+        $scope.downloadReplicaCSV = function () {
+            console.log("CLICK");
+            var replica_lengths = $scope.replica_length_list;
+            var csvContent = "SpeachLength, Value\n";
+            var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
+            console.log(max_length);
+            replica_lengths.forEach(function (lengthArray, index) {
+
+                var dataString = lengthArray.join(",");
+                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
+
+            });
+
+            var hiddenElement = document.createElement('a');
+
+            hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'SpeachLengths.csv';
+            hiddenElement.click();
+        };
+
         // Sets the configuration table cell classes to set the color
         $scope.setColor = util.setColor;
         $scope.setProbabilityColor = util.setProbabilityColor;
