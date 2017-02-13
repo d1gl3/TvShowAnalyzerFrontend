@@ -119,6 +119,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var replica_lengths = $scope.replica_length_list[0].values;
             var csvContent = "SpeachLength, Value\n";
             var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
+            console.log(max_length);
             var length_dict = {};
             replica_lengths.forEach(function (lengthArray, index) {
                 length_dict[lengthArray[0]] = lengthArray[1];
@@ -128,6 +129,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var value_to_add = null;
 
             for(var i = 1; i<max_length; i++){
+                console.log(length_dict[i]);
                 if (i in length_dict){
                     value_to_add = i < max_length ? String.valueOf(i) + ',' + String.valueOf(length_dict[i]) + "\n" : String.valueOf(i) + ',' + String.valueOf(length_dict[i]);
                     console.log(value_to_add);
