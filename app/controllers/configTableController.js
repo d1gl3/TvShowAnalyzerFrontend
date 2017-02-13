@@ -124,6 +124,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 length_dict[lengthArray[0]] = lengthArray[1];
             });
 
+            console.log(length_dict);
+
             for(var i = 1; i<max_length; i++){
                 if (length_dict[i] != null){
                     csvContent += i < max_length ? i.toString() + ',' + length_dict[i].toString() + "\n" : i.toString() + ',' + length_dict[i].toString();
@@ -198,7 +200,6 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             $scope.config_probability_header = new_season.probability_matrix[0];
 
             $scope.config_probability = _.sortBy(new_season.probability_matrix.slice(1, new_season.probability_matrix.length), function (array) {
-                console.log(array);
                 var max = 0;
 
                 for (var el in array) {

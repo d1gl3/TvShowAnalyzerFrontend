@@ -66,8 +66,6 @@ seriesAnalyzer.factory('UtilityService',
                     if (value < 1) {
                         return "prob-minus";
                     }
-                } else {
-                    console.log("HIER: " + String.valueOf(value));
                 }
                 return "prob-equal";
             };
