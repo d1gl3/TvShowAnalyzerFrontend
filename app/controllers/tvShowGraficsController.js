@@ -108,7 +108,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     replik_percentage.push([season_obj.season_number, season_obj.number_of_replicas]);
                     word_percentage.push([season_obj.season_number, season_obj.replicas_length_total]);
                     number_of_speakers.push([season_obj.season_number, season_obj.speakers.length]);
-                    config_densities.push([season_obj.season_number, season_obj.configuration_density]);
+                    config_densities.push([season_obj.season_number, season_obj.configuration_density.toFixed(2)]);
                 }
             }
 
