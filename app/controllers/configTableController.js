@@ -119,12 +119,18 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var replica_lengths = $scope.replica_length_list[0].values;
             var csvContent = "SpeachLength, Value\n";
             var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
-            console.log(max_length);
-            console.log(replica_lengths);
+            var length_dict = {};
             replica_lengths.forEach(function (lengthArray, index) {
-                var dataString = lengthArray.join(",");
-                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
+                length_dict[lengthArray[0]] = lengthArray[1];
             });
+
+            for(var i = 1; i<max_length; i++){
+                if (length_dict[i] != null){
+                    csvContent += i < max_length ? i.toString() + ',' + length_dict[i].toString() + "\n" : i.toString() + ',' + length_dict[i].toString();
+                } else {
+                    csvContent += i < max_length ? i.toString() + ',0\n' : i.toString() + ',0';
+                }
+            }
 
             var hiddenElement = document.createElement('a');
 
