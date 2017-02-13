@@ -135,7 +135,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     console.log(value_to_add);
                     csvContent += value_to_add;
                 } else {
-                    csvContent += i < max_length ? String.valueOf(i) + ',0\n' : String.valueOf(i) + ',0';
+                    csvContent += i < max_length ? i + ',0\n' : i + ',0';
                 }
             }
 
