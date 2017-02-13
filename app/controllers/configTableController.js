@@ -134,6 +134,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 }
             }
 
+            console.log(csvContent);
+
             var hiddenElement = document.createElement('a');
 
             hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
