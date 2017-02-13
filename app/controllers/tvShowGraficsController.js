@@ -561,7 +561,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             chart: {
                 type: 'discreteBarChart',
                 useInteractiveGuideline: false,
-                interactive: true,
+                interactive: false,
                 height: 400,
                 margin: {
                     top: 20,
