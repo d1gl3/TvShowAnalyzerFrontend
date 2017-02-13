@@ -120,8 +120,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var csvContent = "SpeachLength, Value\n";
             var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
             console.log(max_length);
+            console.log(replica_lengths);
             replica_lengths.forEach(function (lengthArray, index) {
-                console.log(lengthArray);
                 var dataString = lengthArray.join(",");
                 csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
 
