@@ -116,7 +116,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
         $scope.downloadReplicaCSV = function () {
             console.log("CLICK");
-            var replica_lengths = $scope.replica_length_list;
+            var replica_lengths = $scope.replica_length_list[0].values;
             var csvContent = "SpeachLength, Value\n";
             var max_length = $scope.replica_length_list[0].values[$scope.replica_length_list[0].values.length - 1];
             console.log(max_length);
@@ -124,7 +124,6 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             replica_lengths.forEach(function (lengthArray, index) {
                 var dataString = lengthArray.join(",");
                 csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
-
             });
 
             var hiddenElement = document.createElement('a');
