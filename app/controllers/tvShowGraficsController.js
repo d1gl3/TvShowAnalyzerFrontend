@@ -285,7 +285,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             console.log(nodes);
 
             var width = 1400,
-                height = 700;
+                height = 1000;
 
             var force = d3.layout.force()
                 .nodes(d3.values(nodes))
