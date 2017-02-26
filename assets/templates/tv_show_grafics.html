@@ -17,7 +17,7 @@
                                     This website visualizes quantitative data extracted and computed from the
                                     transcripts of
                                     the TV Series "The Big Bang Theory".
-                                    The data which is provided is computed from the speaches of the all the characters
+                                    The provided data is computed from the speeches of the all the characters
                                     in
                                     the show.
                                 </p>
@@ -104,7 +104,7 @@
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Number of speakers:</td>
+                                                <td>Number Of Unique Speakers:</td>
                                                 <td>{{tv_show.number_of_speakers}}</td>
                                             </tr>
                                         </table>
@@ -114,17 +114,17 @@
                         </div>
 
                         <div class="col-md-3">
-                            <h3><span class="label label-info">Replika Distribution</span></h3>
+                            <h3><span class="label label-info">Number Of Speeches</span></h3>
                             <nvd3 options="barOptions2" data="replicaNumberDistribution"
                             ></nvd3>
                         </div>
                         <div class="col-md-3">
-                            <h3><span class="label label-info">Word Distribution</span></h3>
+                            <h3><span class="label label-info">Number Of Word</span></h3>
                             <nvd3 options="barOptions2" data="replicaWordDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-3">
-                            <h3><span class="label label-info">Number of Speakers</span></h3>
+                            <h3><span class="label label-info">Number Of Speakers</span></h3>
                             <nvd3 options="barOptions2" data="numberOfSpeakersDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
@@ -202,14 +202,14 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Number Of Replicas</th>
-                                    <th>Longest Replic</th>
-                                    <th>Shortest Replic</th>
-                                    <th>Average Replic Length</th>
-                                    <th>Replic Length Median</th>
-                                    <th>Total Length Of Replics</th>
-                                    <th>Tv Show Replic Percentage</th>
-                                    <th>Tv Show Word Percentage</th>
+                                    <th>Number Of Speeches</th>
+                                    <th>Longest Speech</th>
+                                    <th>Shortest Speech</th>
+                                    <th>Average Speech Length</th>
+                                    <th>Speech Length Median</th>
+                                    <th>Total Length Of Speeches</th>
+                                    <th>Percentage Of Speeches In Tv Show</th>
+                                    <th>Percentage Of Words In Tv Show</th>
                                     <th>Appeared in seasons</th>
                                 </tr>
                                 </thead>
@@ -243,7 +243,7 @@
                     <div class="panel-body" id="force-directed-graph-body">
                         <table class="">
                             <tr>
-                                <td>Concomidant</td>
+                                <td>Concomitant</td>
                                 <td><label class="switch">
                                     <input id="concomidant-switch" type="checkbox"
                                            ng-model="checkboxModel.concomidant">
@@ -252,7 +252,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Dominating</td>
+                                <td>Dominant</td>
                                 <td>
                                     <label class="switch">
                                         <input id="dominating-switch" type="checkbox"

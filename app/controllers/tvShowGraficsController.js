@@ -75,7 +75,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
                 for (var len in replica_lengths) {
                     if (replica_lengths.hasOwnProperty(len)) {
-                        length_list.push([+len.substring(1), replica_lengths[len], "Test"])
+                        length_list.push([+len.substring(1), replica_lengths[len]])
                     }
                 }
 
@@ -291,11 +291,12 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 .nodes(d3.values(nodes))
                 .links(links)
                 .size([width, height])
-                .linkDistance(400)
-                .gravity(0.5)
-                .charge(-100)
-                //.alpha(0.5)
-                //.friction(0.5)
+                .linkDistance(function (n, i) {
+                    return (1 / n.weight) * 400 + 50;
+                })
+                .charge(-120)
+                .friction(0.9)
+                .linkStrength(0.4)
                 .on("tick", tick)
                 .start();
 
@@ -359,6 +360,11 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 .append("path")
                 .attr("d", "M0,-5L10,0L0,5");
 
+            var div = d3.select("#force-graph").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style('padding', '0 10px')
+                .style('opacity', 0);
 
             var path = svg.append("g").selectAll("path")
                 .data(force.links())
@@ -375,14 +381,16 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     if (d.type == "concomidant" || d.type == "subordinating") {
                         return "url(#" + d.type + ")";
                     }
-                });
+                })
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout);
 
 
             var circle = svg.append("g").selectAll("circle")
                 .data(force.nodes())
                 .enter().append("circle")
                 .attr("r", function (d) {
-                    return d.weight;
+                    return 20;
                 })
                 .call(drag)
                 .on('dblclick', function (d) {
@@ -398,6 +406,23 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 .text(function (d) {
                     return d.name;
                 });
+
+            function mouseover(d) {
+                console.log(d3.event);
+                div.transition()
+                    .style('opacity', .9)
+                    .style('background', 'lightsteelblue');
+                div.html(d.weight)
+                    .style('left', (d3.event.clientX - 20) + 'px')
+                    .style('top', (d3.event.clientY) + 'px')
+            }
+
+            function mouseout() {
+                setTimeout(function () {
+                    div.transition()
+                        .style('opacity', 0)
+                }, 2000);
+            }
 
             // Use elliptical arc path segments to doubly-encode directionality.
             function tick() {

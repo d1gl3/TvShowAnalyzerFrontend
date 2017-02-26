@@ -132,18 +132,18 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', 'Curren
                 }
 
                 replicaAverageSeasons.push(
-                    util.barChartObject(name, avg_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
+                    util.barChartObject(name, avg_length_list)
+                    //util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
                 );
 
                 replicaNumberSeasons.push(
-                    util.barChartObject(name, number_of_replicas_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
+                    util.barChartObject(name, number_of_replicas_list)
+                    //util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
                 );
 
                 replicaSumSeasons.push(
-                    util.barChartObject(name, sum_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
+                    util.barChartObject(name, sum_length_list)
+                    //util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
                 );
             }
 

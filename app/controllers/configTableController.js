@@ -369,6 +369,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 yDomain: [0, 1],
                 tooltip: {
                     contentGenerator: function (key) {
+                        console.log($scope.episode_titles);
+                        console.log(key);
                         return '<h3>' + $scope.episode_titles[key.pointIndex] + '</h3>';
                     }
                 },
@@ -455,9 +457,16 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 .nodes(d3.values(nodes))
                 .links(links)
                 .size([width, height])
-                .linkDistance(300)
+                .linkDistance(function(n, i){
+                    if($scope.selectedSeason != null){
+                        return (1/n.weight) * 400 + 100;
+                    }else {
+                        return (1/n.weight) * 500;
+                    }
+                })
                 .charge(-120)
                 .friction(0.9)
+                .linkStrength(0.9)
                 .on("tick", tick)
                 .start();
 
@@ -473,7 +482,14 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             var svg = d3.select("#force-graph").append("svg")
                 .attr("width", width)
                 .attr("height", height)
-                .attr("id", "svg_character_network");;
+                .attr("id", "svg_character_network");
+
+
+            var div = d3.select("#force-graph").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style('padding', '0 10px')
+                .style('opacity', 0);
 
             // Per-type markers, as they don't inherit styles.
             svg.append("defs").selectAll("marker")
@@ -519,14 +535,16 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     if (d.type == "concomidant") {
                         return "url(#" + d.type + ")";
                     }
-                });
+                })
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout);
 
 
             var circle = svg.append("g").selectAll("circle")
                 .data(force.nodes())
                 .enter().append("circle")
                 .attr("r", function (d) {
-                    return d.weight * 4;
+                    return 20;
                 })
                 .call(drag)
                 .on('dblclick', function (d) {
@@ -543,6 +561,23 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     return d.name;
                 });
 
+            function mouseover(d) {
+                console.log(d3.event);
+                div.transition()
+                    .style('opacity', .9)
+                    .style('background', 'lightsteelblue');
+                div.html(d.weight)
+                    .style('left', (d3.event.clientX) + 'px')
+                    .style('top', (d3.event.clientY) + 'px')
+            }
+
+            function mouseout() {
+                setTimeout(function () {
+                    div.transition()
+                        .style('opacity', 0)
+                }, 2000);
+            }
+
             // Use elliptical arc path segments to doubly-encode directionality.
             function tick() {
                 path.attr("d", initial_path);
@@ -555,7 +590,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 if (d.type == "dominating") {
                     var pl = this.getTotalLength(),
                         // radius of circle plus marker head
-                        r = (d.target.weight) * 4 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                        r = 20 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
                         // position close to where path intercepts circle
                         m = this.getPointAtLength(pl - r);
 
@@ -564,7 +599,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     if (d.type == "concomidant") {
                         var pl = this.getTotalLength(),
                             // radius of circle plus marker head
-                            r = (d.target.weight) * 4 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                            r = 20 + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
                             // position close to where path intercepts circle
                             l = this.getPointAtLength(pl - r);
 
@@ -600,10 +635,6 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
         $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
             hide_show_elements_by_class("dominating", checkboxSettings)
-        });
-
-        $scope.$watch('checkboxModel.alternative', function (checkboxSettings) {
-            hide_show_elements_by_class("alternative", checkboxSettings)
         });
 
         function hide_show_elements_by_class(classname, setVisible) {

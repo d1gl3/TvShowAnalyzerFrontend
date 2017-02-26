@@ -37,7 +37,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.js"></script>
     <script src="bower_components/jqcloud2/dist/jqcloud.js"></script>
     <script src="bower_components/angular-jqcloud/angular-jqcloud.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.4.0/rzslider.min.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
@@ -45,9 +46,11 @@
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="bower_components/jqcloud2/dist/jqcloud.css">
     <link rel="stylesheet" type="text/css" href="assets/css/appstyle.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.3/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/buttons/1.2.3/css/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="bower_components/angular-material/angular-material.css">
+
 </head>
 <body>
 
@@ -85,16 +88,17 @@
                         <li><a href="#/speaker-comparison">Comparison</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#/download-view">Downloads</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-
-<div ng-view>
-
-    Test
-
+<div id="content">
+    <div ng-view>
+    </div>
 </div>
 
 
@@ -140,6 +144,7 @@
 <script src="app/controllers/speakerComparisonController.js"></script>
 <script src="app/controllers/configTableController.js"></script>
 <script src="app/controllers/speakerOverviewController.js"></script>
+<script src="app/controllers/downloadController.js"></script>
 
 <!--Directives-->
 <script src="app/directives/directives.js"></script>
@@ -147,9 +152,9 @@
 
 
 <script>
-    $(document).on('click', '.panel-heading span.clickable', function(e){
+    $(document).on('click', '.panel-heading span.clickable', function (e) {
         var $this = $(this);
-        if(!$this.hasClass('panel-collapsed')) {
+        if (!$this.hasClass('panel-collapsed')) {
             $this.parents('.panel').find('.panel-body').slideUp();
             $this.addClass('panel-collapsed');
             $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');

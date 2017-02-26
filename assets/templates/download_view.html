@@ -1,0 +1,303 @@
+<link rel="stylesheet" type="text/css" href="../assets/css/download_view.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div id="tabs_container" class="col-xs-12">
+    <div ng-app="seriesAnalyzer" ng-controller="downloadController">
+        <div class="row">
+            <div class="col-md-6">
+
+                <fieldset class="well fieldset">
+
+                    <legend class="legend">Full Series Related Data
+                        <div ng-show="all_seasons == null">Preparing data...<i ng-show="all_seasons == null"
+                                                                               class='fa fa-spinner fa-spin'></i>
+                        </div>
+                    </legend>
+                    <md-button class="md-raised" ng-click="downloadSeasonSpeachDist()"
+                               ng-disabled="all_seasons == null">Download Seasons Speach Distribution
+                    </md-button>
+
+                    <md-button class="md-raised" ng-click="downloadSeasonStats()" ng-disabled="all_seasons == null">
+                        Download Seasons Statistics
+                    </md-button>
+                </fieldset>
+
+            </div>
+            <div class="col-md-6">
+                <fieldset class="well fieldset">
+                    <legend class="legend">Season Related Data
+                        <div ng-show="all_seasons == null">Preparing data...<i ng-show="all_seasons == null"
+                                                                               class='fa fa-spinner fa-spin'></i></div>
+                    </legend>
+                    <h5>Season Episodes Statistics</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeStats(1)"
+                                   ng-disabled="all_episodes == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(2)" ng-disabled="all_episodes == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(3)" ng-disabled="all_episodes == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(4)" ng-disabled="all_episodes == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(5)" ng-disabled="all_episodes == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(6)" ng-disabled="all_episodes == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(7)" ng-disabled="all_episodes == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeStats(8)"
+                                   ng-disabled="all_episodes == null">Season 8
+                        </md-button>
+                    </section>
+                    <h5>Season Episodes Speech Distribution</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeSpeechDist(1)"
+                                   ng-disabled="all_episodes == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(2)" ng-disabled="all_episodes == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(3)" ng-disabled="all_episodes == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(4)" ng-disabled="all_episodes == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(5)" ng-disabled="all_episodes == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(6)" ng-disabled="all_episodes == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(7)" ng-disabled="all_episodes == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeSpeechDist(8)"
+                                   ng-disabled="all_episodes == null">Season 8
+                        </md-button>
+                    </section>
+
+                    <h5>Season Speaker Statistics</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonSpeakerStatistics(1)"
+                                   ng-disabled="all_seasons == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(2)" ng-disabled="all_seasons == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(3)" ng-disabled="all_seasons == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(4)" ng-disabled="all_seasons == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(5)" ng-disabled="all_seasons == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(6)" ng-disabled="all_seasons == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(7)" ng-disabled="all_seasons == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonSpeakerStatistics(8)"
+                                   ng-disabled="all_seasons == null">Season 8
+                        </md-button>
+                    </section>
+
+                    <h5>Speaker Statistics For Single Speaker</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-select placeholder="Choose Speaker" ng-model="speaker" md-on-open="loadTvShowSpeakers()"
+                                   style="min-width: 200px;">
+                            <md-option ng-value="speaker" ng-repeat="speaker in tv_show_speakers">{{speaker.name}}
+                            </md-option>
+                        </md-select>
+                        <md-button class="md-raised" ng-click="downloadSpeakerStats(speaker)"
+                                   ng-disabled="speaker == null">
+                            Download Speaker Season Statistics
+                        </md-button>
+                    </section>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset class="well fieldset">
+                    <legend class="legend">Episode Related Data
+                        <div ng-show="all_seasons == null">Preparing data...<i ng-show="all_seasons == null"
+                                                                               class='fa fa-spinner fa-spin'></i></div>
+                    </legend>
+                    <!--
+                    <h5>Episodes Scenes Statistics</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeStats(1)"
+                                   ng-disabled="all_episodes == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(2)" ng-disabled="all_episodes == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(3)" ng-disabled="all_episodes == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(4)" ng-disabled="all_episodes == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(5)" ng-disabled="all_episodes == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(6)" ng-disabled="all_episodes == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeStats(7)" ng-disabled="all_episodes == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeStats(8)"
+                                   ng-disabled="all_episodes == null">Season 8
+                        </md-button>
+                    </section>
+                    <h5>Season Episodes Speech Distribution</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeSpeechDist(1)"
+                                   ng-disabled="all_episodes == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(2)" ng-disabled="all_episodes == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(3)" ng-disabled="all_episodes == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(4)" ng-disabled="all_episodes == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(5)" ng-disabled="all_episodes == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(6)" ng-disabled="all_episodes == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonEpisodeSpeechDist(7)" ng-disabled="all_episodes == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonEpisodeSpeechDist(8)"
+                                   ng-disabled="all_episodes == null">Season 8
+                        </md-button>
+                    </section>
+
+                    <h5>Season Speaker Statistics</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonSpeakerStatistics(1)"
+                                   ng-disabled="all_seasons == null">Season 1
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(2)" ng-disabled="all_seasons == null">
+                            Season 2
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(3)" ng-disabled="all_seasons == null">
+                            Season 3
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(4)" ng-disabled="all_seasons == null">
+                            Season 4
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(5)" ng-disabled="all_seasons == null">
+                            Season 5
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(6)" ng-disabled="all_seasons == null">
+                            Season 6
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised middle"
+                                   ng-click="downloadSeasonSpeakerStatistics(7)" ng-disabled="all_seasons == null">
+                            Season 7
+                        </md-button>
+                        <md-button class="seasonButtonGroup md-raised" ng-click="downloadSeasonSpeakerStatistics(8)"
+                                   ng-disabled="all_seasons == null">Season 8
+                        </md-button>
+                    </section>
+
+                    -->
+                    <md-button class="md-raised" ng-click="downloadEpisodeNumberOfSpeechesPerSpeaker()"
+                               ng-disabled="all_episodes == null">Download Episode Number of Speeches Values for Speakers
+                    </md-button>
+
+                    <h5>Speaker Episode Speech Length Distribution For Single Speaker</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-select placeholder="Choose Speaker" ng-model="speaker" md-on-open="loadTvShowSpeakers()"
+                                   style="min-width: 200px;">
+                            <md-option ng-value="speaker" ng-repeat="speaker in tv_show_speakers">{{speaker.name}}
+                            </md-option>
+                        </md-select>
+                        <md-button class="md-raised" ng-click="downloadSpeakerEpisodeSpeechDist(speaker.name)"
+                                   ng-disabled="speaker == null">
+                            Download Speaker Season Statistics
+                        </md-button>
+                    </section>
+
+                    <h5>Speaker Episode Stats For Single Speaker</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-select placeholder="Choose Speaker" ng-model="speaker" md-on-open="loadTvShowSpeakers()"
+                                   style="min-width: 200px;">
+                            <md-option ng-value="speaker" ng-repeat="speaker in tv_show_speakers">{{speaker.name}}
+                            </md-option>
+                        </md-select>
+                        <md-button class="md-raised" ng-click="downloadSpeakerEpisodeStats(speaker.name)"
+                                   ng-disabled="speaker == null">
+                            Download Speaker Season Statistics
+                        </md-button>
+                    </section>
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+    </div>
+</div>

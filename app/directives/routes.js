@@ -8,5 +8,6 @@ seriesAnalyzer.config(function($routeProvider) {
         .when('/speaker-overview-table', { templateUrl: 'assets/templates/speaker_overview_table.html' })
         .when('/speaker-single-view', { templateUrl: 'assets/templates/single_speaker_statistics.html' })
         .when('/speaker-comparison', { templateUrl: 'assets/templates/speaker-comparison.html' })
+        .when('/download-view', {templateUrl: 'assets/templates/download_view.html'})
         .otherwise({ redirectTo: '/' });
 });
