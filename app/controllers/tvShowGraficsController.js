@@ -292,7 +292,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 .links(links)
                 .size([width, height])
                 .linkDistance(function (n, i) {
-                    return (1 / n.weight) * 700;
+                    return (1 / n.weight) * 600 + 100;
                 })
                 .charge(-120)
                 .friction(0.9)
