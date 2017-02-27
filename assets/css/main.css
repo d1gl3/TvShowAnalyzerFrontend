@@ -46,6 +46,9 @@
     margin: auto;
 }
 
+.ng-hide.ng-hide-animate{
+    display: none !important;
+}
 
 @keyframes spin {
     0% { transform: rotate(0deg); }

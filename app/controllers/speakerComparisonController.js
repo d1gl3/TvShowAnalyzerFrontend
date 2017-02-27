@@ -1,19 +1,60 @@
-seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'CurrentSelectedSpeakerService', 'SeasonService',
+seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope', '$http', '$q', 'CurrentSelectedSpeakerService', 'SeasonService',
     'EpisodeService', 'SettingService', 'UtilityService', 'SpeakerService',
-    function ($scope, $http, CurrentSelectedSpeakerService, SeasonService, EpisodeService, SettingService, UtilityService, SpeakerService) {
+    function ($rootScope, $scope, $http, $q, CurrentSelectedSpeakerService, SeasonService, EpisodeService, SettingService, UtilityService, SpeakerService) {
 
         var util = UtilityService;
+
+        $rootScope.$on('$routeChangeStart', function(event, next, current) {
+            if (typeof(current) !== 'undefined'){
+                window.nv.charts = {};
+                window.nv.graphs = [];
+                window.nv.logs = {};
+                // remove resize listeners
+                window.onresize = null;
+            }
+        });
 
         $scope.selectedSpeaker = [{}, {}];
         $scope.seasonHammingDistance = [];
         $scope.episodeHammingDistance = [];
+        $scope.speakers = null;
+        $scope.episodes = null;
+        $scope.seasons = null;
+        $scope.showSpeakerSelection = false;
 
-        // Get the whole speaker data
-        SpeakerService.GetSpeakers().then(
-            function (data) {
-                $scope.speakers = data;
+        if ($scope.speakers == null || $scope.episodes == null || $scope.seasons == null) {
+            $q.all([
+                EpisodeService.GetEpisodes(),
+                SeasonService.GetSeasons(),
+                SpeakerService.GetSpeakers()
+            ]).then(function (results) {
+                $scope.episodes = results[0].data;
+                $scope.seasons = results[1].data;
+                $scope.speakers = results[2].data;
+
+                initSpeakerSelection();
+                window.onresize = null;
+            });
+        }
+
+        function initSpeakerSelection() {
+            $scope.showSpeakerSelection = true;
+        }
+
+        $scope.$watchGroup(['speaker1', 'speaker2'], function (speakers) {
+            if (speakers[0] != null && speakers[1] != null) {
+                set_season_hamm_dist();
+                set_probability_curve();
             }
-        );
+            if (speakers[0] != null) {
+                set_speaker_season_data(speakers[0]);
+                set_speaker_episode_data(speakers[0]);
+            }
+            if (speakers[1] != null) {
+                set_speaker_season_data(speakers[1]);
+                set_speaker_episode_data(speakers[1]);
+            }
+        });
 
         // Set Data on speaker selection
         $scope.set_selected_speaker = function (name, pos) {
@@ -22,90 +63,86 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 var replica_lengths = _speaker.replicas_length_list;
                 var length_list = util.format_replica_length_list(replica_lengths);
 
-                $scope.selectedSpeaker[+pos] = _speaker;
+                switch (pos) {
+                    case 0:
+                        $scope.speaker1 = _speaker;
+                        break;
+                    case 1:
+                        $scope.speaker2 = _speaker;
+                        break;
+                }
 
-                // Set speaker word lists
-                $scope.selectedSpeaker[+pos].speakerWords = _speaker.word_cloud_data;
-                $scope.selectedSpeaker[+pos].speakerWordsNeg = _speaker.negative_words_cloud;
-                $scope.selectedSpeaker[+pos].speakerWordsPos = _speaker.positive_words_cloud;
+                $scope.selectedSpeaker[+pos] = _speaker;
 
                 // Set data for replica length distribution chart
                 $scope.selectedSpeaker[+pos].replicaLengths = [
                     util.barChartObject("Quantity", length_list)
                 ];
-            });
 
-            set_speaker_season_data(name, pos);
-            set_speaker_episode_data(name, pos);
+                set_speaker_season_data(name, pos);
+                set_speaker_episode_data(name, pos);
+            });
         };
 
         // Set Speaker Season Data for Comparison Graphs
-        function set_speaker_season_data(name, pos) {
-            SeasonService.GetSeasons().then(
-                function (result) {
-                    var speaker_season_stats = [];
-                    for (var season in result.data) {
-                        if (result.data.hasOwnProperty(season)) {
-                            var _season_speakers = result.data[season].speakers;
-                            var season_speaker_stats = _.findWhere(_season_speakers, {name: name});
-                            speaker_season_stats.push({
-                                season_number: result.data[season].season_number,
-                                season_data: season_speaker_stats
-                            });
-                        } else {
-                            speaker_season_stats.push({
-                                season_number: result.data[season].season_number,
-                                season_data: null
-                            });
-                        }
-                    }
+        function set_speaker_season_data(speaker) {
 
-                    speaker_season_stats.sort(util.sort_by_key("season_number"));
-
-                    $scope.selectedSpeaker[pos].speakerSeasonStats = speaker_season_stats
+            var speaker_season_stats = [];
+            for (var season in $scope.seasons) {
+                if ($scope.seasons.hasOwnProperty(season)) {
+                    var _season_speakers = $scope.seasons[season].speakers;
+                    var season_speaker_stats = _.findWhere(_season_speakers, {name: speaker.name});
+                    speaker_season_stats.push({
+                        season_number: $scope.seasons[season].season_number,
+                        season_data: season_speaker_stats
+                    });
+                } else {
+                    speaker_season_stats.push({
+                        season_number: $scope.seasons[season].season_number,
+                        season_data: null
+                    });
                 }
-            );
+            }
+
+            speaker_season_stats.sort(util.sort_by_key("season_number"));
+
+            speaker.speakerSeasonStats = speaker_season_stats;
+
         }
 
         // Set Speaker Episode Data for Comparison Graphs
-        function set_speaker_episode_data(name, pos) {
-            EpisodeService.GetEpisodes().then(
-                function (result) {
-                    $scope.all_episodes = result.data;
+        function set_speaker_episode_data(speaker) {
+            var speaker_episode_stats = [];
+            for (var episode in $scope.episodes) {
+                if ($scope.episodes.hasOwnProperty(episode)) {
+                    var _episode_speakers = $scope.episodes[episode].speakers;
+                    var episode_speaker_stats = _.findWhere(_episode_speakers, {name: speaker.name});
 
-                    var speaker_episode_stats = [];
-                    for (var episode in result.data) {
-                        if (result.data.hasOwnProperty(episode)) {
-                            var _episode_speakers = result.data[episode].speakers;
-                            var episode_speaker_stats = _.findWhere(_episode_speakers, {name: name});
-
-                            if (episode_speaker_stats == undefined) {
-                                episode_speaker_stats = {
-                                    replicas_length_total: 0,
-                                    number_of_replicas: 0,
-                                    replicas_length_avg: 0
-                                }
-                            }
-
-                            speaker_episode_stats.push({
-                                season_number: result.data[episode].season_number,
-                                episode_number: result.data[episode].episode_number,
-                                episode_data: episode_speaker_stats
-                            });
-                        } else {
-                            speaker_episode_stats.push({
-                                season_number: result.data[episode].season_number,
-                                episode_number: result.data[episode].episode_number,
-                                episode_data: null
-                            });
+                    if (episode_speaker_stats == undefined) {
+                        episode_speaker_stats = {
+                            replicas_length_total: 0,
+                            number_of_replicas: 0,
+                            replicas_length_avg: 0
                         }
                     }
 
-                    speaker_episode_stats.sort(util.fieldSorter(['season_number', 'episode_number']));
-
-                    $scope.selectedSpeaker[pos].speakerEpisodeStats = speaker_episode_stats;
+                    speaker_episode_stats.push({
+                        season_number: $scope.episodes[episode].season_number,
+                        episode_number: $scope.episodes[episode].episode_number,
+                        episode_data: episode_speaker_stats
+                    });
+                } else {
+                    speaker_episode_stats.push({
+                        season_number: $scope.episodes[episode].season_number,
+                        episode_number: $scope.episodes[episode].episode_number,
+                        episode_data: null
+                    });
                 }
-            );
+            }
+
+            speaker_episode_stats.sort(util.fieldSorter(['season_number', 'episode_number']));
+
+            speaker.speakerEpisodeStats = speaker_episode_stats;
         }
 
         // Construct data object for season Comparison Graphs
@@ -120,9 +157,9 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 name = null,
                 speaker_stats = 0;
 
-            if ($scope.selectedSpeaker[0].speakerSeasonStats) {
-                speaker_stats = $scope.selectedSpeaker[0].speakerSeasonStats;
-                name = $scope.selectedSpeaker[0].name;
+            if ($scope.speaker1 && $scope.speaker1.speakerSeasonStats) {
+                speaker_stats = $scope.speaker1.speakerSeasonStats;
+                name = $scope.speaker1.name;
                 avg_length_list = [];
                 number_of_replicas_list = [];
                 sum_length_list = [];
@@ -146,24 +183,22 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 }
 
                 replicaAverageSeasons.push(
-                    util.barChartObject(name, avg_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
+                    util.barChartObject(name, avg_length_list)
                 );
 
                 replicaNumberSeasons.push(
-                    util.barChartObject(name, number_of_replicas_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
+                    util.barChartObject(name, number_of_replicas_list)
                 );
 
                 replicaSumSeasons.push(
-                    util.barChartObject(name, sum_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
+                    util.barChartObject(name, sum_length_list)
                 );
             }
 
-            if ($scope.selectedSpeaker[1].speakerSeasonStats) {
-                speaker_stats = $scope.selectedSpeaker[1].speakerSeasonStats;
-                name = $scope.selectedSpeaker[1].name;
+            if ($scope.speaker2 && $scope.speaker2.speakerSeasonStats) {
+
+                speaker_stats = $scope.speaker2.speakerSeasonStats;
+                name = $scope.speaker2.name;
                 avg_length_list = [];
                 number_of_replicas_list = [];
                 sum_length_list = [];
@@ -187,18 +222,15 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 }
 
                 replicaAverageSeasons.push(
-                    util.barChartObject(name, avg_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
+                    util.barChartObject(name, avg_length_list)
                 );
 
                 replicaNumberSeasons.push(
-                    util.barChartObject(name, number_of_replicas_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
+                    util.barChartObject(name, number_of_replicas_list)
                 );
 
                 replicaSumSeasons.push(
-                    util.barChartObject(name, sum_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
+                    util.barChartObject(name, sum_length_list)
                 );
             }
 
@@ -218,9 +250,9 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 name = null,
                 speaker_stats = 0;
 
-            if ($scope.selectedSpeaker[0].speakerEpisodeStats) {
-                speaker_stats = $scope.selectedSpeaker[0].speakerEpisodeStats;
-                name = $scope.selectedSpeaker[0].name;
+            if ($scope.speaker1 && $scope.speaker1.speakerEpisodeStats) {
+                speaker_stats = $scope.speaker1.speakerEpisodeStats;
+                name = $scope.speaker1.name;
                 avg_length_list = [];
                 number_of_replicas_list = [];
                 sum_length_list = [];
@@ -247,24 +279,21 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 }
 
                 replicaAverageEpisodes.push(
-                    util.barChartObject(name, avg_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
+                    util.barChartObject(name, avg_length_list)
                 );
 
                 replicaNumberEpisodes.push(
-                    util.barChartObject(name, number_of_replicas_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
+                    util.barChartObject(name, number_of_replicas_list)
                 );
 
                 replicaSumEpisodes.push(
-                    util.barChartObject(name, sum_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
+                    util.barChartObject(name, sum_length_list)
                 );
             }
 
-            if ($scope.selectedSpeaker[1].speakerEpisodeStats) {
-                speaker_stats = $scope.selectedSpeaker[1].speakerEpisodeStats;
-                name = $scope.selectedSpeaker[1].name;
+            if ($scope.speaker2 && $scope.speaker2.speakerEpisodeStats) {
+                speaker_stats = $scope.speaker2.speakerEpisodeStats;
+                name = $scope.speaker2.name;
                 avg_length_list = [];
                 number_of_replicas_list = [];
                 sum_length_list = [];
@@ -292,18 +321,15 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 }
 
                 replicaAverageEpisodes.push(
-                    util.barChartObject(name, avg_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(avg_length_list))
+                    util.barChartObject(name, avg_length_list)
                 );
 
                 replicaNumberEpisodes.push(
-                    util.barChartObject(name, number_of_replicas_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(number_of_replicas_list))
+                    util.barChartObject(name, number_of_replicas_list)
                 );
 
                 replicaSumEpisodes.push(
-                    util.barChartObject(name, sum_length_list),
-                    util.lineChartObject("Regression" + name, util.getPolynomialRegressionCurve(sum_length_list))
+                    util.barChartObject(name, sum_length_list)
                 );
             }
 
@@ -339,11 +365,10 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
         }
 
         // Set data for season hamming distance graph
-        function set_season_hamm_dist(speakers) {
-            console.log(speakers);
+        function set_season_hamm_dist() {
             var season_dist = [];
-            var hamm_1 = speakers[0].hamming_distances;
-            var hamm_2 = speakers[1].hamming_distances;
+            var hamm_1 = $scope.speaker1.hamming_distances;
+            var hamm_2 = $scope.speaker2.hamming_distances;
 
             for (var i = 1; i <= 8; i++) {
                 var dist = util.calc_hamm(hamm_1["season_" + i].season_hamming_dist, hamm_2["season_" + i].season_hamming_dist);
@@ -361,37 +386,34 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             }];
         }
 
-        function set_probability_curve(speakers) {
-            console.log("SET CURVES");
-            var absolut_enc = [],
-                relative_enc = [],
-                speaker1 = speakers[0].name,
-                speaker2 = speakers[1].name,
+        function set_probability_curve() {
+            var relative_enc = [],
                 count = 1;
 
-            var episodes = $scope.all_episodes;
+            $scope.episodes.sort(util.fieldSorter(['season_number', 'episode_number']));
 
-            episodes.sort(util.fieldSorter(['season_number', 'episode_number']));
+            for (var epi in $scope.episodes) {
+                if ($scope.episodes.hasOwnProperty(epi)) {
+                    if (typeof $scope.episodes[epi].speaker_probabilities.couple === "undefined") console.log($scope.episodes[epi]);
 
-            for (var epi in episodes) {
-                if (episodes.hasOwnProperty(epi)) {
-                    var _abs_enc = episodes[epi].speaker_probabilities.couple[speaker1][speaker2],
-                        prob1 = episodes[epi].speaker_probabilities.single[speaker1],
-                        prob2 = episodes[epi].speaker_probabilities.single[speaker2];
+                    var delta = null;
 
-                    if (isNaN(_abs_enc)) _abs_enc = 0;
+                    if (typeof $scope.episodes[epi].speaker_probabilities.couple[$scope.speaker1.name] != 'undefined'
+                        && typeof $scope.episodes[epi].speaker_probabilities.couple[$scope.speaker2.name] != 'undefined') {
 
-                    var delta = _abs_enc - (episodes[epi].number_of_scenes * prob1 * prob2);
+                        var _abs_enc = $scope.episodes[epi].speaker_probabilities.couple[$scope.speaker1.name][$scope.speaker2.name],
+                            prob1 = $scope.episodes[epi].speaker_probabilities.single[$scope.speaker1.name],
+                            prob2 = $scope.episodes[epi].speaker_probabilities.single[$scope.speaker2.name];
+                        delta = _abs_enc - ($scope.episodes[epi].number_of_scenes * prob1 * prob2);
+                    }
 
                     relative_enc.push({
                         count: count,
                         delta: delta,
-                        episode_number: episodes[epi].episode_number,
-                        season_number: episodes[epi].season_number
+                        episode_number: $scope.episodes[epi].episode_number,
+                        season_number: $scope.episodes[epi].season_number
                     });
                     count += 1;
-
-                    console.log(episodes[epi].season_number, episodes[epi].episode_number, delta)
                 }
             }
 
@@ -402,62 +424,14 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                     area: false,
                     values: relative_enc
                 }];
-
-            console.log(relative_enc);
         }
 
-        function calculate_correlations(replica_list_dict) {
+        $scope.$watchGroup(['speaker1.speakerSeasonStats', 'speaker2.speakerSeasonStats'], set_speaker_season_replik_line_chart_data);
 
-            var correlation_coefficients = {};
+        $scope.$watchGroup(['speaker1.speakerEpisodeStats', 'speaker2.speakerEpisodeStats'], set_speaker_episode_replik_line_chart_data);
 
-            for (var list in replica_list_dict) {
-                if (replica_list_dict.hasOwnProperty(list)) {
-                    var listname = replica_list_dict[list].mtype;
-                    var arrays = replica_list_dict[list].filter(function (el) {
-                        return el.bar == true;
-                    });
-
-                    var values1 = [],
-                        values2 = [];
-
-                    for (var i = 0; i < arrays[0].values.length; i++) {
-                        values1.push(parseInt(arrays[0].values[i][1]));
-                        values2.push(parseInt(arrays[1].values[i][1]));
-                    }
-
-                    correlation_coefficients[listname] = ss.sampleCorrelation(values1, values2);
-                }
-            }
-
-            console.log(correlation_coefficients);
-        }
-
-        // Watch Scope Changes
-        $scope.$watchGroup(['replicaAverageEpisodes', 'replicaNumberEpisodes', 'replicaSumEpisodes'], function (new_values) {
-            if (typeof new_values[0] === "undefined" || typeof new_values[1] === "undefined" || typeof new_values[2] === "undefined") return;
-
-            if ($scope.selectedSpeaker[0] && $scope.selectedSpeaker[1]) {
-                new_values[0].mtype = "avg";
-                new_values[1].mtype = "num";
-                new_values[2].mtype = "sum";
-                calculate_correlations(new_values);
-            }
-        });
-
-        $scope.$watchGroup(['selectedSpeaker[0].speakerSeasonStats', 'selectedSpeaker[1].speakerSeasonStats'], function () {
-            set_speaker_season_replik_line_chart_data();
-        });
-
-        $scope.$watchGroup(['selectedSpeaker[0]', 'selectedSpeaker[1]'], function (speakers) {
-            console.log(speakers);
-            if (speakers[0].name != undefined && speakers[1].name != undefined) {
-                set_season_hamm_dist(speakers);
-                set_probability_curve(speakers);
-            }
-        });
-
-        $scope.$watchGroup(['selectedSpeaker[0].speakerEpisodeStats', 'selectedSpeaker[1].speakerEpisodeStats'], function () {
-            set_speaker_episode_replik_line_chart_data();
+        $scope.$on('$locationChangeStart', function (event) {
+            window.onresize = null;
         });
 
         // NVD3 Module Options
@@ -652,7 +626,6 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
             }
         };
 
-
         $scope.linechartOptionsProbs = {
             chart: {
                 type: 'lineChart',
@@ -682,7 +655,6 @@ seriesAnalyzer.controller('speakerComparisonController', ['$scope', '$http', 'Cu
                 },
                 tooltip: {
                     contentGenerator: function (d) {
-                        console.log(d.series[0].values[d.pointIndex].episode_number);
                         return '<h3>Delta: ' + d.series[0].values[d.pointIndex].delta + '</h3>' +
                             '<h4>Season: ' + d.series[0].values[d.pointIndex].season_number + '</h4>' +
                             '<h4>Episode: ' + d.series[0].values[d.pointIndex].episode_number + '</h4>';

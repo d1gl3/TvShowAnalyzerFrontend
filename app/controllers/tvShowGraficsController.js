@@ -22,6 +22,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
         var util = UtilityService;
 
         $scope.loading = true;
+        $scope.forceDirectedData = null;
 
         $scope.checkboxModel = {
             dominating: true,
@@ -30,23 +31,21 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
         };
 
         var filter_by_weight = function (link) {
-            return (link.weight >= $scope.slider.min) && (link.weight <= $scope.slider.max);
+            return link.weight > 2;
         };
 
-        var set_force_directed_data = function (data) {
+        function set_force_directed_data(data) {
             var force_data_all = data.force_directed_data,
                 nodes = force_data_all.nodes,
                 links = force_data_all.links;
 
             links = links.filter(filter_by_weight);
 
-            $scope.slider.options.ceil = $scope.max_weight;
-
             $scope.forceDirectedData = {
                 links: links,
                 nodes: nodes
             };
-        };
+        }
 
         function get_tv_show_data() {
             TvShowService.GetTvShow().then(function (result) {
@@ -119,9 +118,6 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             $scope.numberOfSpeakersDistribution = [util.barChartObject("Quantity", number_of_speakers.sort(util.sort_by_key(0)))];
 
             $scope.configuration_densities = [util.barChartObject("Density", config_densities.sort(util.sort_by_key(0)))];
-
-            console.log($scope.numberOfSpeakersDistribution);
-            console.log($scope.configuration_densities);
 
             get_tv_show_data();
         });
@@ -207,72 +203,15 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             hiddenElement.click();
         };
 
-        $scope.$watchGroup(["slider.min", "slider.max"], function () {
-            set_force_directed_data($scope.tv_show);
-        }, true);
-
-        $scope.slider = {
-            min: 0,
-            max: 200,
-            options: {
-                floor: 0,
-                ceil: 150
-            }
-        };
-
         var color = d3.scale.category20();
-        $scope.forceDirectedOptions = {
-            chart: {
-                type: 'forceDirectedGraph',
-                height: 1000,
-                linkStrength: 0.1,
-                friction: 0.9,
-                linkDist: function (d) {
-                    return (($scope.max_weight) - d.weight) / 2;
-                },
-                charge: -120,
-                gravity: 0.1,
-                width: (function () {
-                    return nv.utils.windowSize().width
-                })(),
-                radius: function (d) {
-                    return d.weight * 2;
-                },
-                margin: {
-                    top: 20, right: 20, bottom: 20, left: 20
-                }
-                ,
-                color: function (d) {
-                    return color(d.group)
-                }
-                ,
-                nodeExtras: function (node) {
-                    console.log(node);
-                    node && node
-                        .append("text")
-                        .attr("dx", 8)
-                        .attr("dy", ".35em")
-                        .text(function (d) {
-                            return d.name
-                        })
-                        .style('font-size', '10px');
-                },
-                linkExtras: function (link) {
-                    link && link
-                        .style('stroke', function (l) {
-                            return l.color
-                        });
-                }
-            }
-        };
 
-        function drawForceGraph(force_data) {
+        var drawForceGraph = function(force_data) {
 
             if (typeof force_data == "undefined") return;
 
             d3.select("#force-graph").select("svg").remove();
 
-            var links = force_data.force_directed_data.links;
+            var links = force_data.links;
 
             var nodes = {};
 
@@ -281,8 +220,6 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
                 link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
             });
-
-            console.log(nodes);
 
             var width = 1400,
                 height = 1000;
@@ -471,7 +408,9 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             }
         }
 
-        $scope.$watch('tv_show', drawForceGraph);
+        $scope.$watch('forceDirectedData', function (new_data) {
+            if(new_data != null) drawForceGraph(new_data);
+        });
 
         $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
             hide_show_elements_by_class("concomidant", checkboxSettings);

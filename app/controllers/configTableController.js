@@ -11,8 +11,8 @@ angular.module('my-controllers').filter('range', function () {
     };
 });
 
-angular.module('my-controllers').controller("configTableController", ["$scope", "$http", "$q", "EpisodeService", "SeasonService", "TvShowService", "UtilityService", "DTOptionsBuilder",
-    function ($scope, $http, $q, EpisodeService, SeasonService, TvShowService, UtilityService, DTOptionsBuilder) {
+angular.module('my-controllers').controller("configTableController", ["$scope", "$http", "$q", "$timeout", "EpisodeService", "SeasonService", "TvShowService", "UtilityService", "DTOptionsBuilder",
+    function ($scope, $http, $q, $timeout, EpisodeService, SeasonService, TvShowService, UtilityService, DTOptionsBuilder) {
 
         var util = UtilityService;
         // Get All Data For Config Tables
@@ -25,6 +25,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
         };
 
         $scope.loading = false;
+        $scope.showTable = false;
 
         $scope.show_loading = function () {
             console.log("test");
@@ -164,12 +165,12 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             if (typeof new_season == "undefined") return;
 
             $scope.loading = true;
+            $scope.showTable = false;
 
             var force_data_all = new_season.force_directed_data,
                 nodes = force_data_all.nodes,
                 links = force_data_all.links;
 
-            console.log(nodes);
             $scope.max_weight = Math.max.apply(Math, links.map(function (o) {
                 return o.weight;
             }));
@@ -181,12 +182,12 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
             $scope.replica_length_list = getFormatedLengthList(new_season.replicas_length_list);
 
             var episodes = $scope.all_episodes.filter(function (el) {
-                return el.season_number == $scope.selectedSeason.season_number;
+                return el.season_number == new_season.season_number;
             });
             $scope.configuration_densities = util.calculate_configuration_densities(episodes);
             $scope.episode_titles = get_titles_from_episodes(episodes);
 
-            $scope.config_matrix = _.sortBy($scope.selectedSeason.configuration_matrix, function (array) {
+            $scope.config_matrix = _.sortBy(new_season.configuration_matrix.slice(1, new_season.configuration_matrix.length), function (array) {
                 var sum = 0;
 
                 for (var el in array) {
@@ -215,20 +216,28 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
                 return max;
             }).reverse();
-            $scope.loading = false;
+
+
+            $timeout(function () {
+                $scope.loading = false;
+                $scope.showTable = true;
+            });
         });
 
         // Prepares the data when viewing an Episode
         $scope.$watch("selectedEpisode", function (new_episode) {
             if (typeof new_episode === 'undefined') return;
             $scope.loading = true;
+            $scope.showTable = false;
             $scope.replica_length_list = getFormatedLengthList(new_episode.replicas_length_list);
 
             $scope.config_probability_header = new_episode.probability_matrix[0];
             $scope.config_probability = new_episode.probability_matrix.slice(1, new_episode.probability_matrix.length);
-            console.log($scope.config_probability);
-            console.log($scope.config_probability_header);
-            $scope.loading = false;
+
+            $timeout(function () {
+                $scope.loading = false;
+                $scope.showTable = true;
+            });
         });
 
         $scope.forceDirectedOptionsSeasons = {
@@ -448,8 +457,6 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
             });
 
-            console.log(nodes);
-
             var width = 1400,
                 height = 900;
 
@@ -635,6 +642,10 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
 
         $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
             hide_show_elements_by_class("dominating", checkboxSettings)
+        });
+
+        $scope.$on('$locationChangeStart', function(event) {
+            window.onresize = null;
         });
 
         function hide_show_elements_by_class(classname, setVisible) {

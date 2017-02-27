@@ -191,23 +191,25 @@
                                 season first!
                             </div>
                             <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
-                            <table datatable="ng" dt-options="dtOptions" id="config-matrix"
-                                   class="row-border hover">
-                                <thead>
+                            <div ng-if="showTable">
+                                <table datatable="ng" dt-options="dtOptions" id="config-matrix"
+                                       class="row-border hover">
+                                    <thead>
 
-                                <th>Speaker/Season</th>
-                                <th ng-repeat="n in [] | range:selectedEpisode.number_of_scenes+1">{{n}}</th>
+                                    <th>Speaker/Season</th>
+                                    <th ng-repeat="n in [] | range:selectedEpisode.number_of_scenes+1">{{n}}</th>
 
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
-                                    <td ng-repeat="values in scene track by $index"
-                                        ng-class="setColor(values)">
-                                        {{values}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="scene in selectedEpisode.configuration_matrix">
+                                        <td ng-repeat="values in scene track by $index"
+                                            ng-class="setColor(values)">
+                                            {{values}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,22 +227,24 @@
                                 season first!
                             </div>
                             <div class="loader" ng-if="loading" ng-hide="selectedEpisode"></div>
-                            <table datatable="ng" dt-options="dtOptions" class="row-border hover"
-                                   ng-if="config_probability">
-                                <thead>
+                            <div ng-if="showTable">
+                                <table datatable="ng" dt-options="dtOptions" class="row-border hover"
+                                       ng-if="config_probability">
+                                    <thead>
 
-                                <th ng-repeat="n in config_probability_header">{{n}}</th>
+                                    <th ng-repeat="n in config_probability_header">{{n}}</th>
 
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="row in config_probability">
-                                    <td ng-repeat="val in row track by $index"
-                                        ng-class="setProbabilityColor(val)">
-                                        {{val}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in config_probability">
+                                        <td ng-repeat="val in row track by $index"
+                                            ng-class="setProbabilityColor(val)">
+                                            {{val}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

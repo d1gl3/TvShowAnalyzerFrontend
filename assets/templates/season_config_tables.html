@@ -153,24 +153,26 @@
                                 season first!
                             </div>
                             <div class="loader" ng-if="loading" ng-hide="selectedSeason"></div>
-                            <table datatable="ng" dt-options="dtConfigOptions" id="config-matrix"
-                                   class="row-border hover"
-                                   ng-if="config_matrix">
-                                <thead>
+                            <div ng-if="showTable">
+                                <table datatable="ng" dt-options="dtConfigOptions" id="config-matrix"
+                                       class="row-border hover"
+                                       ng-if="config_matrix">
+                                    <thead>
 
-                                <th>Speaker/Season</th>
-                                <th ng-repeat="n in [] | range:selectedSeason.number_of_episodes+1">{{n}}</th>
+                                    <th>Speaker/Season</th>
+                                    <th ng-repeat="n in [] | range:selectedSeason.number_of_episodes+1">{{n}}</th>
 
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="season in config_matrix">
-                                    <td ng-repeat="values in season track by $index"
-                                        ng-class="setColor(values)">
-                                        {{values}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="season in config_matrix">
+                                        <td ng-repeat="values in season track by $index"
+                                            ng-class="setColor(values)">
+                                            {{values}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -185,22 +187,24 @@
                                 season first!
                             </div>
                             <div class="loader" ng-if="loading" ng-hide="selectedSeason"></div>
-                            <table datatable="ng" dt-options="dtOptions" class="row-border hover"
-                                   ng-if="config_probability"  dt-column-defs="dtColumnDefs">
-                                <thead>
+                            <div ng-if="showTable">
+                                <table datatable="ng" dt-options="dtOptions" class="row-border hover"
+                                       ng-if="config_probability" dt-column-defs="dtColumnDefs">
+                                    <thead>
 
-                                <th ng-repeat="n in config_probability_header">{{n}}</th>
+                                    <th ng-repeat="n in config_probability_header">{{n}}</th>
 
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="row in config_probability">
-                                    <td ng-repeat="val in row track by $index"
-                                        ng-class="setProbabilityColor(val)">
-                                        {{val}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in config_probability">
+                                        <td ng-repeat="val in row track by $index"
+                                            ng-class="setProbabilityColor(val)">
+                                            {{val}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -260,7 +264,8 @@
                                 season first!
                             </div>
                             <div class="well well-sm">
-                                You can drag nodes to fix them at a desired position. A double click releases a node to be influenced by the force again.
+                                You can drag nodes to fix them at a desired position. A double click releases a node to
+                                be influenced by the force again.
                             </div>
                             <div class="loader" ng-if="loading" ng-hide="selectedSeason"></div>
                             <table class="" ng-if="selectedSeason">

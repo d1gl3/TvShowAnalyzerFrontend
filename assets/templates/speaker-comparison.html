@@ -9,8 +9,9 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Speaker Selection</div>
                 <div class="panel-body">
+                    <div class="loader" ng-show="!showSpeakerSelection"> Loading Data...</div>
 
-                    <div class="row">
+                    <div class="row" ng-show="showSpeakerSelection">
                         <div class="col-md-6 speaker-selection">
 
                             <div class="speaker-card">
@@ -68,13 +69,13 @@
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Cooper</div>
-                                <img class="speaker-image" src="assets/img/mrs_cooper.jpg"
+                                <img class="speaker-image" src="assets/img/Sheldon’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Mrs Cooper', 0)">
 
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Wolowitz</div>
-                                <img class="speaker-image" src="assets/img/mrs_wolowitz.jpg"
+                                <img class="speaker-image" src="assets/img/Howard’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Mrs Wolowitz', 0)">
 
                             </div>
@@ -86,7 +87,7 @@
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Beverley</div>
-                                <img class="speaker-image" src="assets/img/beverley.jpg"
+                                <img class="speaker-image" src="assets/img/Leonard’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Beverley', 0)">
 
                             </div>
@@ -167,13 +168,13 @@
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Cooper</div>
-                                <img class="speaker-image" src="assets/img/mrs_cooper.jpg"
+                                <img class="speaker-image" src="assets/img/Sheldon’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Mrs Cooper', 1)">
 
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Wolowitz</div>
-                                <img class="speaker-image" src="assets/img/mrs_wolowitz.jpg"
+                                <img class="speaker-image" src="assets/img/Howard’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Mrs Wolowitz', 1)">
 
                             </div>
@@ -185,7 +186,7 @@
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Beverley</div>
-                                <img class="speaker-image" src="assets/img/beverley.jpg"
+                                <img class="speaker-image" src="assets/img/Leonard’s_Mother.jpg"
                                      ng-click="set_selected_speaker('Beverley', 1)">
 
                             </div>
@@ -223,21 +224,21 @@
                 </div>
             </div>
 
-            <div class="well" ng-if="selectedSpeaker[0].name == undefined && selectedSpeaker[1].name == undefined">
+            <div class="well" ng-hide="!showSpeakerSelection"
+                 ng-if="selectedSpeaker[0].name == undefined && selectedSpeaker[1].name == undefined">
                 Please choose at least one of the speakers to show data!
             </div>
 
-            <div class="panel panel-primary"
-                 ng-if="selectedSpeaker[0].name != undefined || selectedSpeaker[1].name != undefined">
+            <div class="panel panel-primary" ng-if="speaker1 || speaker2">
                 <div class="panel-heading">Speaker Stats</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="selected-speaker-container">
+                            <div class="selected-speaker-container" ng-if="speaker1 != null">
 
                                 <div class="speaker-info-image-container">
                                     <img class="comparison-image"
-                                         ng-src="assets/img/{{selectedSpeaker[0].name.toString().replace(' ', '_').toLowerCase()}}.jpg"
+                                         ng-src="assets/img/{{speaker1.name.toString().replace(' ', '_').toLowerCase()}}.jpg"
                                          onError="this.src='assets/img/anonym.jpg';">
                                 </div>
 
@@ -249,19 +250,19 @@
 
                                                 <tr>
                                                     <td>Name:</td>
-                                                    <td>{{selectedSpeaker[0].name}}</td>
+                                                    <td>{{speaker1.name}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Number Of Replicas:</td>
-                                                    <td>{{selectedSpeaker[0].number_of_replicas}}</td>
+                                                    <td>{{speaker1.number_of_replicas}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Longest Replic:</td>
-                                                    <td>{{selectedSpeaker[0].replicas_length_max}}</td>
+                                                    <td>{{speaker1.replicas_length_max}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Shortest Replic:</td>
-                                                    <td>{{selectedSpeaker[0].replicas_length_min}}</td>
+                                                    <td>{{speaker1.replicas_length_min}}</td>
                                                 </tr>
 
                                             </table>
@@ -272,21 +273,24 @@
 
                                                 <tr>
                                                     <td>Percentage Of Replics In Show:</td>
-                                                    <td>{{((selectedSpeaker[0].replik_percentage)*100).toFixed(2)}} %
+                                                    <td>{{((speaker1.replik_percentage)*100).toFixed(2)}}
+                                                        %
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Percentage Of Words In Show:</td>
-                                                    <td>{{((selectedSpeaker[0].word_percentage)*100).toFixed(2)}} %</td>
+                                                    <td>{{((speaker1.word_percentage)*100).toFixed(2)}}
+                                                        %
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Average Replic Length:</td>
-                                                    <td>{{selectedSpeaker[0].replicas_length_avg.toFixed(2)}}</td>
+                                                    <td>{{speaker1.replicas_length_avg.toFixed(2)}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Median Replic Length:</td>
-                                                    <td>{{selectedSpeaker[0].replicas_length_med}}</td>
+                                                    <td>{{speaker1.replicas_length_med}}</td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -295,7 +299,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="selected-speaker-container" ng-if="selectedSpeaker[1].name != undefined">
+                            <div class="selected-speaker-container" ng-if="speaker2 != null">
                                 <div class="speaker-info-table-container">
                                     <table st-table="rowCollection" class="table table-striped">
                                         <td>
@@ -304,19 +308,19 @@
 
                                                 <tr>
                                                     <td>Name:</td>
-                                                    <td>{{selectedSpeaker[1].name}}</td>
+                                                    <td>{{speaker2.name}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Number Of Replicas:</td>
-                                                    <td>{{selectedSpeaker[1].number_of_replicas}}</td>
+                                                    <td>{{speaker2.number_of_replicas}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Longest Replic:</td>
-                                                    <td>{{selectedSpeaker[1].replicas_length_max}}</td>
+                                                    <td>{{speaker2.replicas_length_max}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Shortest Replic:</td>
-                                                    <td>{{selectedSpeaker[1].replicas_length_min}}</td>
+                                                    <td>{{speaker2.replicas_length_min}}</td>
                                                 </tr>
 
                                             </table>
@@ -327,21 +331,24 @@
 
                                                 <tr>
                                                     <td>Percentage Of Replics In Show:</td>
-                                                    <td>{{((selectedSpeaker[1].replik_percentage)*100).toFixed(2)}} %
+                                                    <td>{{((speaker2.replik_percentage)*100).toFixed(2)}}
+                                                        %
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Percentage Of Words In Show:</td>
-                                                    <td>{{((selectedSpeaker[1].word_percentage)*100).toFixed(2)}} %</td>
+                                                    <td>{{((speaker2.word_percentage)*100).toFixed(2)}}
+                                                        %
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Average Replic Length:</td>
-                                                    <td>{{selectedSpeaker[1].replicas_length_avg.toFixed(2)}}</td>
+                                                    <td>{{speaker2.replicas_length_avg.toFixed(2)}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Median Replic Length:</td>
-                                                    <td>{{selectedSpeaker[1].replicas_length_med}}</td>
+                                                    <td>{{speaker2.replicas_length_med}}</td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -358,25 +365,22 @@
                 </div>
             </div>
 
-
-            <div class="panel panel-primary"
-                 ng-if="selectedSpeaker[0].replicaLengths || selectedSpeaker[1].replicaLengths">
+            <div class="panel panel-primary" ng-if="speaker1 || speaker2">
                 <div class="panel-heading">Replica Length Distribution</div>
                 <div class="panel-body">
 
                     <div class="row speaker-info-grafics">
-                        <div class="col-md-6 bar-chart">
-                            <nvd3 options="discreteBarChartOptions" data="selectedSpeaker[0].replicaLengths"></nvd3>
+                        <div class="col-md-6 bar-chart" ng-if="speaker1">
+                            <nvd3 options="discreteBarChartOptions" data="speaker1.replicaLengths"></nvd3>
                         </div>
-                        <div class="col-md-6 bar-chart">
-                            <nvd3 options="discreteBarChartOptions" data="selectedSpeaker[1].replicaLengths"></nvd3>
+                        <div class="col-md-6 bar-chart" ng-if="speaker2">
+                            <nvd3 options="discreteBarChartOptions" data="speaker2.replicaLengths"></nvd3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-primary"
-                 ng-if="selectedSpeaker[0].hamming_distances || selectedSpeaker[1].hamming_distances">
+            <div class="panel panel-primary" ng-if="speaker1 && speaker2">
                 <div class="panel-heading">Hamming Distances</div>
                 <div class="row">
                     <div class="col-md-6" ng-if="seasonHammingDistance">
@@ -389,20 +393,19 @@
             </div>
 
 
-            <div class="panel panel-primary"
-                 ng-if="selectedSpeaker[0].speakerWords || selectedSpeaker[1].speakerWords">
+            <div class="panel panel-primary" ng-if="speaker1 || speaker2">
                 <div class="panel-heading">Most Used Words</div>
                 <div class="panel-body">
 
                     <div class="panel-heading">Overall</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[0].speakerWords" width="350" height="250" steps="7"
+                            <div class="col-md-6" ng-if="speaker1">
+                                <jqcloud words="speaker1.word_cloud_data" width="350" height="250" steps="7"
                                          shape="rectangular"></jqcloud>
                             </div>
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[1].speakerWords" width="350" height="250" steps="7"
+                            <div class="col-md-6" ng-if="speaker2">
+                                <jqcloud words="speaker2.word_cloud_data" width="350" height="250" steps="7"
                                          shape="rectangular"></jqcloud>
                             </div>
                         </div>
@@ -412,18 +415,18 @@
                     <div class="panel-body">
                         <div class="row">
 
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[0].speakerWordsPos" width="350" height="250"
+                            <div class="col-md-6" ng-if="speaker1">
+                                <jqcloud words="speaker1.positive_words_cloud" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
-                                <span class="label label-success">Ratio: {{(selectedSpeaker[0].words_pos_ratio*100).toFixed(1)}} %</span>
+                                <span class="label label-success">Ratio: {{(speaker1.words_pos_ratio*100).toFixed(1)}} %</span>
                             </div>
 
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[1].speakerWordsPos" width="350" height="250"
+                            <div class="col-md-6" ng-if="speaker2">
+                                <jqcloud words="speaker2.positive_words_cloud" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
-                                <span class="label label-success">Ratio: {{(selectedSpeaker[1].words_pos_ratio*100).toFixed(1)}} %</span>
+                                <span class="label label-success">Ratio: {{(speaker1.words_pos_ratio*100).toFixed(1)}} %</span>
                             </div>
                         </div>
                     </div>
@@ -432,26 +435,25 @@
                     <div class="panel-body">
                         <div class="row">
 
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[0].speakerWordsNeg" width="350" height="250"
+                            <div class="col-md-6" ng-if="speaker1">
+                                <jqcloud words="speaker1.negative_words_cloud" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
-                                <span class="label label-danger">Ratio: {{(selectedSpeaker[0].words_neg_ratio*100).toFixed(1)}} %</span>
+                                <span class="label label-danger">Ratio: {{(speaker1.words_neg_ratio*100).toFixed(1)}} %</span>
                             </div>
 
-                            <div class="col-md-6">
-                                <jqcloud words="selectedSpeaker[1].speakerWordsNeg" width="350" height="250"
+                            <div class="col-md-6" ng-if="speaker2">
+                                <jqcloud words="speaker2.negative_words_cloud" width="350" height="250"
                                          steps="7"
                                          shape="rectangular"></jqcloud>
-                                <span class="label label-danger">Ratio: {{(selectedSpeaker[1].words_neg_ratio*100).toFixed(1)}} %</span>
+                                <span class="label label-danger">Ratio: {{(speaker2.words_neg_ratio*100).toFixed(1)}} %</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel"
-                 ng-if="selectedSpeaker[0].speakerSeasonStats || selectedSpeaker[1].speakerSeasonStats">
+            <div class="panel panel-primary linechart-panel" ng-if="speaker1.speakerSeasonStats || speaker2.speakerSeasonStats">
                 <div class="panel-heading">Speaker Season Replic Stats</div>
                 <div class="panel-body">
 
@@ -472,8 +474,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel"
-                 ng-if="selectedSpeaker[0].speakerEpisodeStats || selectedSpeaker[1].speakerEpisodeStats">
+            <div class="panel panel-primary linechart-panel" ng-if="speaker1.speakerEpisodeStats || speaker2.speakerEpisodeStats">
                 <div class="panel-heading">Speaker Episode Replic Stats</div>
                 <div class="panel-body">
 
@@ -494,7 +495,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel" ng-if="probabilities">
+            <div class="panel panel-primary linechart-panel" ng-if="speaker1 && speaker2">
                 <div class="panel-heading">Speaker Configuration Probabilities</div>
                 <div class="panel-body">
 
@@ -506,7 +507,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <br>
     </div>
