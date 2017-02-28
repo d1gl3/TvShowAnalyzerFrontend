@@ -1,8 +1,7 @@
 'use strict';
 
 seriesAnalyzer.factory('UtilityService',
-    ['$cookieStore', '$rootScope',
-        function ($cookieStore, $rootScope) {
+    [ function () {
 
             var service = {};
 
@@ -167,15 +166,15 @@ seriesAnalyzer.factory('UtilityService',
             service.calc_hamm = function (str1, str2) {
                 var dist = 0;
 
-                var str1 = str1.toLowerCase();
-                var str2 = str2.toLowerCase();
+                var _str1 = str1.toLowerCase();
+                var _str2 = str2.toLowerCase();
 
-                for (var i = 0; i < str1.length; i++) {
+                for (var i = 0; i < _str1.length; i++) {
 
-                    if (str2[i] && str2[i] !== str1[i]) {
+                    if (_str2[i] && _str2[i] !== _str1[i]) {
                         dist += 1;
                     }
-                    else if (!str2[i]) {
+                    else if (!_str2[i]) {
                         //  If there's no letter in the comparing string
                         dist += dist;
                     }
