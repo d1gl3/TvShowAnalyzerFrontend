@@ -17,7 +17,7 @@
                                     This website visualizes quantitative data extracted and computed from the
                                     transcripts of
                                     the TV Series "The Big Bang Theory".
-                                    The provided data is computed from the speeches of the all the characters
+                                    The provided data is computed from the speeches of all the characters
                                     in
                                     the show.
                                 </p>
@@ -32,9 +32,14 @@
                                         Data</a>
                                     <a class="btn btn-primary btn-lg" href="#/episode-config-tables" role="button">Episodes
                                         Data</a>
-                                    <a class="btn btn-primary btn-lg" href="#/speaker-overview-table" role="button">Speaker
-                                        Overview
+                                    <a class="btn btn-primary btn-lg" href="#/speaker-single-view" role="button">Single
+                                        Speaker
                                         Data</a>
+                                    <a class="btn btn-primary btn-lg" href="#/speaker-comparison" role="button">Compare
+                                        Speakers
+                                    </a>
+                                    <a class="btn btn-primary btn-lg" href="#/download-view" role="button">Data
+                                        Download</a>
                                 </p>
                             </div>
                             <div>
@@ -115,22 +120,22 @@
 
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Speeches</span></h3>
-                            <nvd3 options="barOptions2" data="replicaNumberDistribution"
+                            <nvd3 options="basicBarOptions" data="replicaNumberDistribution"
                             ></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Word</span></h3>
-                            <nvd3 options="barOptions2" data="replicaWordDistribution"
+                            <nvd3 options="basicBarOptions" data="replicaWordDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Speakers</span></h3>
-                            <nvd3 options="barOptions2" data="numberOfSpeakersDistribution"
+                            <nvd3 options="basicBarOptions" data="numberOfSpeakersDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Configuration Density</span></h3>
-                            <nvd3 options="barOptionsConfigDensities" data="configuration_densities"
+                            <nvd3 options="basicBarOptionsInteractiveFalse" data="configuration_densities"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                     </div>
@@ -150,7 +155,7 @@
                             <h3><span class="label label-info">Speech Length Distribution</span></h3>
                         </div>
                         <div class="col-md-12 bar-chart" id="bar-chart-season-replic-length">
-                            <nvd3 options="barOptions2" data="tvShowReplicaLengths"></nvd3>
+                            <nvd3 options="basicBarOptions" data="tvShowReplicaLengths"></nvd3>
                         </div>
                         <div class="col-md-12 bar-chart">
                             <md-button class="md-raised" ng-click="downloadReplicaCSV()">Download as CSV</md-button>
@@ -275,7 +280,7 @@
                         <div id="force-directed-graph-speakers">
                             <div class="col-md-12" id="force-graph">
                             </div>
-                            <button svg-download="#svg_character_network" title="CharacterNetworkFull" type="png">
+                            <button svg-download='#svg_character_network' title="CharacterNetworkFull" type="png">
                                 Download as PNG
                             </button>
                         </div>

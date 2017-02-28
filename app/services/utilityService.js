@@ -6,6 +6,45 @@ seriesAnalyzer.factory('UtilityService',
 
             var service = {};
 
+            service.get_formated_length_list = function(old_length_list){
+                var length_list = [];
+
+                for (var len in old_length_list) {
+                    if (old_length_list.hasOwnProperty(len)) {
+                        length_list.push([+len.substring(1), old_length_list[len]])
+                    }
+                }
+
+                return length_list.sort(service.sort_by_key(0));
+            };
+
+            service.sort_and_reverse_config_matrix = function (mtx) {
+                return _.sortBy(mtx, function (array) {
+                    var sum = 0;
+
+                    for (var el in array) {
+                        if (array.hasOwnProperty(el)) {
+                            if (array[el] == 1) sum++;
+                        }
+                    }
+
+                    return sum;
+                }).reverse();
+            };
+
+            service.get_formated_force_data = function(obj){
+                var force_data_all = obj.force_directed_data,
+                    nodes = force_data_all.nodes,
+                    links = force_data_all.links;
+
+                links = links.filter(service.filter_by_weight);
+
+                return {
+                    links: links,
+                    nodes: nodes
+                };
+            };
+
             // Filters Force Directed Graph Links by weight >= 2
             service.filter_by_weight = function (link) {
                 return link.weight >= 2;

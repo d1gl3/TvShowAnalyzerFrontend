@@ -29,72 +29,25 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             concomidant: true,
             independent: true
         };
-
-        var filter_by_weight = function (link) {
-            return link.weight > 2;
-        };
-
-        function set_force_directed_data(data) {
-            var force_data_all = data.force_directed_data,
-                nodes = force_data_all.nodes,
-                links = force_data_all.links;
-
-            links = links.filter(filter_by_weight);
-
-            $scope.forceDirectedData = {
-                links: links,
-                nodes: nodes
-            };
-        }
-
-        function get_tv_show_data() {
-            TvShowService.GetTvShow().then(function (result) {
-                $scope.tv_show = result.data;
-                $scope.tv_show_config_matrix = _.sortBy($scope.tv_show.configuration_matrix, function (array) {
-                    var sum = 0;
-
-                    for (var el in array) {
-                        if (array.hasOwnProperty(el)) {
-                            if (array[el] == 1) sum++;
-                        }
-                    }
-
-                    return sum;
-                }).reverse();
+        $scope.setColor = util.setColor;
 
 
-                $scope.max_weight = Math.max.apply(Math, result.data.force_directed_data.links.map(function (o) {
-                    return o.weight;
-                }));
+        // Get Season and TV Show Data before initializing views
+        $q.all([
+            SeasonService.GetSeasons(),
+            TvShowService.GetTvShow()
+        ]).then(function (results) {
+            $scope.all_seasons = results[0].data;
+            $scope.tv_show = results[1].data;
 
-                set_force_directed_data(result.data);
+            set_season_data();
+            set_tv_show_data();
 
-                var replica_lengths = $scope.tv_show.replicas_length_list;
-                var length_list = [];
+            window.onresize = null;
+        });
 
-                for (var len in replica_lengths) {
-                    if (replica_lengths.hasOwnProperty(len)) {
-                        length_list.push([+len.substring(1), replica_lengths[len]])
-                    }
-                }
-
-                length_list.sort(util.sort_by_key(0));
-
-                $scope.tvShowReplicaLengths = [{
-                    key: "Quantity",
-                    bar: true,
-                    values: length_list.slice(0, 50)
-                }];
-
-                var reversed_length_list = jQuery.extend(true, [], length_list);
-                reversed_length_list.sort(util.sort_by_key(1));
-
-                $scope.tvShowReplicaLengthsDistribution = reversed_length_list;
-            });
-        }
-
-        SeasonService.GetSeasons().then(function (result) {
-            $scope.all_seasons = result.data;
+        // Set Season Data for Graphs
+        function set_season_data() {
 
             var replik_percentage = [],
                 word_percentage = [],
@@ -112,100 +65,24 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             }
 
             $scope.replicaNumberDistribution = [util.barChartObject("Quantity", replik_percentage.sort(util.sort_by_key(0)))];
-
             $scope.replicaWordDistribution = [util.barChartObject("Quantity", word_percentage.sort(util.sort_by_key(0)))];
-
             $scope.numberOfSpeakersDistribution = [util.barChartObject("Quantity", number_of_speakers.sort(util.sort_by_key(0)))];
-
             $scope.configuration_densities = [util.barChartObject("Density", config_densities.sort(util.sort_by_key(0)))];
+        }
 
-            get_tv_show_data();
-        });
+        // Set TV Show Data for Views
+        function set_tv_show_data() {
+            $scope.tv_show_config_matrix = util.sort_and_reverse_config_matrix($scope.tv_show.configuration_matrix);
+            $scope.forceDirectedData = util.get_formated_force_data($scope.tv_show);
+            $scope.tvShowReplicaLengths = [{
+                key: "Quantity",
+                bar: true,
+                values: util.get_formated_length_list($scope.tv_show.replicas_length_list).slice(0, 50)
+            }];
+        }
 
-        $scope.barOptionsConfigurationDensities = {
-            chart: {
-                type: 'lineChart',
-                height: 300,
-                margin: {
-                    top: 20,
-                    right: 20,
-                    bottom: 65,
-                    left: 50
-                },
-                x: function (d) {
-                    return d[0];
-                },
-                y: function (d) {
-                    return d[1];
-                },
-                callback: function (chart) {
-                    chart.update();
-                },
-                showValues: false,
-                valueFormat: function (d) {
-                    return d3.format(',.0f')(d);
-                },
-                duration: 800,
-                xAxis: {
-                    axisLabel: 'Length',
-                    tickFormat: function (d) {
-                        return "Season" + d3.format(',.0f')(d)
-                    },
-                    rotateLabels: 30,
-                    showMaxMin: false
-                },
-                yAxis: {
-                    axisLabel: 'Occurences',
-                    axisLabelDistance: -10,
-                    tickFormat: function (d) {
-                        return d3.format(",.2f")(d);
-                    }
-                },
-                yDomain: [0, 1],
-                tooltip: {
-                    keyFormatter: function (d) {
-                        return d3.format(',.0f')(d);
-                    }
-                },
-                zoom: {
-                    enabled: true,
-                    scaleExtent: [1, 10],
-                    useFixedDomain: false,
-                    useNiceScale: false,
-                    horizontalOff: false,
-                    verticalOff: true,
-                    unzoomEventType: 'dblclick.zoom'
-                }
-            }
-        };
-
-        $scope.setColor = util.setColor;
-
-
-        $scope.downloadReplicaCSV = function () {
-            console.log("CLICK");
-            var replica_lengths = $scope.tvShowReplicaLengths[0].values;
-            var csvContent = "SpeachLength, Value\n";
-            var max_length = $scope.tvShowReplicaLengths[0].values[$scope.tvShowReplicaLengths[0].values.length - 1];
-            console.log(max_length);
-            replica_lengths.forEach(function (lengthArray, index) {
-
-                var dataString = lengthArray.join(",");
-                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
-
-            });
-
-            var hiddenElement = document.createElement('a');
-
-            hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
-            hiddenElement.target = '_blank';
-            hiddenElement.download = 'SpeachLengths_Total.csv';
-            hiddenElement.click();
-        };
-
-        var color = d3.scale.category20();
-
-        var drawForceGraph = function(force_data) {
+        // Draw the Force directed Graph for Speakers
+        function drawForceGraph(force_data) {
 
             if (typeof force_data == "undefined") return;
 
@@ -228,7 +105,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 .nodes(d3.values(nodes))
                 .links(links)
                 .size([width, height])
-                .linkDistance(function (n, i) {
+                .linkDistance(function (n) {
                     return (1 / n.weight) * 600 + 100;
                 })
                 .charge(-120)
@@ -326,7 +203,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             var circle = svg.append("g").selectAll("circle")
                 .data(force.nodes())
                 .enter().append("circle")
-                .attr("r", function (d) {
+                .attr("r", function () {
                     return 20;
                 })
                 .call(drag)
@@ -345,7 +222,6 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 });
 
             function mouseover(d) {
-                console.log(d3.event);
                 div.transition()
                     .style('opacity', .9)
                     .style('background', 'lightsteelblue');
@@ -383,14 +259,14 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     return "M" + d.source.x + "," + d.source.y + "L" + m.x + "," + m.y;
                 } else {
                     if (d.type == "concomidant") {
-                        var pl = this.getTotalLength(),
+                        var pl2 = this.getTotalLength(),
                             // radius of circle plus marker head
-                            r = (d.target.weight) + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                            r2 = (d.target.weight) + 16.97, //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
                             // position close to where path intercepts circle
-                            l = this.getPointAtLength(pl - r);
+                            l = this.getPointAtLength(pl2 - r2);
 
-                        var x_start = d.source.x + (r / this.getTotalLength()) * (d.target.x - d.source.x),
-                            y_start = d.source.y + (r / this.getTotalLength()) * (d.target.y - d.source.y);
+                        var x_start = d.source.x + (r2 / this.getTotalLength()) * (d.target.x - d.source.x),
+                            y_start = d.source.y + (r2 / this.getTotalLength()) * (d.target.y - d.source.y);
 
                         return "M" + x_start + "," + y_start + "L" + l.x + "," + l.y;
                     } else {
@@ -408,23 +284,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             }
         }
 
-        $scope.$watch('forceDirectedData', function (new_data) {
-            if(new_data != null) drawForceGraph(new_data);
-        });
-
-        $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
-            hide_show_elements_by_class("concomidant", checkboxSettings);
-        });
-
-        $scope.$watch('checkboxModel.independent', function (checkboxSettings) {
-            hide_show_elements_by_class("independent", checkboxSettings)
-        });
-
-        $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
-            hide_show_elements_by_class("dominating", checkboxSettings)
-            hide_show_elements_by_class("subordinating", checkboxSettings);
-        });
-
+        // Show hidden, hide visible objects by classname
         function hide_show_elements_by_class(classname, setVisible) {
             [].forEach.call(document.querySelectorAll('.' + classname), function (el) {
                 if (!setVisible) {
@@ -435,64 +295,42 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             });
         }
 
-        $scope.barOptions = {
-            chart: {
-                type: 'historicalBarChart',
-                height: 300,
-                margin: {
-                    top: 20,
-                    right: 20,
-                    bottom: 65,
-                    left: 50
-                },
-                color: d3.scale.category20(),
-                x: function (d) {
-                    return d[0];
-                },
-                y: function (d) {
-                    return d[1] / 100000;
-                },
-                showValues: false,
-                valueFormat: function (d) {
-                    return d3.format(',.0f')(d);
-                },
-                duration: 800,
-                callback: function (chart) {
-                    chart.update();
-                },
-                xAxis: {
-                    axisLabel: 'Length',
-                    tickFormat: function (d) {
-                        if (d % 5 == 0) return d3.format(',.0f')(d);
-                    },
-                    rotateLabels: 30,
-                    showMaxMin: false
-                },
-                yAxis: {
-                    axisLabel: 'Occurences',
-                    axisLabelDistance: -10,
-                    tickFormat: function (d) {
-                        return d3.format(",.0f")(d * 100000);
-                    }
-                },
-                tooltip: {
-                    keyFormatter: function (d) {
-                        return d3.format(',.0f')(d);
-                    }
-                },
-                zoom: {
-                    enabled: true,
-                    scaleExtent: [1, 100],
-                    useFixedDomain: true,
-                    useNiceScale: false,
-                    horizontalOff: false,
-                    verticalOff: true,
-                    unzoomEventType: 'dblclick.zoom'
-                }
-            }
+        // Download function for the speech length distribution
+        $scope.downloadReplicaCSV = function () {
+            var replica_lengths = $scope.tvShowReplicaLengths[0].values;
+            var csvContent = "SpeachLength, Value\n";
+            replica_lengths.forEach(function (lengthArray, index) {
+
+                var dataString = lengthArray.join(",");
+                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
+
+            });
+
+            var hiddenElement = document.createElement('a');
+
+            hiddenElement.href = 'data:attachment/csv,' + encodeURI(csvContent);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'SpeachLengths_Total.csv';
+            hiddenElement.click();
         };
 
-        $scope.barOptions2 = {
+        $scope.$watch('forceDirectedData', function (new_data) {
+            if (new_data != null) drawForceGraph(new_data);
+        });
+
+        // Watches for Force Graph sliders to filter relation edges
+        $scope.$watch('checkboxModel.concomidant', function (checkboxSettings) {
+            hide_show_elements_by_class("concomidant", checkboxSettings);
+        });
+        $scope.$watch('checkboxModel.independent', function (checkboxSettings) {
+            hide_show_elements_by_class("independent", checkboxSettings);
+        });
+        $scope.$watch('checkboxModel.dominating', function (checkboxSettings) {
+            hide_show_elements_by_class("dominating", checkboxSettings);
+            hide_show_elements_by_class("subordinating", checkboxSettings);
+        });
+
+        $scope.basicBarOptions = {
             chart: {
                 type: 'discreteBarChart',
                 useInteractiveGuideline: false,
@@ -521,7 +359,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             }
         };
 
-        $scope.barOptionsConfigDensities = {
+        $scope.basicBarOptionsInteractiveFalse = {
             chart: {
                 type: 'discreteBarChart',
                 useInteractiveGuideline: false,
@@ -553,13 +391,6 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                     }
                 }
             }
-        };
-
-        $scope.ngGridFIx = function () {
-            setTimeout(function () {
-                $(window).resize();
-                console.log("Test");
-            }, 1000);
         };
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
