@@ -27,13 +27,13 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
         };
 
         $scope.loadSeasons = function () {
-            $scope.seasons = $scope.all_seasons;
+            $scope.seasons = $scope.all_seasons.sort(util.fieldSorter(['season_number']));
         };
 
         $scope.loadEpisodes = function (season_number) {
             $scope.episodes = _.filter($scope.all_episodes, function (episode) {
                 return episode.season_number == season_number
-            });
+            }).sort(util.fieldSorter(['episode_number']));
         };
 
         $scope.downloadSpeakerSpeeches = function (speaker_name, season_number, episode_number) {
