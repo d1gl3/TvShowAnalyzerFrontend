@@ -8,11 +8,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Speaker Selection</div>
                     <div class="panel-body">
-
+                        <div class="loader" ng-show="!showSpeakerSelection"> Loading Data...</div>
                         <input type="text" auto-complete ui-items="dropdownSpeakerNames"
-                               ng-model="dropdownSelectedSpeaker"/>
+                               ng-model="dropdownSelectedSpeaker" ng-show="showSpeakerSelection"/>
 
-                        <div class="row speaker-selection">
+                        <div class="row speaker-selection"  ng-show="showSpeakerSelection">
                             <div class="speaker-card">
                                 <div class="speaker-label">Sheldon</div>
                                 <img class="speaker-image" src="assets/img/sheldon.jpg"
@@ -217,7 +217,7 @@
 
                         <div class="row speaker-info-grafics">
                             <div class="col-md-12 bar-chart">
-                                <nvd3 options="options" data="replicaLengths"></nvd3>
+                                <nvd3 options="speechLengthDistributionOptions" data="replicaLengths"></nvd3>
                             </div>
                         </div>
                         <md-button class="md-raised" ng-click="downloadReplicaCSV()">Download as CSV</md-button>

@@ -24,7 +24,30 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
 
         $scope.loadTvShowSpeakers = function () {
             $scope.tv_show_speakers = $scope.all_speakers;
-            console.log($scope.all_speakers);
+        };
+
+        $scope.loadSeasons = function () {
+            $scope.seasons = $scope.all_seasons;
+        };
+
+        $scope.loadEpisodes = function (season_number) {
+            $scope.episodes = _.filter($scope.all_episodes, function (episode) {
+                return episode.season_number == season_number
+            });
+        };
+
+        $scope.downloadSpeakerSpeeches = function (speaker_name, season_number, episode_number) {
+            prepareSpeakerSpeeches(speaker_name, season_number, episode_number, function (speakerSpeeches) {
+                var speechString = "";
+
+                for (var speech in speakerSpeeches){
+                    if (speakerSpeeches.hasOwnProperty(speech)){
+                        speechString += speakerSpeeches[speech].replik + "\n";
+                    }
+                }
+
+                downloadTXTFile("SpeechesBy" + speaker_name, speechString);
+            });
         };
 
         $scope.downloadEpisodeNumberOfSpeechesPerSpeaker = function () {
@@ -88,6 +111,21 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             hiddenElement.target = '_blank';
             hiddenElement.download = name + '.csv';
             hiddenElement.click();
+        };
+
+        var downloadTXTFile = function (name, data) {
+            var hiddenElement = document.createElement('a');
+
+            hiddenElement.href = 'data:text/plain;charset=utf-8,' + encodeURI(data);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = name + '.txt';
+            hiddenElement.click();
+        };
+
+        var prepareSpeakerSpeeches = function (speaker, season_number, episode_number, callback) {
+            SpeakerService.GetSpeakerSpeeches(speaker, season_number, episode_number).then(function (speeches) {
+                callback(speeches.data);
+            });
         };
 
         var prepareSpeakerEpisodeReplikDist = function (speaker_name) {
