@@ -135,6 +135,7 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
 
             transcript_str += "Season: " + transcript.season_number + "\n";
             transcript_str += "Episode: " + transcript.episode_number + "\n";
+            transcript_str += "Title: " + transcript.title + "\n";
             transcript_str += "Speakers: " + transcript.speakers.join(", ") + "\n";
             transcript_str += "Number of Scenes: " + transcript.number_of_scenes + "\n";
             transcript_str += "Number of Speeches: " + transcript.number_of_replicas + "\n";
