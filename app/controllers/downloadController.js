@@ -36,6 +36,14 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             }).sort(util.fieldSorter(['episode_number']));
         };
 
+        $scope.downloadEpisodeTranscript = function (season_number, episode_number) {
+            EpisodeService.GetTranscript(season_number, episode_number).then(function (transcript_obj) {
+                prepareTranscriptForDownload(transcript_obj.data, function (prepared_obj){
+                    downloadTXTFile("Transkript_Season_" + season_number + "_Episode_" + episode_number, prepared_obj);
+                });
+            });
+        };
+
         $scope.downloadSpeakerSpeeches = function (speaker_name, season_number, episode_number) {
             prepareSpeakerSpeeches(speaker_name, season_number, episode_number, function (speakerSpeeches) {
                 var speechString = "";
@@ -120,6 +128,21 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             hiddenElement.target = '_blank';
             hiddenElement.download = name + '.txt';
             hiddenElement.click();
+        };
+
+        var prepareTranscriptForDownload = function (transcript, callback){
+            var transcript_str = "TRANSKRIPT\n==========\n";
+
+            transcript_str += "Season: " + transcript.season_number + "\n";
+            transcript_str += "Episode: " + transcript.episode_number + "\n";
+            transcript_str += "Speakers: " + transcript.speakers.join(", ") + "\n";
+            transcript_str += "Number of Scenes: " + transcript.number_of_scenes + "\n";
+            transcript_str += "Number of Speeches: " + transcript.number_of_replicas + "\n";
+            transcript_str += "==========\n";
+            transcript_str += transcript.content;
+            transcript_str += "==========\n";
+
+            callback(transcript_str);
         };
 
         var prepareSpeakerSpeeches = function (speaker, season_number, episode_number, callback) {

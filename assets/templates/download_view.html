@@ -187,6 +187,26 @@
                             Download Speaker Season Statistics
                         </md-button>
                     </section>
+
+                    <h5>Episode Transcripts</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-select placeholder="Choose Season" ng-model="season1" md-on-open="loadSeasons()"
+                                   style="min-width: 200px;" ng->
+                            <md-option ng-value="season1" ng-repeat="season1 in seasons">{{season1.season_number}}
+                            </md-option>
+                        </md-select>
+
+                        <md-select placeholder="Choose Episode" ng-model="episode1" md-on-open="loadEpisodes(season1.season_number)"
+                                   style="min-width: 200px;">
+                            <md-option ng-value="episode1" ng-repeat="episode1 in episodes">{{episode1.episode_number}}
+                            </md-option>
+                        </md-select>
+                        <md-button class="md-raised" ng-click="downloadEpisodeTranscript(season1.season_number, episode1.episode_number)"
+                                   ng-disabled="episode1 == null">
+                            Download Episode Transcript
+                        </md-button>
+                    </section>
                 </fieldset>
             </div>
             <div class="col-md-6">

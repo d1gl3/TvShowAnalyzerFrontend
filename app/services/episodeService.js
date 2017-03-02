@@ -29,5 +29,24 @@ seriesAnalyzer.factory('EpisodeService',
                 return deferObject.promise;
             };
 
+            service.GetTranscript = function (season_number, episode_number) {
+                var transcript_endpoint = SettingService.getBackendUrl() + '/api/transcripts?season=' + season_number + "&episode=" + episode_number,
+
+                    transcript = $http.get(transcript_endpoint),
+
+                    deferObject = deferObject || $q.defer();
+
+                transcript.then(
+                    function (answer) {
+                        deferObject.resolve(answer);
+                    },
+                    function (reason) {
+                        deferObject.reject(reason);
+                    }
+                );
+
+                return deferObject.promise;
+            };
+
             return service;
         }]);
