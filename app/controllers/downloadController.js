@@ -36,9 +36,15 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             }).sort(util.fieldSorter(['episode_number']));
         };
 
+        $scope.downloadSpeakerWords = function (speaker_name, words_list) {
+            prepareWordListDownload(words_list, function (words) {
+                downloadCSVFile("WordsBy" + speaker_name, words);
+            });
+        };
+
         $scope.downloadEpisodeTranscript = function (season_number, episode_number) {
             EpisodeService.GetTranscript(season_number, episode_number).then(function (transcript_obj) {
-                prepareTranscriptForDownload(transcript_obj.data, function (prepared_obj){
+                prepareTranscriptForDownload(transcript_obj.data, function (prepared_obj) {
                     downloadTXTFile("Transkript_Season_" + season_number + "_Episode_" + episode_number, prepared_obj);
                 });
             });
@@ -48,8 +54,8 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             prepareSpeakerSpeeches(speaker_name, season_number, episode_number, function (speakerSpeeches) {
                 var speechString = "";
 
-                for (var speech in speakerSpeeches){
-                    if (speakerSpeeches.hasOwnProperty(speech)){
+                for (var speech in speakerSpeeches) {
+                    if (speakerSpeeches.hasOwnProperty(speech)) {
                         speechString += speakerSpeeches[speech].replik + "\n";
                     }
                 }
@@ -130,7 +136,17 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             hiddenElement.click();
         };
 
-        var prepareTranscriptForDownload = function (transcript, callback){
+        var prepareWordListDownload = function (words, callback) {
+            var csvData = "Word, Count\n";
+
+            for (var i = 0; i < words.length; i++) {
+                csvData += words[i][0] + "," + words[i][1] + "\n"
+            }
+
+            callback(csvData);
+        };
+
+        var prepareTranscriptForDownload = function (transcript, callback) {
             var transcript_str = "TRANSKRIPT\n==========\n";
 
             transcript_str += "Season: " + transcript.season_number + "\n";
@@ -273,7 +289,7 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
                 }
             }
 
-            for (var s in $scope.all_speakers.sort(util.fieldSorter(['name']))){
+            for (var s in $scope.all_speakers.sort(util.fieldSorter(['name']))) {
                 header_list.push($scope.all_speakers[s].name);
             }
 
@@ -285,11 +301,11 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
                     var key = episodes[_episode].season_number + '_' + episodes[_episode].episode_number;
                     var epi_line_list = [key];
 
-                    for (var _s in $scope.all_speakers.sort(util.fieldSorter(['name']))){
+                    for (var _s in $scope.all_speakers.sort(util.fieldSorter(['name']))) {
                         var name = $scope.all_speakers[_s].name;
-                        if (key in speaker_dicts[name]){
+                        if (key in speaker_dicts[name]) {
                             epi_line_list.push(speaker_dicts[name][key]);
-                        }else{
+                        } else {
                             epi_line_list.push(0);
                         }
                     }
@@ -380,7 +396,7 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             var csvData = "season, number of speeches, number of words, longest speech, shortest speech, " +
                 "average speech length, speech length median, configuration densities, number of episodes, number of speakers\n";
 
-            var seasons = seasons.sort(util.fieldSorter(['season_number']));
+            var seasons = $scope.all_seasons.sort(util.fieldSorter(['season_number']));
 
             for (var season in seasons) {
                 if (seasons.hasOwnProperty(season)) {
@@ -457,7 +473,7 @@ angular.module('my-controllers').controller("downloadController", ["$scope", "$h
             for (var i = 1; i <= max_length; i++) {
                 var line = i + ",";
 
-                for (var j = 1; j <= 8; j++) {
+                for (var j = 1; j <= speach_dists.length; j++) {
                     if (speach_dists[j]['_' + i] != null) {
                         line += j != 8 ? speach_dists[j]['_' + i] + ',' : speach_dists[j]['_' + i] + '\n';
                     } else {

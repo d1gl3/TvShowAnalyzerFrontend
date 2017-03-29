@@ -161,10 +161,10 @@ seriesAnalyzer.factory('UtilityService',
         // Sets the configuration table cell classes to set the color
         service.setProbabilityColor = function (value) {
             if (typeof value === 'number') {
-                if (value > 1) {
+                if (value > 0) {
                     return "prob-plus";
                 }
-                if (value < 1) {
+                if (value < 0) {
                     return "prob-minus";
                 }
             }
@@ -206,8 +206,7 @@ seriesAnalyzer.factory('UtilityService',
             config_densities.sort(service.sort_by_key(0));
 
             return [
-                service.barChartObject("Quantity", config_densities),
-                service.lineChartObject("Regression", service.getPolynomialRegressionCurve(config_densities))
+                service.barChartObject("Quantity", config_densities)
             ];
         };
 

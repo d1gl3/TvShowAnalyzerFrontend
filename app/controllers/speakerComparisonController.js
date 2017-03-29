@@ -4,8 +4,8 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
 
         var util = UtilityService;
 
-        $rootScope.$on('$routeChangeStart', function(event, next, current) {
-            if (typeof(current) !== 'undefined'){
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            if (typeof(current) !== 'undefined') {
                 window.nv.charts = {};
                 window.nv.graphs = [];
                 window.nv.logs = {};
@@ -43,7 +43,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
 
         $scope.$watchGroup(['speaker1', 'speaker2'], function (speakers) {
             if (speakers[0] != null && speakers[1] != null) {
-                set_season_hamm_dist();
+                set_episodes_hamm_dist();
                 set_probability_curve();
             }
             if (speakers[0] != null) {
@@ -340,49 +340,34 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
             $scope.replicaSumEpisodes = replicaSumEpisodes;
         };
 
-        // Set data for episode hamming distance graph
-        function set_episodes_hamm_dist(season_number) {
-            var episode_dist = [];
-            var hamm_1 = $scope.selectedSpeaker[0].hamming_distances["season_" + season_number];
-            var hamm_2 = $scope.selectedSpeaker[1].hamming_distances["season_" + season_number];
-
-            for (var i = 1; i <= Object.keys(hamm_1).length - 1; i++) {
-                var dist = util.calc_hamm(hamm_1["episode_" + i].episode_hamming_dist, hamm_2["episode_" + i].episode_hamming_dist);
-                episode_dist.push({
-                    x: i,
-                    y: dist
-                });
-            }
-
-            $scope.episodeHammingDistance = [{
-                key: "HammingDistance",
-                bar: true,
-                area: true,
-                values: episode_dist
-            }];
-
-            $scope.$apply();
-        }
-
         // Set data for season hamming distance graph
-        function set_season_hamm_dist() {
-            var season_dist = [];
-            var hamm_1 = $scope.speaker1.hamming_distances;
-            var hamm_2 = $scope.speaker2.hamming_distances;
+        function set_episodes_hamm_dist() {
+            var episode_dist = [];
+            var episode_labels = [];
 
-            for (var i = 1; i <= 8; i++) {
-                var dist = util.calc_hamm(hamm_1["season_" + i].season_hamming_dist, hamm_2["season_" + i].season_hamming_dist);
-                season_dist.push({
-                    x: i,
-                    y: dist
-                });
+            var count = 1;
+
+            for (var j = 1; j <= 8; j++) {
+                var hamm_1_epi = $scope.selectedSpeaker[0].hamming_distances["season_" + j];
+                var hamm_2_epi = $scope.selectedSpeaker[1].hamming_distances["season_" + j];
+                for (var i = 1; i <= Object.keys(hamm_1_epi).length - 1; i++) {
+                    var dist = util.calc_hamm(hamm_1_epi["episode_" + i].episode_hamming_dist, hamm_2_epi["episode_" + i].episode_hamming_dist);
+                    episode_dist.push({
+                        x: count,
+                        y: dist
+                    });
+                    episode_labels.push(j + "_" + i);
+                    count += 1;
+                }
             }
+
+            $scope.episode_labels = episode_labels;
 
             $scope.seasonHammingDistance = [{
                 key: "HammingDistance",
                 bar: true,
                 area: true,
-                values: season_dist
+                values: episode_dist
             }];
         }
 
@@ -396,7 +381,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 if ($scope.episodes.hasOwnProperty(epi)) {
                     if (typeof $scope.episodes[epi].speaker_probabilities.couple === "undefined") console.log($scope.episodes[epi]);
 
-                    var delta = null;
+                    var delta = 0;
 
                     if (typeof $scope.episodes[epi].speaker_probabilities.couple[$scope.speaker1.name] != 'undefined'
                         && typeof $scope.episodes[epi].speaker_probabilities.couple[$scope.speaker2.name] != 'undefined') {
@@ -552,8 +537,8 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
 
         $scope.linechartOptionsSeasonHamming = {
             chart: {
-                type: 'lineChart',
-                height: 450,
+                type: 'discreteBarChart',
+                height: 550,
                 margin: {
                     top: 20,
                     right: 20,
@@ -569,7 +554,11 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 },
                 useInteractiveGuideline: true,
                 xAxis: {
-                    axisLabel: 'Season'
+                    axisLabel: 'Season',
+                    rotateLabels: -90,
+                    tickFormat: function (d) {
+                        return $scope.episode_labels[d-1];
+                    }
                 },
                 yAxis: {
                     axisLabel: 'Hamming Distance',
@@ -577,13 +566,6 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                interactiveLayer: {
-                    dispatch: {
-                        elementClick: function (e) {
-                            set_episodes_hamm_dist(Math.round(e.pointXValue));
-                        }
-                    }
                 }
             },
             title: {
@@ -591,9 +573,10 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 text: 'Season Hamming Distance'
             }
         };
+
         $scope.linechartOptionsEpisodeHamming = {
             chart: {
-                type: 'lineChart',
+                type: 'historicalBarChart',
                 height: 450,
                 margin: {
                     top: 20,

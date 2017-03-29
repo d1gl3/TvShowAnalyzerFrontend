@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/speaker_comparison.css">
 
 <div class="container-fluid full-height full-width">
     <div id="tabs_container" class="col-xs-12">
@@ -70,13 +70,13 @@
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Cooper</div>
                                 <img class="speaker-image" src="assets/img/Sheldon’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Mrs Cooper', 0)">
+                                     ng-click="set_selected_speaker('Sheldon’s Mother', 0)">
 
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Wolowitz</div>
                                 <img class="speaker-image" src="assets/img/Howard’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Mrs Wolowitz', 0)">
+                                     ng-click="set_selected_speaker('Howard’s Mother', 0)">
 
                             </div>
                             <div class="speaker-card">
@@ -88,7 +88,7 @@
                             <div class="speaker-card">
                                 <div class="speaker-label">Beverley</div>
                                 <img class="speaker-image" src="assets/img/Leonard’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Beverley', 0)">
+                                     ng-click="set_selected_speaker('Leonard’s Mother', 0)">
 
                             </div>
                             <div class="speaker-card">
@@ -169,13 +169,13 @@
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Cooper</div>
                                 <img class="speaker-image" src="assets/img/Sheldon’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Mrs Cooper', 1)">
+                                     ng-click="set_selected_speaker('Sheldon’s Mother', 1)">
 
                             </div>
                             <div class="speaker-card">
                                 <div class="speaker-label">Mrs Wolowitz</div>
                                 <img class="speaker-image" src="assets/img/Howard’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Mrs Wolowitz', 1)">
+                                     ng-click="set_selected_speaker('Howard’s Mother', 1)">
 
                             </div>
                             <div class="speaker-card">
@@ -187,7 +187,7 @@
                             <div class="speaker-card">
                                 <div class="speaker-label">Beverley</div>
                                 <img class="speaker-image" src="assets/img/Leonard’s_Mother.jpg"
-                                     ng-click="set_selected_speaker('Beverley', 1)">
+                                     ng-click="set_selected_speaker('Leonard’s Mother', 1)">
 
                             </div>
                             <div class="speaker-card">
@@ -368,7 +368,6 @@
             <div class="panel panel-primary" ng-if="speaker1 || speaker2">
                 <div class="panel-heading">Replica Length Distribution</div>
                 <div class="panel-body">
-
                     <div class="row speaker-info-grafics">
                         <div class="col-md-6 bar-chart" ng-if="speaker1">
                             <nvd3 options="discreteBarChartOptions" data="speaker1.replicaLengths"></nvd3>
@@ -380,14 +379,13 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary" ng-if="speaker1 && speaker2">
+            <div class="panel panel-primary" id="hamming-distance" ng-if="speaker1 && speaker2">
                 <div class="panel-heading">Hamming Distances</div>
-                <div class="row">
-                    <div class="col-md-6" ng-if="seasonHammingDistance">
-                        <nvd3 options="linechartOptionsSeasonHamming" data="seasonHammingDistance"></nvd3>
-                    </div>
-                    <div class="col-md-6" ng-if="episodeHammingDistance">
-                        <nvd3 options="linechartOptionsEpisodeHamming" data="episodeHammingDistance"></nvd3>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12" ng-if="seasonHammingDistance">
+                            <nvd3 options="linechartOptionsSeasonHamming" data="seasonHammingDistance"></nvd3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -453,7 +451,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel" ng-if="speaker1.speakerSeasonStats || speaker2.speakerSeasonStats">
+            <div class="panel panel-primary linechart-panel"
+                 ng-if="speaker1.speakerSeasonStats || speaker2.speakerSeasonStats">
                 <div class="panel-heading">Speaker Season Replic Stats</div>
                 <div class="panel-body">
 
@@ -474,7 +473,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-primary linechart-panel" ng-if="speaker1.speakerEpisodeStats || speaker2.speakerEpisodeStats">
+            <div class="panel panel-primary linechart-panel"
+                 ng-if="speaker1.speakerEpisodeStats || speaker2.speakerEpisodeStats">
                 <div class="panel-heading">Speaker Episode Replic Stats</div>
                 <div class="panel-body">
 

@@ -216,6 +216,23 @@
                                                                                class='fa fa-spinner fa-spin'></i></div>
                     </legend>
 
+
+
+                    <h5>Speaker Words</h5>
+
+                    <section layout="row" layout-align="center center">
+                        <md-select placeholder="Choose Speaker" ng-model="speaker_words" md-on-open="loadTvShowSpeakers()"
+                                   style="min-width: 200px;">
+                            <md-option ng-value="speaker_words" ng-repeat="speaker_words in tv_show_speakers">{{speaker_words.name}}
+                            </md-option>
+                        </md-select>
+
+                        <md-button class="md-raised" ng-click="downloadSpeakerWords(speaker_words.name, speaker_words.words.list)"
+                                   ng-disabled="speaker_words == null">
+                            Download Speaker Speeches
+                        </md-button>
+                    </section>
+
                     <h5>Speaker Speeches</h5>
 
                     <section layout="row" layout-align="center center">

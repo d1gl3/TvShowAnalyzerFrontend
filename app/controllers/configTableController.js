@@ -384,13 +384,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     }
                 },
                 zoom: {
-                    enabled: true,
-                    scaleExtent: [1, 10],
-                    useFixedDomain: false,
-                    useNiceScale: false,
-                    horizontalOff: false,
-                    verticalOff: true,
-                    unzoomEventType: "dblclick.zoom"
+                    enabled: false
                 }
             }
         };
@@ -472,7 +466,7 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     }
                 })
                 .charge(-120)
-                .friction(0.9)
+                .friction(0.3)
                 .linkStrength(0.9)
                 .on("tick", tick)
                 .start();
@@ -544,7 +538,8 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                     }
                 })
                 .on("mouseover", mouseover)
-                .on("mouseout", mouseout);
+                .on("mouseout", mouseout)
+                .on("dblclick", clickpath);
 
 
             var circle = svg.append("g").selectAll("circle")
@@ -585,12 +580,22 @@ angular.module('my-controllers').controller("configTableController", ["$scope", 
                 }, 2000);
             }
 
+            function clickpath(d) {
+                d3.select(this).classed('hidden', d.hidden = true)
+                    .style('opacity', 0);
+            }
+
             // Use elliptical arc path segments to doubly-encode directionality.
             function tick() {
-                path.attr("d", initial_path);
-                path.attr("d", corrected_path);
-                circle.attr("transform", transform);
-                text.attr("transform", transform);
+                try {
+                    path.attr("d", initial_path);
+                    path.attr("d", corrected_path);
+                    circle.attr("transform", transform);
+                    text.attr("transform", transform);
+                } catch (err) {
+                    force.stop();
+                    if ($scope.selectedEpisode) drawForceGraph($scope.selectedEpisode);
+                }
             }
 
             function corrected_path(d) {

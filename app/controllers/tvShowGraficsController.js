@@ -74,10 +74,11 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
         function set_tv_show_data() {
             $scope.tv_show_config_matrix = util.sort_and_reverse_config_matrix($scope.tv_show.configuration_matrix);
             $scope.forceDirectedData = util.get_formated_force_data($scope.tv_show);
-            $scope.tvShowReplicaLengths = [{
+            $scope.tvShowReplicaLengths = util.get_formated_length_list($scope.tv_show.replicas_length_list);
+            $scope.tvShowReplicaLengthsSlice = [{
                 key: "Quantity",
                 bar: true,
-                values: util.get_formated_length_list($scope.tv_show.replicas_length_list).slice(0, 50)
+                values: util.get_formated_length_list($scope.tv_show.replicas_length_list).slice(1, 50)
             }];
         }
 
@@ -297,14 +298,33 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
 
         // Download function for the speech length distribution
         $scope.downloadReplicaCSV = function () {
-            var replica_lengths = $scope.tvShowReplicaLengths[0].values;
+            var replica_lengths = $scope.tvShowReplicaLengths;
+            var length_dict = {};
             var csvContent = "SpeachLength, Value\n";
+            var maxLength = replica_lengths[replica_lengths.length - 1][0];
+
+            console.log(replica_lengths);
+            console.log(maxLength);
+
             replica_lengths.forEach(function (lengthArray, index) {
 
-                var dataString = lengthArray.join(",");
-                csvContent += index < replica_lengths.length ? dataString + "\n" : dataString;
-
+               length_dict[lengthArray[0]] = lengthArray[1];
             });
+
+
+            console.log(length_dict);
+            var lines = [];
+            for (var i = 1; i <= maxLength; i++) {
+                if (i in length_dict){
+                    lines.push(i + "," + length_dict[i])
+                } else {
+
+                    lines.push(i + ",0")
+                }
+            }
+
+            console.log(lines);
+            csvContent += lines.join("\n");
 
             var hiddenElement = document.createElement('a');
 
@@ -354,7 +374,7 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
                 },
                 transitionDuration: 500,
                 xAxis: {
-                    axisLabel: 'Season'
+                    axisLabel: 'Length'
                 }
             }
         };
