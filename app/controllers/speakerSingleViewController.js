@@ -60,6 +60,11 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', '$q', '
             $scope.replicaAverageSeasons = replicaAverageSeasons;
             $scope.replicaNumberSeasons = replicaNumberSeasons;
             $scope.replicaSumSeasons = replicaSumSeasons;
+
+            console.log(replicaAverageSeasons);
+            console.log(replicaNumberSeasons);
+            console.log(replicaSumSeasons);
+
         }
 
         // Construct data object for episode Comparison Graphs

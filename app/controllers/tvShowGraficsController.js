@@ -379,7 +379,70 @@ angular.module('my-controllers').controller('tvShowGraficsController', ['$scope'
             }
         };
 
+        $scope.basicBarOptionsSeasons = {
+            chart: {
+                type: 'discreteBarChart',
+                useInteractiveGuideline: false,
+                interactive: true,
+                height: 400,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 60,
+                    left: 55
+                },
+                x: function (d) {
+                    return d[0];
+                },
+                y: function (d) {
+                    return d[1];
+                },
+                showValues: true,
+                valueFormat: function (d) {
+                    return d3.format('.0f')(d);
+                },
+                transitionDuration: 500,
+                xAxis: {
+                    axisLabel: 'Season'
+                }
+            }
+        };
+
         $scope.basicBarOptionsInteractiveFalse = {
+            chart: {
+                type: 'discreteBarChart',
+                useInteractiveGuideline: false,
+                interactive: false,
+                height: 400,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 60,
+                    left: 55
+                },
+                x: function (d) {
+                    return d[0];
+                },
+                y: function (d) {
+                    return d[1];
+                },
+                showValues: true,
+                valueFormat: function (d) {
+                    return d3.format('.2f')(d);
+                },
+                transitionDuration: 500,
+                xAxis: {
+                    axisLabel: 'Season'
+                },
+                yAxis: {
+                    tickFormat: function (d) {
+                        return d3.format('.2f')(d);
+                    }
+                }
+            }
+        };
+
+        $scope.basicBarOptionsSeasonsInteractiveFalse = {
             chart: {
                 type: 'discreteBarChart',
                 useInteractiveGuideline: false,

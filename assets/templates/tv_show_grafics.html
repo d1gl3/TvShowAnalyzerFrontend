@@ -10,7 +10,7 @@
                 <div class="col-md-12">
                     <div class="jumbotron" ng-controller="navbarCtrl">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <h1>The Big Bang Theory</h1>
                                 <h2>Quantitative Analysis</h2>
                                 <p>
@@ -106,7 +106,7 @@
                                                 <td>{{tv_show.replicas_length_med}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Number Of Unique Speakers:</td>
+                                                <td>Number of unique speakers:</td>
                                                 <td>{{tv_show.number_of_speakers}}</td>
                                             </tr>
                                         </table>
@@ -117,22 +117,22 @@
 
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Speeches</span></h3>
-                            <nvd3 options="basicBarOptions" data="replicaNumberDistribution"
+                            <nvd3 options="basicBarOptionsSeasons" data="replicaNumberDistribution"
                             ></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Word</span></h3>
-                            <nvd3 options="basicBarOptions" data="replicaWordDistribution"
+                            <nvd3 options="basicBarOptionsSeasons" data="replicaWordDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Number Of Speakers</span></h3>
-                            <nvd3 options="basicBarOptions" data="numberOfSpeakersDistribution"
+                            <nvd3 options="basicBarOptionsSeasons" data="numberOfSpeakersDistribution"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                         <div class="col-md-3">
                             <h3><span class="label label-info">Configuration Density</span></h3>
-                            <nvd3 options="basicBarOptionsInteractiveFalse" data="configuration_densities"
+                            <nvd3 options="basicBarOptionsSeasonsInteractiveFalse" data="configuration_densities"
                                   class="with-3d-shadow with-transitions"></nvd3>
                         </div>
                     </div>
