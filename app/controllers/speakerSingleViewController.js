@@ -327,8 +327,12 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', '$q', '
         $scope.linechartOptionsReplicaNumberEpi = util.getBaseLineChartOptions();
         $scope.linechartOptionsReplicaNumberEpi.title = {
             enable: true,
-            text: 'Number Of Speeches Per Episode'
+            text: 'Number Of Speeches Per Episode',
         };
+        $scope.linechartOptionsReplicaNumberEpi.xAxis = {
+            axisLabel: 'Episode'
+        };
+
         $scope.linechartOptionsReplicaNumberEpi.subtitle = {
             enable: true,
             text: 'This chart shows the total number of speeches per episode for the selected speaker',
@@ -351,6 +355,9 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', '$q', '
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaAvgEpi.xAxis = {
+            axisLabel: 'Episode'
+        };
 
         $scope.linechartOptionsReplicaSumEpi = util.getBaseLineChartOptions();
         $scope.linechartOptionsReplicaSumEpi.title = {
@@ -364,6 +371,9 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', '$q', '
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
             }
+        };
+        $scope.linechartOptionsReplicaSumEpi.xAxis = {
+            axisLabel: 'Episode'
         };
 
     }]);

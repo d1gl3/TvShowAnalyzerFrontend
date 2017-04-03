@@ -454,30 +454,32 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
         $scope.linechartOptionsReplicaNumber = baseLineChartOptions;
         $scope.linechartOptionsReplicaNumber.title = {
             enable: true,
-            text: 'Number of Replics per Season'
+            text: 'Number of Speeches per Season'
         };
         $scope.linechartOptionsReplicaNumber.subtitle = {
             enable: true,
-            text: 'This chart shows the total number of replics per season for the selected Speaker',
+            text: 'This chart shows the total number of speeches per season for the selected Speaker',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaNumber.yAxis.axisLabel = "Number of speeches";
 
         $scope.linechartOptionsReplicaAvg = baseLineChartOptions;
         $scope.linechartOptionsReplicaAvg.title = {
             enable: true,
-            text: 'Average Replic Length per Season'
+            text: 'Average Speech Length per Season'
         };
         $scope.linechartOptionsReplicaAvg.subtitle = {
             enable: true,
-            text: 'This chart shows the average replic length per season for the selected Speaker',
+            text: 'This chart shows the average speech length per season for the selected Speaker',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaAvg.yAxis.axisLabel = "Average length of speeches";
 
         $scope.linechartOptionsReplicaSum = baseLineChartOptions;
         $scope.linechartOptionsReplicaSum.title = {
@@ -492,11 +494,12 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaSum.yAxis.axisLabel = "Number of words";
 
         $scope.linechartOptionsReplicaNumberEpi = baseLineChartOptions;
         $scope.linechartOptionsReplicaNumberEpi.title = {
             enable: true,
-            text: 'Number of Replics per Episode'
+            text: 'Number of Speeches per Episode'
         };
         $scope.linechartOptionsReplicaNumberEpi.subtitle = {
             enable: true,
@@ -506,20 +509,31 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaNumberEpi.xAxis = {
+            axisLabel: 'Episode'
+        };
+        $scope.linechartOptionsReplicaNumberEpi.yAxis.axisLabel = "Number of speeches";
+
 
         $scope.linechartOptionsReplicaAvgEpi = baseLineChartOptions;
         $scope.linechartOptionsReplicaAvgEpi.title = {
             enable: true,
-            text: 'Average Replic Length per Episode'
+            text: 'Average Speech Length per Episode'
         };
         $scope.linechartOptionsReplicaAvgEpi.subtitle = {
             enable: true,
-            text: 'This chart shows the average replic length per episode for the selected Speaker',
+            text: 'This chart shows the average speech length per episode for the selected Speaker',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaAvgEpi.xAxis = {
+            axisLabel: 'Episode'
+        };
+        $scope.linechartOptionsReplicaAvgEpi.yAxis.axisLabel = "Average length of speeches";
+
+
 
         $scope.linechartOptionsReplicaSumEpi = baseLineChartOptions;
         $scope.linechartOptionsReplicaSumEpi.title = {
@@ -534,6 +548,11 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
+        $scope.linechartOptionsReplicaSumEpi.xAxis = {
+            axisLabel: 'Episode'
+        };
+        $scope.linechartOptionsReplicaSumEpi.yAxis.axisLabel = "Number of words";
+
 
         $scope.linechartOptionsSeasonHamming = {
             chart: {
