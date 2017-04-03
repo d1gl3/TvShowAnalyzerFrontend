@@ -55,7 +55,6 @@ seriesAnalyzer.factory('UtilityService',
                     axisLabel: 'Season'
                 },
                 yAxis: {
-                    axisLabel: 'Number of Replics',
                     tickFormat: function (d) {
                         return d3.format('.02f')(d);
                     },
