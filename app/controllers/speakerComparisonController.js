@@ -491,7 +491,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
         };
         $scope.linechartOptionsReplicaNumberEpi.subtitle = {
             enable: true,
-            text: 'This chart shows the total number of replics per Episode for the selected Speaker',
+            text: 'This chart shows the total number of speeches per Episode for the selected Speaker',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
