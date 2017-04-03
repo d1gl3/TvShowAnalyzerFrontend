@@ -462,7 +462,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        options2.linechartOptionsReplicaAvg.yAxis = {
+        options2.yAxis = {
             axisLabel: 'Average length of speeches',
             tickFormat: function (d) {
                 return d3.format('.02f')(d);
