@@ -421,12 +421,18 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
 
         // NVD3 Module Options
 
-        $scope.linechartOptionsReplicaNumber = util.getBaseLineChartOptionsSpeakers();
-        $scope.linechartOptionsReplicaNumber.title = {
+        var options1 = util.getBaseLineChartOptionsSpeakers();
+        var options2 = util.getBaseLineChartOptionsSpeakers();
+        var options3 = util.getBaseLineChartOptionsSpeakers();
+        var options4 = util.getBaseLineChartOptionsSpeakers();
+        var options5 = util.getBaseLineChartOptionsSpeakers();
+        var options6 = util.getBaseLineChartOptionsSpeakers();
+
+        options1.title = {
             enable: true,
             text: 'Number of Speeches per Season'
         };
-        $scope.linechartOptionsReplicaNumber.subtitle = {
+        options1.subtitle = {
             enable: true,
             text: 'This chart shows the total number of speeches per season for the selected Speaker',
             css: {
@@ -434,7 +440,7 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        $scope.linechartOptionsReplicaNumber.yAxis = {
+        options1.yAxis = {
             axisLabel: 'Number of speeches',
             tickFormat: function (d) {
                 return d3.format('.02f')(d);
@@ -442,12 +448,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
             axisLabelDistance: -10
         };
 
-        $scope.linechartOptionsReplicaAvg = util.getBaseLineChartOptionsSpeakers();
-        $scope.linechartOptionsReplicaAvg.title = {
+        $scope.linechartOptionsReplicaNumber = options1;
+
+        options2.title = {
             enable: true,
             text: 'Average Speech Length per Season'
         };
-        $scope.linechartOptionsReplicaAvg.subtitle = {
+        options2.subtitle = {
             enable: true,
             text: 'This chart shows the average speech length per season for the selected Speaker',
             css: {
@@ -455,13 +462,15 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        $scope.linechartOptionsReplicaAvg.yAxis = {
+        options2.linechartOptionsReplicaAvg.yAxis = {
             axisLabel: 'Average length of speeches',
             tickFormat: function (d) {
                 return d3.format('.02f')(d);
             },
             axisLabelDistance: -10
         };
+        $scope.linechartOptionsReplicaAvg = options2
+
 
         $scope.linechartOptionsReplicaSum = util.getBaseLineChartOptionsSpeakers();
         $scope.linechartOptionsReplicaSum.title = {
