@@ -464,7 +464,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        $scope.linechartOptionsReplicaNumber.yAxis.axisLabel = "Number of speeches";
+        $scope.linechartOptionsReplicaNumber.yAxis = {
+            axisLabel: 'Number of speeches',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
         $scope.linechartOptionsReplicaAvg = baseLineChartOptions;
         $scope.linechartOptionsReplicaAvg.title = {
@@ -479,7 +485,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        $scope.linechartOptionsReplicaAvg.yAxis.axisLabel = "Average length of speeches";
+        $scope.linechartOptionsReplicaAvg.yAxis = {
+            axisLabel: 'Average length of speeches',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
         $scope.linechartOptionsReplicaSum = baseLineChartOptions;
         $scope.linechartOptionsReplicaSum.title = {
@@ -494,7 +506,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
                 'margin': '10px 13px 0px 7px'
             }
         };
-        $scope.linechartOptionsReplicaSum.yAxis.axisLabel = "Number of words";
+        $scope.linechartOptionsReplicaSum.yAxis = {
+            axisLabel: 'Number of words',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
         $scope.linechartOptionsReplicaNumberEpi = baseLineChartOptions;
         $scope.linechartOptionsReplicaNumberEpi.title = {
@@ -512,7 +530,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
         $scope.linechartOptionsReplicaNumberEpi.xAxis = {
             axisLabel: 'Episode'
         };
-        $scope.linechartOptionsReplicaNumberEpi.yAxis.axisLabel = "Number of speeches";
+        $scope.linechartOptionsReplicaNumberEpi.yAxis = {
+            axisLabel: 'Number of speeches',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
 
         $scope.linechartOptionsReplicaAvgEpi = baseLineChartOptions;
@@ -531,7 +555,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
         $scope.linechartOptionsReplicaAvgEpi.xAxis = {
             axisLabel: 'Episode'
         };
-        $scope.linechartOptionsReplicaAvgEpi.yAxis.axisLabel = "Average length of speeches";
+        $scope.linechartOptionsReplicaAvgEpi.yAxis = {
+            axisLabel: 'Average length of speeches',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
 
 
@@ -551,7 +581,13 @@ seriesAnalyzer.controller('speakerComparisonController', ['$rootScope', '$scope'
         $scope.linechartOptionsReplicaSumEpi.xAxis = {
             axisLabel: 'Episode'
         };
-        $scope.linechartOptionsReplicaSumEpi.yAxis.axisLabel = "Number of words";
+        $scope.linechartOptionsReplicaSumEpi.yAxis = {
+            axisLabel: 'Number of words',
+            tickFormat: function (d) {
+                return d3.format('.02f')(d);
+            },
+            axisLabelDistance: -10
+        };
 
 
         $scope.linechartOptionsSeasonHamming = {
