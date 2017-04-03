@@ -327,7 +327,7 @@ seriesAnalyzer.controller('singleSpeakerController', ['$scope', '$http', '$q', '
         $scope.linechartOptionsReplicaNumberEpi = util.getBaseLineChartOptions();
         $scope.linechartOptionsReplicaNumberEpi.title = {
             enable: true,
-            text: 'Number Of Speeches Per Episode',
+            text: 'Number Of Speeches Per Episode'
         };
         $scope.linechartOptionsReplicaNumberEpi.xAxis = {
             axisLabel: 'Episode'

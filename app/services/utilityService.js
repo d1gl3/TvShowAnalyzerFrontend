@@ -34,6 +34,36 @@ seriesAnalyzer.factory('UtilityService',
             }
         };
 
+        var baseLineChartOptionsSpeakers = {
+            chart: {
+                type: 'lineChart',
+                height: 450,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
+                    left: 55
+                },
+                x: function (d) {
+                    return d[0];
+                },
+                y: function (d) {
+                    return d[1];
+                },
+                useInteractiveGuideline: true,
+                xAxis: {
+                    axisLabel: 'Season'
+                },
+                yAxis: {
+                    axisLabel: 'Number of Replics',
+                    tickFormat: function (d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -10
+                }
+            }
+        };
+
         service.aggregateSpeakerSeasonSpeechData = function (speaker_stats) {
             var avg_length_list = [],
                 number_of_replicas_list = [],
@@ -66,6 +96,10 @@ seriesAnalyzer.factory('UtilityService',
 
         service.getBaseLineChartOptions = function () {
             return $.extend(true, {}, baseLineChartOptions);
+        };
+
+        service.getBaseLineChartOptionsSpeakers = function () {
+            return $.extend(true, {}, baseLineChartOptionsSpeakers);
         };
 
         service.get_formated_length_list = function (old_length_list) {
